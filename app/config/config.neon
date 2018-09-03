@@ -1,0 +1,30 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# https://nette.org/security-warning
+#
+parameters:
+
+
+application:
+	errorPresenter: Error
+	debugger: true # panel do Tracy
+	#catchExceptions: true  # default: zapnuto v produkčním režimu
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+
+session:
+	expiration: 14 days
+
+
+database:
+        dsn: 'mysql:host=127.0.0.1;dbname=vykazuj;charset=utf8;'
+        user: localtest
+        password: lo1cal8te2st
+
+
+services:
+	router: App\RouterFactory::createRouter
+	authenticator: MyAuthenticator
+	registrator: MyRegistrator
+	authorizator: MyAuthorizator
