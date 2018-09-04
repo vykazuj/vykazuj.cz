@@ -62,13 +62,17 @@ class ChargePresenter extends BasePresenter
              
         }
         
-        public function actionCreateRecord($project_id, $hours, $hours_over, $day, $month, $year){
+        //public function actionCreateRecord($project_id, $hours, $hours_over, $day, $month, $year){
+        public function actionCreateRecord($id){
             
+            $row = $this->database->fetch('select * from record where id = ?', $id);
             $myObj = null;
             /*
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
             */
+            
+            /*
             $myObj['project_id'] = $project_id;
             $myObj['hours'] = $hours;
             $myObj['hours_over'] = $hours_over;
@@ -78,6 +82,16 @@ class ChargePresenter extends BasePresenter
             $myObj['user_id'] = 3;
             $myObj['status'] = 'created';
             $myObj['note'] = 'Vytvořeno skriptem';
+            */
+            $myObj['project_id'] = 1;
+            $myObj['hours'] = 0;
+            $myObj['hours_over'] = 0;
+            $myObj['day'] = $row["day"];
+            $myObj['month'] = $row["month"];
+            $myObj['year'] = $row["year"];
+            $myObj['user_id'] = $this->user->getId();
+            $myObj['status'] = 'created';
+            $myObj['note'] = 'Vytvořeno jen tak';
             
             try
                     { 
@@ -98,7 +112,6 @@ class ChargePresenter extends BasePresenter
         public function actionDeleteRecord($id){
             
             $myObj = null;
-            if(rand(0, 100 ) > 50){
                 try
                     { 
                     $this->database->query('DELETE from record where id = ?',$id);
@@ -109,10 +122,28 @@ class ChargePresenter extends BasePresenter
                     $myObj['result'] = 'NOK';
                     $myObj['code'] = $e->getMessage();
                 }  
-            }else{
-                $myObj['result'] = 'NOT_OK';
-                $myObj['code'] = 'ERR'.round(rand(0, 100 ));
-            }
+
+           
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));
+             
+        }
+        
+        public function actionGetMyChargeableProjects(){
+            
+            $myObj = null;
+                try
+                    { 
+                    $row = $this->database->query('SELECT * from project');
+                    $myObj['result'] = 'OK';
+                    $myObj['code'] = '0';
+                    $myObj['data'] = $row;
+                    }
+                catch (\Nette\Neon\Exception $e) {
+                    $myObj['result'] = 'NOK';
+                    $myObj['code'] = $e->getMessage();
+                }  
+
            
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));

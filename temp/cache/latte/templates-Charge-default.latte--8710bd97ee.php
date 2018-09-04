@@ -145,7 +145,7 @@ class Template8710bd97ee extends Latte\Runtime\Template
         var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 104 */ ?>;
         var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 105 */ ?>;
         var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 106 */ ?>;
-        alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
+        //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
          $.ajax(
             {
               type: 'GET',
@@ -163,6 +163,7 @@ class Template8710bd97ee extends Latte\Runtime\Template
                     {
                       $("#my-charged-records-table").append(
                               '<tr id="'+raw_data[i].id+'">'+
+                              '<td class="tiny addRecord" recordId="'+raw_data[i].id+'">+++</td>'+
                               '<td class="tiny">'+raw_data[i].day + '</td>'+
                               '<td class="tiny">'+daysOfWeek[raw_data[i].day%7]+'</td>'+
                               '<td class="wide">'+raw_data[i].project_name + '</td>'+
@@ -175,7 +176,7 @@ class Template8710bd97ee extends Latte\Runtime\Template
                     }        
                 }          
                     $(".deleteRecord").click( function(){
-                        var recordId = ($(this).children("svg").attr('recordid'));
+                        var recordId = ($(this).children("svg").attr('recordid'));                        
                         $.ajax(
                         {
 
@@ -187,7 +188,7 @@ class Template8710bd97ee extends Latte\Runtime\Template
                                 {
                                     var json = $.parseJSON(data); 
                                     if(json.result==='OK'){
-                                        alert('Smazáno');
+                                        //alert('Smazáno');
                                         $("tr#"+recordId).remove();
                                     }else{
                                         alert(json.code);
@@ -195,6 +196,47 @@ class Template8710bd97ee extends Latte\Runtime\Template
                                 }
                         });
                     });
+                    
+                    $(".addRecord").click( function(){
+                        var parent = $(this).parent();
+                        var recordId = ($(this).attr('recordid'));
+                                                alert(recordId);
+                        //$(this).parent().after();
+                        
+
+                        $.ajax(
+                        {
+
+                           type: 'GET',
+                           url: home_url+'/charge/create-record?id='+recordId,
+                           dataType: 'json',
+                           cache: false,
+                           success: function(data)
+                                {
+                                    var json = $.parseJSON(data); 
+                                    if(json.result==='OK'){
+
+
+                                        parent.after('<tr id="'+json.data+'">'+
+                              '<td class="tiny addRecord" recordId="'+json.data["id"]+'">+++</td>'+
+                              '<td class="tiny">1</td>'+
+                              '<td class="tiny">Po</td>'+
+                              '<td class="wide">Přidáno</td>'+
+                              '<td class="tiny">0h ' +
+                              '<td class="tiny">0h ' +
+                              '<td class="tiny"><i class="fas fa-share-alt"></i></td>'+
+                              '<td class="tiny"><i class="fas fa-pencil-alt"></i></td>'+
+                              '<td class="tiny deleteRecord"><i class="fas fa-trash-alt deleteRecord" recordId="'+json.data["id"]+'"></i></td>'+
+                              '</tr>');
+                                        
+                                    }else{
+                                        alert(json.code);
+                                    }
+                                }
+                        });
+
+                    });
+                                    
                     
                     
               }
