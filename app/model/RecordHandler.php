@@ -24,7 +24,7 @@ class RecordHandler {
     }
     
     function getRecordsByMonthYearUser($month, $year, $userId){
-        return $this->database->fetchAll('select r.*, p.name as project_name from record r, project p where p.id = r.project_id and r.user_id = ? and r.year = ? and r.month = ? ORDER by day ASC',$userId, $year, $month);
+        return $this->database->fetchAll('select r.*, p.name as projectName from record r, project p where p.id = r.project_id and r.user_id = ? and r.year = ? and r.month = ? ORDER by day ASC',$userId, $year, $month);
     }
     
     function getRecordDetail($recordId){
@@ -37,6 +37,10 @@ class RecordHandler {
     
     
     function insertNewRecord($row){
-        return $this->database->table('record')->insert($row);
+        return $this->database->table('record')->insert($row)->toArray();
+    }
+    
+    function getProjectName($recordId){
+        return $this->database->fetchField("select name from project p, record r where p.id = r.project_id and r.id = ?",$recordId);
     }
 }

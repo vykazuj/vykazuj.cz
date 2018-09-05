@@ -78,7 +78,6 @@ class ChargePresenter extends BasePresenter
                 $myObj2['code'] = 'Nemáte právo na vytvoření záznamu.';
                 $myJSON = json_encode($myObj2);
                 $this->sendResponse(new JsonResponse($myJSON));
-                return false;
             }
             
             $myObj = null;
@@ -95,6 +94,7 @@ class ChargePresenter extends BasePresenter
             try
                     { 
                     $rowNum = $myRecordHandler->insertNewRecord($myObj);
+                    $rowNum["projectName"] = $myRecordHandler->getProjectName($rowNum["id"]);
                     $myObj2['result'] = 'OK';
                     $myObj2['code'] = '0';
                     $myObj2['data'] = $rowNum;
@@ -102,6 +102,7 @@ class ChargePresenter extends BasePresenter
                 catch (\Nette\Neon\Exception $e) {
                     $myObj2['result'] = 'NOK';
                     $myObj2['code'] = $e->getMessage();
+                    $myObj2['data'] = $e->getMessage();
                 }  
                             
             $myJSON = json_encode($myObj2);

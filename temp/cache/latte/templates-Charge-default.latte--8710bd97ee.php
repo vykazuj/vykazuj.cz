@@ -163,10 +163,10 @@ class Template8710bd97ee extends Latte\Runtime\Template
                     {
                       $("#my-charged-records-table").append(
                               '<tr id="'+raw_data[i].id+'">'+
-                              '<td class="tiny addRecord" recordId="'+raw_data[i].id+'">+++</td>'+
+                              '<td class="tiny addRecord" recordId="'+raw_data[i].id+'"><i class="fas fa-plus-circle"></i></td>'+
                               '<td class="tiny">'+raw_data[i].day + '</td>'+
                               '<td class="tiny">'+daysOfWeek[raw_data[i].day%7]+'</td>'+
-                              '<td class="wide">'+raw_data[i].project_name + '</td>'+
+                              '<td class="wide">'+raw_data[i].projectName + '</td>'+
                               '<td class="tiny">'+raw_data[i].hours + 'h ' +
                               '<td class="tiny">'+raw_data[i].hours_over + 'h ' +
                               '<td class="tiny"><i class="fas fa-share-alt"></i></td>'+
@@ -200,7 +200,7 @@ class Template8710bd97ee extends Latte\Runtime\Template
                     $(".addRecord").click( function(){
                         var parent = $(this).parent();
                         var recordId = ($(this).attr('recordid'));
-                                                alert(recordId);
+                        //alert(recordId);
                         //$(this).parent().after();
                         
 
@@ -215,13 +215,11 @@ class Template8710bd97ee extends Latte\Runtime\Template
                                 {
                                     var json = $.parseJSON(data); 
                                     if(json.result==='OK'){
-
-
                                         parent.after('<tr id="'+json.data+'">'+
-                              '<td class="tiny addRecord" recordId="'+json.data["id"]+'">+++</td>'+
-                              '<td class="tiny">1</td>'+
-                              '<td class="tiny">Po</td>'+
-                              '<td class="wide">Přidáno</td>'+
+                              '<td class="tiny addRecord" recordId="'+json.data["id"]+'"><i class="fas fa-plus-circle"></i></td>'+
+                              '<td class="tiny">'+json.data["day"]+'</td>'+
+                              '<td class="tiny">'+daysOfWeek[json.data.day%7]+'</td>'+
+                              '<td class="wide">'+json.data["projectName"]+'</td>'+
                               '<td class="tiny">0h ' +
                               '<td class="tiny">0h ' +
                               '<td class="tiny"><i class="fas fa-share-alt"></i></td>'+
@@ -456,7 +454,15 @@ class Template8710bd97ee extends Latte\Runtime\Template
     position: relative; 
     margin-top: -5%;
 }
-asdasdasd
+
+#my-charged-records-table > tbody > tr > td.addRecord >svg {
+    visibility: hidden;
+}
+
+#my-charged-records-table > tbody > tr:hover > td.addRecord >svg {
+    visibility: visible;
+}
+
 svg {
     margin-left: 10px;
     margin-right: 10px;
