@@ -7,25 +7,10 @@ return array (
       'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\model\\MyAuthenticator.php',
       'time' => 1536010073,
     ),
-    'MyAuthorizator' => 
-    array (
-      'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\model\\MyAuthorizator.php',
-      'time' => 1536072688,
-    ),
-    'MyRegistrator' => 
-    array (
-      'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\model\\MyRegistrator.php',
-      'time' => 1536072688,
-    ),
     'App\\Presenters\\BasePresenter' => 
     array (
       'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\presenters\\BasePresenter.php',
       'time' => 1516266795,
-    ),
-    'App\\Presenters\\ChargePresenter' => 
-    array (
-      'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\presenters\\ChargePresenter.php',
-      'time' => 1535706117,
     ),
     'App\\Presenters\\Error4xxPresenter' => 
     array (
@@ -42,10 +27,25 @@ return array (
       'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\router\\RouterFactory.php',
       'time' => 1516266796,
     ),
+    'MyAuthorizator' => 
+    array (
+      'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\model\\MyAuthorizator.php',
+      'time' => 1536086046,
+    ),
+    'MyRegistrator' => 
+    array (
+      'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\model\\MyRegistrator.php',
+      'time' => 1536086046,
+    ),
     'App\\Presenters\\HomepagePresenter' => 
     array (
       'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\presenters\\HomepagePresenter.php',
-      'time' => 1536073898,
+      'time' => 1536086046,
+    ),
+    'App\\Presenters\\ChargePresenter' => 
+    array (
+      'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\presenters\\ChargePresenter.php',
+      'time' => 1536091663,
     ),
   ),
   1 => 
