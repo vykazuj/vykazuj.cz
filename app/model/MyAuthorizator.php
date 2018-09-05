@@ -14,9 +14,8 @@ class MyAuthorizator implements Nette\Security\IAuthorizator
         $this->acl->addResource('game');
         $this->acl->addResource('tournament');
         
-        $this->acl->allow('premium', 'game', 'play');
-        $this->acl->allow('moderator', 'game', 'create');
-        $this->acl->allow('reprezentant', 'game', 'create');
+        $this->acl->allow('basic', 'game', 'play');
+        $this->acl->allow('premium', 'game', 'create');
         return $this->acl;
     }
     
