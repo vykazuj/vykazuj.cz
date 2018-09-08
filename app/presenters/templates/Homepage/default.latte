@@ -8,15 +8,28 @@
   <body class="text-center">
       <div class="container">
         <div class="panel panel-body">
-            <form class="form-signin" action="{$basePath}/charge/">
-              <img src="{$basePath}/images/granton_logo.png" />  
-              <h1 class="h1 mb-4 font-weight-semibold">Vykazuj.cz</h1>
-              <label for="inputEmail" class="sr-only">Email address</label>
-              <input type="text" id="mail" class="form-control" placeholder="Email address" required autofocus>
-              <label for="inputPassword" class="sr-only">Password</label>
-              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-              <button class="btn btn-lg btn-primary btn-block" type="submit">Přihlásit se</button>
-            </form>
+
+            {form loginForm}
+                <img src="{$basePath}/images/granton_logo.png" />  
+                <h1 class="h1 mb-4 font-weight-semibold">Vykazuj.cz</h1>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                {input name}
+                {input password}
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Přihlásit se</button>
+            {/form}
+
+            {ifset $flashes}
+              <div n:foreach="$flashes as $flash" n:class="$flash->type">
+                  <span n:class="$flash->type">
+                      {if $flash->type == "error"}<i class="fas fa-times-circle awesomered"></i>
+                      {elseif $flash->type == "info"}<i class="fas fa-lightbulb awesomeyellow"></i>
+                      {elseif $flash->type == "success"}<i class="fas fa-check-circle awesomegreen"></i>
+                      {/if}
+                      {$flash->message}
+                  </span>
+              </div>
+          {/ifset}
+
         </div>
       </div>
   </body>
@@ -42,31 +55,31 @@ input:-webkit-autofill, input:-webkit-autofill:focus,  input:-webkit-autofill:vi
     -webkit-box-shadow: 0 0 0 30px white inset;
 }
  
-.form-signin {
+#frm-loginForm {
   width: 100%;
   max-width: 330px;
   padding: 15px;
   margin: auto;
 }
-.form-signin .checkbox {
+#frm-loginForm .checkbox {
   font-weight: 400;
 }
-.form-signin .form-control {
+#frm-loginForm .form-control {
   position: relative;
   box-sizing: border-box;
   height: auto;
   padding: 10px;
   font-size: 16px;
 }
-.form-signin .form-control:focus {
+#frm-loginForm .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="text"] {
+#frm-loginForm input[type="text"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.form-signin input[type="password"] {
+#frm-loginForm input[type="password"] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
