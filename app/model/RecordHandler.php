@@ -39,11 +39,24 @@ class RecordHandler {
         return $this->database->table('record')->insert($row)->toArray();
     }
     
+    function updateRecord($recordId, $projectId, $hours, $hoursOver){
+        return $this->database->query("UPDATE record set hours = ?, hours_over = ?, project_id = ? WHERE id = ?", $hours, $hoursOver, $projectId, $recordId);
+    }
+    
     function getProjectName($recordId){
         return $this->database->fetchField("select name from project p, record r where p.id = r.project_id and r.id = ?",$recordId);
     }
     
     function getMyChargeableProjects($userId){
-        return $this->database->fetchAll('select p.* from project p, users_project_rel upr where p.id = upr.project_id and upr.user_id = ? ',$userId);
+        return $this->database->fetchAll('select p.* from project p, users_project_rel upr where p.id = upr.project_id and upr.user_id = ? and upr.rel = ?',$userId,'user');
     }
+    
+    function isMyChargeableProject($projectId, $userId){
+        $rowCount = $this->database->query('select * from users_project_rel upr where upr.project_id = ?  and upr.user_id = ?  and upr.rel = ?',$projectId, $userId, 'user')->getRowCount();
+        if($rowCount>0)
+            {return true;}
+            else
+            {return false;}
+    }
+    
 }

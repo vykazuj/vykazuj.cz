@@ -17,19 +17,9 @@ return array (
       'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\model\\MyRegistrator.php',
       'time' => 1536394128,
     ),
-    'RecordHandler' => 
-    array (
-      'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\model\\RecordHandler.php',
-      'time' => 1536394128,
-    ),
     'App\\Presenters\\BasePresenter' => 
     array (
       'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\presenters\\BasePresenter.php',
-      'time' => 1536394135,
-    ),
-    'App\\Presenters\\ChargePresenter' => 
-    array (
-      'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\presenters\\ChargePresenter.php',
       'time' => 1536394135,
     ),
     'App\\Presenters\\Error4xxPresenter' => 
@@ -52,10 +42,20 @@ return array (
       'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\router\\RouterFactory.php',
       'time' => 1516266796,
     ),
+    'RecordHandler' => 
+    array (
+      'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\model\\RecordHandler.php',
+      'time' => 1536436313,
+    ),
+    'App\\Presenters\\ChargePresenter' => 
+    array (
+      'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\presenters\\ChargePresenter.php',
+      'time' => 1536436505,
+    ),
   ),
   1 => 
   array (
-    'Nette\\Environment' => 8,
+    'Nette\\Environment' => 12,
     'App\\Presenters\\JsonResponse' => 2,
     'App\\Model\\UserManager' => 1,
     'App\\Forms\\SignInFormFactory' => 1,
