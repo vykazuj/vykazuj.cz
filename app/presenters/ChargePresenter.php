@@ -23,6 +23,8 @@ class ChargePresenter extends BasePresenter
         
         public function actionDefault(){
             //$this->user->login(3);
+            $myRecordHandler = new \RecordHandler($this->database);
+            $this->template->myChargeableProjects = $myRecordHandler->getMyChargeableProjects($this->user->getId());
         }
         
         public function actionGetChargeRecord($month, $year){
@@ -61,11 +63,16 @@ class ChargePresenter extends BasePresenter
         public function actionCreateRecord($id, $projectId){
             //TODO $project ID by mělo jít z nějakýho defaultu na screeně
             
-            $projectId = 1;
+            //$projectId = 1;
             $myRecordHandler = new \RecordHandler($this->database);
             $row = $myRecordHandler->getRecordDetail($id);
             
-            //TODO jestli má uživatel právo přidání daného projektu
+            if(!$myRecordHandler->isMyChargeableProject($projectId, $this->user->getId())){
+                $myObj2['result'] = 'NOK';
+                $myObj2['code'] = 'Nemáte právo na tento projekt.';
+                $myJSON = json_encode($myObj2);
+                $this->sendResponse(new JsonResponse($myJSON));
+            }
             
             if($row["user_id"] != $this->user->getId()){
                 $myObj2['result'] = 'NOK';

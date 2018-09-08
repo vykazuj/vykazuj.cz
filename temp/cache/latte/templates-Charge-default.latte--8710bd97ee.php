@@ -32,6 +32,7 @@ class Template8710bd97ee extends Latte\Runtime\Template
 	function prepare()
 	{
 		extract($this->params);
+		if (isset($this->params['myChargeableProject'])) trigger_error('Variable $myChargeableProject overwritten in foreach on line 71');
 		$this->parentName = "@login.latte";
 		Nette\Bridges\ApplicationLatte\UIRuntime::initialize($this, $this->parentName, $this->blocks);
 		
@@ -118,9 +119,48 @@ class Template8710bd97ee extends Latte\Runtime\Template
             <li class="nav-pills-red"><a href="#">Předvyplnit</a></li>
             </ul>
             <ul class="nav nav-pills nav-pills-graph">
-                
             <li class="nav-pills-graph">
-                <div style="position:relative; width: 90%;">
+                
+            <div style="margin-left:5%; width:90%; position:relative; text-align: center;">
+                    <br>
+                    <span class="graph-title">
+                        Vyber projekt:<br>
+<?php
+		if (isset($myChargeableProjects)) {
+?>
+                    </span>    
+                    <select class="my-chargeable-projects" id="my-chargeable-projects">
+<?php
+			$iterations = 0;
+			foreach ($myChargeableProjects as $myChargeableProject) {
+				?>                      <option value="<?php echo LR\Filters::escapeHtmlAttr($myChargeableProject->id) /* line 71 */ ?>" title="<?php
+				echo LR\Filters::escapeHtmlAttr($myChargeableProject->name) /* line 71 */ ?>">
+                          <?php
+				if (strlen($myChargeableProject->name)>30) {
+					?> <?php echo LR\Filters::escapeHtmlText(substr($myChargeableProject->name, 0, 27).'...') /* line 72 */ ?>
+
+                          <?php
+				}
+				else {
+					echo LR\Filters::escapeHtmlText($myChargeableProject->name) /* line 73 */ ?>
+
+<?php
+				}
+?>
+                      </option>
+<?php
+				$iterations++;
+			}
+?>
+                    </select>   
+                    <br>
+                        
+                  
+                  
+<?php
+		}
+?>
+                </span>
                 <span class="graph-title">
                 <br>
                     Celkem   
@@ -207,11 +247,12 @@ class Template8710bd97ee extends Latte\Runtime\Template
                             obj.click( function(){
                             var parent = obj.parent();
                             var recordId = obj.attr('recordid');
+                            var projectId = $("#my-chargeable-projects").val();
                             $.ajax(
                             {
 
                                type: 'GET',
-                               url: home_url+'/charge/create-record?id='+recordId,
+                               url: home_url+'/charge/create-record?id='+recordId+'&projectId='+projectId,
                                dataType: 'json',
                                cache: false,
                                success: function(data)
@@ -231,9 +272,9 @@ class Template8710bd97ee extends Latte\Runtime\Template
 
 
         var daysOfWeek = ["Po","Út","St","Čt","Pá","So","Ne"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 175 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 176 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 177 */ ?>;
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 194 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 195 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 196 */ ?>;
         //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
          $.ajax(
             {
@@ -456,6 +497,18 @@ class Template8710bd97ee extends Latte\Runtime\Template
 
 .nav-pills-graph{
     margin-top: 10px;
+}
+
+select#my-chargeable-projects {
+    padding: 1px 1px 1px 5px;
+    color: #333333;
+    border-radius: 5px 5px 5px 5px;
+    margin: 0px 0;
+    box-sizing: border-box;
+    border: 1px solid #d1d1d1;
+    font-size: 16px;
+    position:relative;
+    width:90%;
 }
 
 .graph-intitle{

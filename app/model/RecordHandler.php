@@ -44,6 +44,15 @@ class RecordHandler {
     }
     
     function getMyChargeableProjects($userId){
-        return $this->database->fetchAll('select p.* from project p, users_project_rel upr where p.id = upr.project_id and upr.user_id = ? ',$userId);
+        return $this->database->fetchAll('select p.* from project p, users_project_rel upr where p.id = upr.project_id and upr.user_id = ? and upr.rel = ?',$userId,'user');
     }
+    
+    function isMyChargeableProject($projectId, $userId){
+        $rowCount = $this->database->query('select * from users_project_rel upr where upr.project_id = ?  and upr.user_id = ?  and upr.rel = ?',$projectId, $userId, 'user')->getRowCount();
+        if($rowCount>0)
+            {return true;}
+            else
+            {return false;}
+    }
+    
 }

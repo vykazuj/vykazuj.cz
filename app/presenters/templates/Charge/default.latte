@@ -59,9 +59,27 @@
             <li class="nav-pills-red"><a href="#">Předvyplnit</a></li>
             </ul>
             <ul class="nav nav-pills nav-pills-graph">
-                
             <li class="nav-pills-graph">
-                <div style="position:relative; width: 90%;">
+                
+            <div style="margin-left:5%; width:90%; position:relative; text-align: center;">
+                    <br>
+                    <span class="graph-title">
+                        Vyber projekt:<br>
+                        {ifset $myChargeableProjects}
+                    </span>    
+                    <select class="my-chargeable-projects" id="my-chargeable-projects">
+                      <option n:foreach="$myChargeableProjects as $myChargeableProject" value="{$myChargeableProject->id}" title="{$myChargeableProject->name}">
+                          {if strlen($myChargeableProject->name)>30} {substr($myChargeableProject->name, 0, 27).'...'}
+                          {else}{$myChargeableProject->name}
+                          {/if}
+                      </option>
+                    </select>   
+                    <br>
+                        
+                  
+                  
+                    {/ifset}
+                </span>
                 <span class="graph-title">
                 <br>
                     Celkem   
@@ -148,11 +166,12 @@
                             obj.click( function(){
                             var parent = obj.parent();
                             var recordId = obj.attr('recordid');
+                            var projectId = $("#my-chargeable-projects").val();
                             $.ajax(
                             {
 
                                type: 'GET',
-                               url: home_url+'/charge/create-record?id='+recordId,
+                               url: home_url+'/charge/create-record?id='+recordId+'&projectId='+projectId,
                                dataType: 'json',
                                cache: false,
                                success: function(data)
@@ -391,6 +410,27 @@
 
 .nav-pills-graph{
     margin-top: 10px;
+}
+
+select#my-chargeable-projects {
+    padding: 1px 1px 1px 5px;
+    color: #333333;
+    border-radius: 5px 5px 5px 5px;
+    margin: 0px 0;
+    box-sizing: border-box;
+    border: 1px solid #d1d1d1;
+    font-size: 16px;
+    position:relative;
+    width:90%;
+}
+select.my-chargeable-projects-no-border {
+    padding: 1px 1px 1px 5px;
+    color: #333333;
+    border-radius: 5px 5px 5px 5px;
+    margin: 0px 0;
+    box-sizing: border-box;
+    border: 0px solid #d1d1d1;
+    font-size: 20px;
 }
 
 .graph-intitle{
