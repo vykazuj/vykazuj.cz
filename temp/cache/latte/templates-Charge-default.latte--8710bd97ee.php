@@ -47,9 +47,27 @@ class Template8710bd97ee extends Latte\Runtime\Template
 <div class="row">
     <div class="col-3 col-lg-2 text-center panel-left">
         <h2 class="h1 mb-4 font-weight-semibold red">Vykazuj.cz</h2>
-        <img src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 9 */ ?>/images/honza.jpg" class="rounded-circle" alt="Cinque Terre">
-        <span class="full-name">Jan Kuba</span>
-        <span class="job-title">Jednatel</span>
+        <img src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 9 */ ?>/images/<?php
+		if ($lastName == 'Haase') {
+			?>drhaase<?php
+		}
+		elseif ($lastName == 'Lamaj') {
+			?>jamal<?php
+		}
+		else {
+			?>honza<?php
+		}
+?>.jpg" class="rounded-circle" alt="Cinque Terre">
+        <span class="full-name"><?php echo LR\Filters::escapeHtmlText($firstName) /* line 10 */ ?> <?php
+		echo LR\Filters::escapeHtmlText($lastName) /* line 10 */ ?></span>
+        <span class="job-title"><?php
+		if ($lastName == 'Haase' || $lastName == 'Lamaj') {
+			?>Slave<?php
+		}
+		else {
+			?>Jednatel<?php
+		}
+?></span>
         <div class="list-group">
             <a href="#" class="list-group-item active"><i class="far fa-clock"></i>Timesheety</a>
             <a href="#" class="list-group-item"><i class="fas fa-chart-line"></i>Statistiky</a>
@@ -138,14 +156,85 @@ class Template8710bd97ee extends Latte\Runtime\Template
 
 </body>
   <script>
-    
+     
     $(document).ready(function() 
-    {
+    {   
+
+        function createNewRow(obj){
+            var abc='<tr id="'+obj["id"]+'">'+
+                    '<td class="tiny rowPlus addRecord" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></td>'+
+                    '<td class="tiny rowDay">'+obj["day"]+'</td>'+
+                    '<td class="tiny rowDayOfWeek">'+daysOfWeek[obj["day"]%7]+'</td>'+
+                    '<td class="wide rowProjectName">'+obj["projectName"]+'</td>'+
+                    '<td class="tiny rowHours">0h ' +
+                    '<td class="tiny rowHoursOver">0h ' +
+                    '<td class="tiny rowShare" recordId="'+obj["id"]+'"><i class="fas fa-share-alt"></i></td>'+
+                    '<td class="tiny rowPencil" recordId="'+obj["id"]+'"><i class="fas fa-pencil-alt"></i></td>'+
+                    '<td class="tiny rowTrash deleteRecord" recordId="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord" recordId="'+obj["id"]+'"></i></td>'+
+                '</tr>';
+            return abc;
+        }
+    
+        function setSVGActions(id){
+            var obj = $(".rowPlus[recordid='"+id+"']");   
+            setActionOnAddRecord(obj); 
+            var obj2 = $(".rowTrash[recordid='"+id+"']");   
+            setActionOnDeleteRecord(obj2);
+        }
+    
+        function setActionOnDeleteRecord(obj){
+                            obj.click( function(){
+                            var recordId = ($(this).children("svg").attr('recordid'));                        
+                            $.ajax(
+                            {
+                               type: 'GET',
+                               url: home_url+'/charge/delete-record?id='+recordId,
+                               dataType: 'json',
+                               cache: false,
+                               success: function(data)
+                                    { var json = $.parseJSON(data); 
+                                        if(json.result==='OK'){
+                                            $("tr#"+recordId).remove();
+                                        }else{
+                                            alert(json.code);
+                                        }
+                                    }
+                            });
+                        });
+        }
+
+        function setActionOnAddRecord(obj){
+                            obj.click( function(){
+                            var parent = obj.parent();
+                            var recordId = obj.attr('recordid');
+                            $.ajax(
+                            {
+
+                               type: 'GET',
+                               url: home_url+'/charge/create-record?id='+recordId,
+                               dataType: 'json',
+                               cache: false,
+                               success: function(data)
+                                    {
+                                        var json = $.parseJSON(data); 
+                                        if(json.result==='OK'){
+                                            parent.after(createNewRow(json.data));
+                                            setSVGActions(json.data.id);
+                                        }else{
+                                            alert(json.code);
+                                        }
+                                    }
+                            });
+
+                    });
+        }
+
+
         var daysOfWeek = ["Po","Út","St","Čt","Pá","So","Ne"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 104 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 105 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 106 */ ?>;
-        alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 175 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 176 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 177 */ ?>;
+        //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
          $.ajax(
             {
               type: 'GET',
@@ -161,42 +250,11 @@ class Template8710bd97ee extends Latte\Runtime\Template
                     var raw_data = json.data;
                     for (i in raw_data)
                     {
-                      $("#my-charged-records-table").append(
-                              '<tr id="'+raw_data[i].id+'">'+
-                              '<td class="tiny">'+raw_data[i].day + '</td>'+
-                              '<td class="tiny">'+daysOfWeek[raw_data[i].day%7]+'</td>'+
-                              '<td class="wide">'+raw_data[i].project_name + '</td>'+
-                              '<td class="tiny">'+raw_data[i].hours + 'h ' +
-                              '<td class="tiny">'+raw_data[i].hours_over + 'h ' +
-                              '<td class="tiny"><i class="fas fa-share-alt"></i></td>'+
-                              '<td class="tiny"><i class="fas fa-pencil-alt"></i></td>'+
-                              '<td class="tiny deleteRecord"><i class="fas fa-trash-alt deleteRecord" recordId="'+raw_data[i].id+'"></i></td>'+
-                              '</tr>');
+                      $("#my-charged-records-table").append(createNewRow(raw_data[i]));   
+                      setSVGActions(raw_data[i].id);
                     }        
-                }          
-                    $(".deleteRecord").click( function(){
-                        var recordId = ($(this).children("svg").attr('recordid'));
-                        $.ajax(
-                        {
-
-                           type: 'GET',
-                           url: home_url+'/charge/delete-record?id='+recordId,
-                           dataType: 'json',
-                           cache: false,
-                           success: function(data)
-                                {
-                                    var json = $.parseJSON(data); 
-                                    if(json.result==='OK'){
-                                        alert('Smazáno');
-                                        $("tr#"+recordId).remove();
-                                    }else{
-                                        alert(json.code);
-                                    }
-                                }
-                        });
-                    });
-                    
-                    
+                }     
+                
               }
             });  
             
@@ -413,6 +471,14 @@ class Template8710bd97ee extends Latte\Runtime\Template
     font-size: 18px;
     position: relative; 
     margin-top: -5%;
+}
+
+#my-charged-records-table > tbody > tr > td.addRecord >svg {
+    visibility: hidden;
+}
+
+#my-charged-records-table > tbody > tr:hover > td.addRecord >svg {
+    visibility: visible;
 }
 
 svg {

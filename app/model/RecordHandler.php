@@ -35,12 +35,15 @@ class RecordHandler {
         return $this->database->fetchField('select user_id from record where id = ?', $recordId);
     }
     
-    
     function insertNewRecord($row){
         return $this->database->table('record')->insert($row)->toArray();
     }
     
     function getProjectName($recordId){
         return $this->database->fetchField("select name from project p, record r where p.id = r.project_id and r.id = ?",$recordId);
+    }
+    
+    function getMyChargeableProjects($userId){
+        return $this->database->fetchAll('select p.* from project p, users_project_rel upr where p.id = upr.project_id and upr.user_id = ? ',$userId);
     }
 }
