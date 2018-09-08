@@ -201,13 +201,14 @@ class Template8710bd97ee extends Latte\Runtime\Template
     {   
 
         function createNewRow(obj){
+            var selectHTML = $("#my-chargeable-projects").html();
             var abc='<tr id="'+obj["id"]+'">'+
                     '<td class="tiny rowPlus addRecord" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></td>'+
                     '<td class="tiny rowDay">'+obj["day"]+'</td>'+
                     '<td class="tiny rowDayOfWeek">'+daysOfWeek[obj["day"]%7]+'</td>'+
-                    '<td class="wide rowProjectName">'+obj["projectName"]+'</td>'+
-                    '<td class="tiny rowHours">0h ' +
-                    '<td class="tiny rowHoursOver">0h ' +
+                    '<td class="wide rowProjectName" recordId="'+obj["id"]+'"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></td>'+
+                    '<td class="tiny rowHours" recordId="'+obj["id"]+'"><span class="value">'+obj["hours"]+'</span>h ' +
+                    '<td class="tiny rowHoursOver" recordId="'+obj["id"]+'"><span class="value">'+obj["hours"]+'</span>h ' +
                     '<td class="tiny rowShare" recordId="'+obj["id"]+'"><i class="fas fa-share-alt"></i></td>'+
                     '<td class="tiny rowPencil" recordId="'+obj["id"]+'"><i class="fas fa-pencil-alt"></i></td>'+
                     '<td class="tiny rowTrash deleteRecord" recordId="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord" recordId="'+obj["id"]+'"></i></td>'+
@@ -221,7 +222,40 @@ class Template8710bd97ee extends Latte\Runtime\Template
             var obj2 = $(".rowTrash[recordid='"+id+"']");   
             setActionOnDeleteRecord(obj2);
         }
-    
+                 
+        function updateRecord(recordId){      
+
+            hours = Number($("td.rowHours[recordid='"+recordId+"']").children("span.value").html()); 
+            hoursOver = Number($("td.rowHoursOver[recordid='"+recordId+"']").children("span.value").html());  
+            projectId = Number($("td.rowProjectName[recordid='"+recordId+"']").children("select").val());  
+            //alert(recordId+' '+hours+' __  '+hoursOver+' __  '+projectId);
+
+            $.ajax(
+            {
+               type: 'GET',
+               url: home_url+'/charge/change-record?recordId='+recordId+'&hours='+hours+'&hoursOver='+hoursOver+'&projectId='+projectId,
+               dataType: 'json',
+               cache: false,
+               success: function(data)
+                    { var json = $.parseJSON(data); 
+                        if(json.result==='OK'){
+                        }else{
+                            alert(json.code);
+                        }
+                    }
+            });
+
+        }
+        
+        function setSelectOption(id, optionId){
+            //$("select.my-chargeable-projects-no-border[recordid='"+id+"']").val(optionId); 
+            $("select.my-chargeable-projects-no-border[recordid='"+id+"']").val(optionId); 
+            $("select.my-chargeable-projects-no-border[recordid='"+id+"']").change(function (){
+                updateRecord(id);
+            });
+        }
+             
+        
         function setActionOnDeleteRecord(obj){
                             obj.click( function(){
                             var recordId = ($(this).children("svg").attr('recordid'));                        
@@ -261,6 +295,8 @@ class Template8710bd97ee extends Latte\Runtime\Template
                                         if(json.result==='OK'){
                                             parent.after(createNewRow(json.data));
                                             setSVGActions(json.data.id);
+                                            setSelectOption(json.data.id, json.data.project_id);
+                                            
                                         }else{
                                             alert(json.code);
                                         }
@@ -272,9 +308,9 @@ class Template8710bd97ee extends Latte\Runtime\Template
 
 
         var daysOfWeek = ["Po","Út","St","Čt","Pá","So","Ne"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 194 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 195 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 196 */ ?>;
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 230 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 231 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 232 */ ?>;
         //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
          $.ajax(
             {
@@ -293,6 +329,8 @@ class Template8710bd97ee extends Latte\Runtime\Template
                     {
                       $("#my-charged-records-table").append(createNewRow(raw_data[i]));   
                       setSVGActions(raw_data[i].id);
+                      setSelectOption(raw_data[i].id, raw_data[i].project_id);
+                      //setSelectAction(raw_data[i].id);
                     }        
                 }     
                 
@@ -363,7 +401,7 @@ class Template8710bd97ee extends Latte\Runtime\Template
             );
     
     
-                });
+        });
 
     </script>
     
@@ -509,6 +547,15 @@ select#my-chargeable-projects {
     font-size: 16px;
     position:relative;
     width:90%;
+}
+select.my-chargeable-projects-no-border {
+    padding: 1px 1px 1px 5px;
+    color: #333333;
+    border-radius: 5px 5px 5px 5px;
+    margin: 0px 0;
+    box-sizing: border-box;
+    border: 0px solid #d1d1d1;
+    font-size: 20px;
 }
 
 .graph-intitle{

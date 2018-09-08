@@ -45,17 +45,17 @@ return array (
     'RecordHandler' => 
     array (
       'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\model\\RecordHandler.php',
-      'time' => 1536399300,
+      'time' => 1536436313,
     ),
     'App\\Presenters\\ChargePresenter' => 
     array (
       'file' => 'C:\\xampp\\htdocs\\vykazuj\\app\\presenters\\ChargePresenter.php',
-      'time' => 1536399360,
+      'time' => 1536436505,
     ),
   ),
   1 => 
   array (
-    'Nette\\Environment' => 11,
+    'Nette\\Environment' => 12,
     'App\\Presenters\\JsonResponse' => 2,
     'App\\Model\\UserManager' => 1,
     'App\\Forms\\SignInFormFactory' => 1,

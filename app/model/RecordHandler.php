@@ -39,6 +39,10 @@ class RecordHandler {
         return $this->database->table('record')->insert($row)->toArray();
     }
     
+    function updateRecord($recordId, $projectId, $hours, $hoursOver){
+        return $this->database->query("UPDATE record set hours = ?, hours_over = ?, project_id = ? WHERE id = ?", $hours, $hoursOver, $projectId, $recordId);
+    }
+    
     function getProjectName($recordId){
         return $this->database->fetchField("select name from project p, record r where p.id = r.project_id and r.id = ?",$recordId);
     }

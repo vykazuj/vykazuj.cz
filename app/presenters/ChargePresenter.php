@@ -59,11 +59,38 @@ class ChargePresenter extends BasePresenter
              
         }
         
+        public function actionChangeRecord($recordId, $projectId, $hours, $hoursOver){
+            $myRecordHandler = new \RecordHandler($this->database);
+            $row = $myRecordHandler->getRecordDetail($recordId);
+            
+            if($row["user_id"] != $this->user->getId()){
+                $myObj2['result'] = 'NOK';
+                $myObj2['code'] = 'Nemáte právo na tento záznam.';
+                $myJSON = json_encode($myObj2);
+                $this->sendResponse(new JsonResponse($myJSON));
+            }
+            
+            try
+                { 
+                $myRecordHandler->updateRecord($recordId, $projectId, $hours, $hoursOver);
+                $myObj2['result'] = 'OK';
+                $myObj2['code'] = '0';
+                $myObj2['data'] = 'OK';
+                }
+                catch (\Nette\Neon\Exception $e) 
+                {
+                    $myObj2['result'] = 'NOK';
+                    $myObj2['code'] = $e->getMessage();
+                    $myObj2['data'] = $e->getMessage();
+                }  
+                            
+            $myJSON = json_encode($myObj2);
+            $this->sendResponse(new JsonResponse($myJSON));
+
+        }
+        
         //public function actionCreateRecord($project_id, $hours, $hours_over, $day, $month, $year){
         public function actionCreateRecord($id, $projectId){
-            //TODO $project ID by mělo jít z nějakýho defaultu na screeně
-            
-            //$projectId = 1;
             $myRecordHandler = new \RecordHandler($this->database);
             $row = $myRecordHandler->getRecordDetail($id);
             
