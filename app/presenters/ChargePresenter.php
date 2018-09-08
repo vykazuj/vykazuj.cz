@@ -6,14 +6,6 @@ use Nette\Application\Responses\JsonResponse;
 class ChargePresenter extends BasePresenter
 {  
         private $database;
-
-        private $projectName = [
-                    0=>'T-Mobile, migrace',
-                    1=>'Amazon Logistics Prague, IT support',
-                    2=>'ČSAD - noční linky',
-                    3=>'Vykazuj, PHP a CSS skripty',
-                    4=>'Rady ve snázi i nesnázi'
-                ];
         
         function __construct(\Nette\Database\Context $database)
         {
@@ -25,6 +17,8 @@ class ChargePresenter extends BasePresenter
 		$this->template->anyVariable = 'any value';
                 $this->template->actualMonth = 8;
                 $this->template->actualYear = 2018;
+                $this->template->firstName = $this->user->getIdentity()->first_name;
+                $this->template->lastName = $this->user->getIdentity()->last_name; 
 	}
         
         public function actionDefault(){
@@ -32,13 +26,14 @@ class ChargePresenter extends BasePresenter
         }
         
         public function actionGetChargeRecord($month, $year){
+            $myRecordHandler = new \RecordHandler($this->database);
             
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
             $month = 8;
             $year = 2018;
-            $myObj['data'] = $this->database->fetchAll('select r.*, p.name as project_name from record r, project p where p.id = r.project_id and r.year = ? and r.month = ? ORDER by day ASC',$year, $month);
+            $myObj['data'] = $myRecordHandler->getRecordsByMonthYearUser($month, $year, $this->user->getId());
             
             /*
             for($i=0;$i<31;$i++){
@@ -62,26 +57,38 @@ class ChargePresenter extends BasePresenter
              
         }
         
-        public function actionCreateRecord($project_id, $hours, $hours_over, $day, $month, $year){
+        //public function actionCreateRecord($project_id, $hours, $hours_over, $day, $month, $year){
+        public function actionCreateRecord($id, $projectId){
+            //TODO $project ID by mělo jít z nějakýho defaultu na screeně
+            
+            $projectId = 1;
+            $myRecordHandler = new \RecordHandler($this->database);
+            $row = $myRecordHandler->getRecordDetail($id);
+            
+            //TODO jestli má uživatel právo přidání daného projektu
+            
+            if($row["user_id"] != $this->user->getId()){
+                $myObj2['result'] = 'NOK';
+                $myObj2['code'] = 'Nemáte právo na vytvoření záznamu.';
+                $myJSON = json_encode($myObj2);
+                $this->sendResponse(new JsonResponse($myJSON));
+            }
             
             $myObj = null;
-            /*
-            $myObj['result'] = 'OK';
-            $myObj['code'] = '0';
-            */
-            $myObj['project_id'] = $project_id;
-            $myObj['hours'] = $hours;
-            $myObj['hours_over'] = $hours_over;
-            $myObj['day'] = $day;
-            $myObj['month'] = $month;
-            $myObj['year'] = $year;
-            $myObj['user_id'] = 3;
+            $myObj['project_id'] = $projectId;
+            $myObj['hours'] = 0;
+            $myObj['hours_over'] = 0;
+            $myObj['day'] = $row["day"];
+            $myObj['month'] = $row["month"];
+            $myObj['year'] = $row["year"];
+            $myObj['user_id'] = $this->user->getId();
             $myObj['status'] = 'created';
-            $myObj['note'] = 'Vytvořeno skriptem';
+            $myObj['note'] = 'Vytvořeno jen tak';
             
             try
                     { 
-                    $rowNum = $this->database->table('record')->insert($myObj);
+                    $rowNum = $myRecordHandler->insertNewRecord($myObj);
+                    $rowNum["projectName"] = $myRecordHandler->getProjectName($rowNum["id"]);
                     $myObj2['result'] = 'OK';
                     $myObj2['code'] = '0';
                     $myObj2['data'] = $rowNum;
@@ -89,6 +96,7 @@ class ChargePresenter extends BasePresenter
                 catch (\Nette\Neon\Exception $e) {
                     $myObj2['result'] = 'NOK';
                     $myObj2['code'] = $e->getMessage();
+                    $myObj2['data'] = $e->getMessage();
                 }  
                             
             $myJSON = json_encode($myObj2);
@@ -96,12 +104,21 @@ class ChargePresenter extends BasePresenter
         }
         
         public function actionDeleteRecord($id){
+            $myRecordHandler = new \RecordHandler($this->database);
+            $recordDetails = $myRecordHandler->getRecordDetail($id);
+            //Je requestor vlastníkem mazaného záznamu?
+             if($recordDetails["user_id"] != $this->user->getId()){
+                $myObj2['result'] = 'NOK';
+                $myObj2['code'] = 'Nemáte právo smazán tohoto záznamu.';
+                $myJSON = json_encode($myObj2);
+                $this->sendResponse(new JsonResponse($myJSON));
+                return false;
+            }
             
             $myObj = null;
-            if(rand(0, 100 ) > 50){
                 try
                     { 
-                    $this->database->query('DELETE from record where id = ?',$id);
+                    $myRecordHandler->deleteRecord($id);
                     $myObj['result'] = 'OK';
                     $myObj['code'] = '0';
                     }
@@ -109,10 +126,28 @@ class ChargePresenter extends BasePresenter
                     $myObj['result'] = 'NOK';
                     $myObj['code'] = $e->getMessage();
                 }  
-            }else{
-                $myObj['result'] = 'NOT_OK';
-                $myObj['code'] = 'ERR'.round(rand(0, 100 ));
-            }
+
+           
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));
+             
+        }
+        
+        public function actionGetMyChargeableProjects(){
+            
+            $myObj = null;
+                try
+                    { 
+                    $row = $this->database->query('SELECT * from project');
+                    $myObj['result'] = 'OK';
+                    $myObj['code'] = '0';
+                    $myObj['data'] = $row;
+                    }
+                catch (\Nette\Neon\Exception $e) {
+                    $myObj['result'] = 'NOK';
+                    $myObj['code'] = $e->getMessage();
+                }  
+
            
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));
