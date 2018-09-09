@@ -80,19 +80,67 @@ class Template8710bd97ee extends Latte\Runtime\Template
     <div class="col-9 col-lg-8 text-center panel-mid">
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
-            <li><a href="#">2018</a></li>
-            <li><a href="#">Leden</a></li>
-            <li><a href="#">Únor</a></li>
-            <li><a href="#">Březen</a></li>
-            <li><a href="#">Duben</a></li>
-            <li><a href="#">Květen</a></li>
-            <li><a href="#">Červen</a></li>
-            <li><a href="#">Červenec</a></li>
-            <li class="active"><a href="#">Srpen</a></li>
-            <li><a href="#">Září</a></li>
-            <li><a href="#">Říjen</a></li>
-            <li><a href="#">Listopad</a></li>
-            <li><a href="#">Prosinec</a></li>
+            <li><a href="#">2018 / <?php echo LR\Filters::escapeHtmlText($activeMonth) /* line 23 */ ?></a></li>
+            <li <?php
+		if ($activeMonth==1) {
+			?>class="active"<?php
+		}
+?>><a href="#">Leden</a></li>
+            <li <?php
+		if ($activeMonth==2) {
+			?>class="active"<?php
+		}
+?>><a href="#">Únor</a></li>
+            <li <?php
+		if ($activeMonth==3) {
+			?>class="active"<?php
+		}
+?>><a href="#">Březen</a></li>
+            <li <?php
+		if ($activeMonth==4) {
+			?>class="active"<?php
+		}
+?>><a href=s#">Duben</a></li>
+            <li <?php
+		if ($activeMonth==5) {
+			?>class="active"<?php
+		}
+?>><a href="#">Květen</a></li>
+            <li <?php
+		if ($activeMonth==6) {
+			?>class="active"<?php
+		}
+?>><a href="#">Červen</a></li>
+            <li <?php
+		if ($activeMonth==7) {
+			?>class="active"<?php
+		}
+?>><a href="#">Červenec</a></li>
+            <li <?php
+		if ($activeMonth==8) {
+			?>class="active"<?php
+		}
+?>><a href="#">Srpen</a></li>
+            <li <?php
+		if ($activeMonth==9) {
+			?>class="active"<?php
+		}
+?>><a href="#">Září</a></li>
+            <li <?php
+		if ($activeMonth==10) {
+			?>class="active"<?php
+		}
+?>><a href="#">Říjen</a></li>
+            <li <?php
+		if ($activeMonth==11) {
+			?>class="active"<?php
+		}
+?>><a href="#">Listopad</a></li>
+            <li <?php
+		if ($activeMonth==12) {
+			?>class="active"<?php
+		}
+?>><a href="#">Prosinec</a></li>
           </ul>
         </div>
         

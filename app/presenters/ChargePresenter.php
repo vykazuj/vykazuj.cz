@@ -25,8 +25,10 @@ class ChargePresenter extends BasePresenter
             //$this->user->login(3);
             $myRecordHandler = new \RecordHandler($this->database);
             $this->template->myChargeableProjects = $myRecordHandler->getMyChargeableProjects($this->user->getId());
+            /*
             $this->template->activeMonth = 1;
             $this->template->activeYear = 2018;
+             */
             $dateSessions = $this->getSession('Date'); 
             
             if(isset($dateSessions->year))
