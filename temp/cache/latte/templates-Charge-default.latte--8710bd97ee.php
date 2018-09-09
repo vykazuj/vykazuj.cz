@@ -80,67 +80,67 @@ class Template8710bd97ee extends Latte\Runtime\Template
     <div class="col-9 col-lg-8 text-center panel-mid">
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
-            <li><a href="#">2018 / <?php echo LR\Filters::escapeHtmlText($activeMonth) /* line 23 */ ?></a></li>
+            <li><a href="#">2018</a></li>
             <li <?php
-		if ($activeMonth==1) {
+		if ($actualMonth==1) {
 			?>class="active"<?php
 		}
-?>><a href="#">Leden</a></li>
+?> class="monthLink" month="1">Leden</li>
             <li <?php
-		if ($activeMonth==2) {
+		if ($actualMonth==2) {
 			?>class="active"<?php
 		}
-?>><a href="#">Únor</a></li>
+?> class="monthLink" month="2">Únor</a></li>
             <li <?php
-		if ($activeMonth==3) {
+		if ($actualMonth==3) {
 			?>class="active"<?php
 		}
-?>><a href="#">Březen</a></li>
+?> class="monthLink" month="3">Březen</a></li>
             <li <?php
-		if ($activeMonth==4) {
+		if ($actualMonth==4) {
 			?>class="active"<?php
 		}
-?>><a href=s#">Duben</a></li>
+?> class="monthLink" month="4">Duben</a></li>
             <li <?php
-		if ($activeMonth==5) {
+		if ($actualMonth==5) {
 			?>class="active"<?php
 		}
-?>><a href="#">Květen</a></li>
+?> class="monthLink" month="5">Květen</a></li>
             <li <?php
-		if ($activeMonth==6) {
+		if ($actualMonth==6) {
 			?>class="active"<?php
 		}
-?>><a href="#">Červen</a></li>
+?> class="monthLink" month="6">Červen</a></li>
             <li <?php
-		if ($activeMonth==7) {
+		if ($actualMonth==7) {
 			?>class="active"<?php
 		}
-?>><a href="#">Červenec</a></li>
+?> class="monthLink" month="7">Červenec</a></li>
             <li <?php
-		if ($activeMonth==8) {
+		if ($actualMonth==8) {
 			?>class="active"<?php
 		}
-?>><a href="#">Srpen</a></li>
+?> class="monthLink" month="8">Srpen</a></li>
             <li <?php
-		if ($activeMonth==9) {
+		if ($actualMonth==9) {
 			?>class="active"<?php
 		}
-?>><a href="#">Září</a></li>
+?> class="monthLink" month="9">Září</a></li>
             <li <?php
-		if ($activeMonth==10) {
+		if ($actualMonth==10) {
 			?>class="active"<?php
 		}
-?>><a href="#">Říjen</a></li>
+?> class="monthLink" month="10">Říjen</a></li>
             <li <?php
-		if ($activeMonth==11) {
+		if ($actualMonth==11) {
 			?>class="active"<?php
 		}
-?>><a href="#">Listopad</a></li>
+?> class="monthLink" month="11">Listopad</a></li>
             <li <?php
-		if ($activeMonth==12) {
+		if ($actualMonth==12) {
 			?>class="active"<?php
 		}
-?>><a href="#">Prosinec</a></li>
+?> class="monthLink" month="12">Prosinec</a></li>
           </ul>
         </div>
         
@@ -354,16 +354,11 @@ class Template8710bd97ee extends Latte\Runtime\Template
                     });
         }
 
-
-        var daysOfWeek = ["Po","Út","St","Čt","Pá","So","Ne"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 230 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 231 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 232 */ ?>;
-        //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
-         $.ajax(
+        function loadActualRecords(month, year){
+                 $.ajax(
             {
               type: 'GET',
-              url: home_url+'/charge/get-charge-record?month=1&abc=15&userId=5647',
+              url: home_url+'/charge/get-charge-record?month='+month+'1&year='+year,
               dataType: 'json',
               cache: false,
               success: function(data)
@@ -384,7 +379,28 @@ class Template8710bd97ee extends Latte\Runtime\Template
                 
               }
             });  
-            
+        }
+        
+        function deleteActualRecors(){
+            $("#my-charged-records-table").html('');
+        }
+        
+        $("li.monthLink").click(function(){
+            alert('asd');
+            var newMonth = $(this).attr('month');
+            deleteActualRecors();
+            loadActualRecords(newMonth, 2018);
+            $('li.active').removeClass('active');
+            $(this).addClass('active');
+        });
+        
+        var daysOfWeek = ["Po","Út","St","Čt","Pá","So","Ne"];
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 269 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 270 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 271 */ ?>;
+        loadActualRecords(actualMonth, actualYear);
+        //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
+                    
                     
                      new Chart(
                 document.getElementById("hours-chart"),
@@ -585,6 +601,17 @@ class Template8710bd97ee extends Latte\Runtime\Template
     margin-top: 10px;
 }
 
+.nav-pills > li {
+  background-color: #FFFFFF;
+  margin-left: -1px;
+  padding: 5px;
+  flex-grow: 1;
+  color: #20252D;
+  font-weight: 600;
+  font-size: 18px;
+  cursor: pointer;
+}  
+
 select#my-chargeable-projects {
     padding: 1px 1px 1px 5px;
     color: #333333;
@@ -637,8 +664,7 @@ svg {
 
 @media screen and (max-width: 1000px) {
         body{ font-size: 14px;}
-        .nav-pills > li { padding: 3px;}
-        .nav-pills > li > a { font-size: 12px;}
+        .nav-pills > li { padding: 3px; font-size: 12px;}
         .panel-left > h2.red{ font-size: 20px;}
         .panel-left > span.full-name{ font-size: 16px;}
         .panel-left > span.job-title{ font-size: 10px;}
@@ -648,8 +674,7 @@ svg {
 
 @media screen and (max-width: 1250px) {
         body{ font-size: 16px;}
-        .nav-pills > li { padding: 4px;}
-        .nav-pills > li > a { font-size: 14px;}
+        .nav-pills > li { padding: 4px; font-size: 14px;}
         .panel-left > h2.red{ font-size: 22px;}
         .panel-left > span.full-name{ font-size: 18px;}
         .panel-left > span.job-title{ font-size: 12px;}
