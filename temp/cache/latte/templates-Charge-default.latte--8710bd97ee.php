@@ -32,7 +32,7 @@ class Template8710bd97ee extends Latte\Runtime\Template
 	function prepare()
 	{
 		extract($this->params);
-		if (isset($this->params['myChargeableProject'])) trigger_error('Variable $myChargeableProject overwritten in foreach on line 71');
+		if (isset($this->params['myChargeableProject'])) trigger_error('Variable $myChargeableProject overwritten in foreach on line 73');
 		$this->parentName = "@login.latte";
 		Nette\Bridges\ApplicationLatte\UIRuntime::initialize($this, $this->parentName, $this->blocks);
 		
@@ -81,80 +81,82 @@ class Template8710bd97ee extends Latte\Runtime\Template
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
             <li><a href="#">2018</a></li>
-            <li <?php
+            <li class="monthLink<?php
 		if ($actualMonth==1) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="1">Leden</li>
-            <li <?php
+?>" month="1">Leden</li>
+            <li class="monthLink<?php
 		if ($actualMonth==2) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="2">Únor</a></li>
-            <li <?php
+?>" month="2">Únor</a></li>
+            <li class="monthLink<?php
 		if ($actualMonth==3) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="3">Březen</a></li>
-            <li <?php
+?>" month="3">Březen</a></li>
+            <li class="monthLink<?php
 		if ($actualMonth==4) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="4">Duben</a></li>
-            <li <?php
+?>" month="4">Duben</a></li>
+            <li class="monthLink<?php
 		if ($actualMonth==5) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="5">Květen</a></li>
-            <li <?php
+?>" month="5">Květen</a></li>
+            <li class="monthLink<?php
 		if ($actualMonth==6) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="6">Červen</a></li>
-            <li <?php
+?>" month="6">Červen</a></li>
+            <li class="monthLink<?php
 		if ($actualMonth==7) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="7">Červenec</a></li>
-            <li <?php
+?>" month="7">Červenec</a></li>
+            <li class="monthLink<?php
 		if ($actualMonth==8) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="8">Srpen</a></li>
-            <li <?php
+?>" month="8">Srpen</a></li>
+            <li class="monthLink<?php
 		if ($actualMonth==9) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="9">Září</a></li>
-            <li <?php
+?>" month="9">Září</a></li>
+            <li class="monthLink<?php
 		if ($actualMonth==10) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="10">Říjen</a></li>
-            <li <?php
+?>" month="10">Říjen</a></li>
+            <li class="monthLink<?php
 		if ($actualMonth==11) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="11">Listopad</a></li>
-            <li <?php
+?>" month="11">Listopad</a></li>
+            <li class="monthLink<?php
 		if ($actualMonth==12) {
-			?>class="active"<?php
+			?> active<?php
 		}
-?> class="monthLink" month="12">Prosinec</a></li>
+?>" month="12">Prosinec</a></li>
           </ul>
         </div>
         
         <div class="container timetable-blank">
             <div class="container container-inner timetable">
                 <table class="table table-hover timetable" id="my-charged-records-table">
-                    <tbody>
+                    <thead>
                       <tr>
-                        <th colspan="2">Datum</th>
+                        <th colspan="3">Datum</th>
                         <th class="text-left">Projekt</th>
                         <th>Čas</th>
                         <th>Přesčas</th>
                         <th colspan="3">Akce</th>
                       </tr>
+                    </thead>
+                    <tbody>
                     </tbody>
                   </table>
             </div>
@@ -181,16 +183,16 @@ class Template8710bd97ee extends Latte\Runtime\Template
 <?php
 			$iterations = 0;
 			foreach ($myChargeableProjects as $myChargeableProject) {
-				?>                      <option value="<?php echo LR\Filters::escapeHtmlAttr($myChargeableProject->id) /* line 71 */ ?>" title="<?php
-				echo LR\Filters::escapeHtmlAttr($myChargeableProject->name) /* line 71 */ ?>">
+				?>                      <option value="<?php echo LR\Filters::escapeHtmlAttr($myChargeableProject->id) /* line 73 */ ?>" title="<?php
+				echo LR\Filters::escapeHtmlAttr($myChargeableProject->name) /* line 73 */ ?>">
                           <?php
 				if (strlen($myChargeableProject->name)>30) {
-					?> <?php echo LR\Filters::escapeHtmlText(substr($myChargeableProject->name, 0, 27).'...') /* line 72 */ ?>
+					?> <?php echo LR\Filters::escapeHtmlText(substr($myChargeableProject->name, 0, 27).'...') /* line 74 */ ?>
 
                           <?php
 				}
 				else {
-					echo LR\Filters::escapeHtmlText($myChargeableProject->name) /* line 73 */ ?>
+					echo LR\Filters::escapeHtmlText($myChargeableProject->name) /* line 75 */ ?>
 
 <?php
 				}
@@ -358,7 +360,7 @@ class Template8710bd97ee extends Latte\Runtime\Template
                  $.ajax(
             {
               type: 'GET',
-              url: home_url+'/charge/get-charge-record?month='+month+'1&year='+year,
+              url: home_url+'/charge/get-charge-record?month='+month+'&year='+year,
               dataType: 'json',
               cache: false,
               success: function(data)
@@ -382,11 +384,10 @@ class Template8710bd97ee extends Latte\Runtime\Template
         }
         
         function deleteActualRecors(){
-            $("#my-charged-records-table").html('');
+            $.each($("#my-charged-records-table").children("tbody").children(), function (){ $(this).remove();});
         }
         
         $("li.monthLink").click(function(){
-            alert('asd');
             var newMonth = $(this).attr('month');
             deleteActualRecors();
             loadActualRecords(newMonth, 2018);
@@ -395,9 +396,9 @@ class Template8710bd97ee extends Latte\Runtime\Template
         });
         
         var daysOfWeek = ["Po","Út","St","Čt","Pá","So","Ne"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 269 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 270 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 271 */ ?>;
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 270 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 271 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 272 */ ?>;
         loadActualRecords(actualMonth, actualYear);
         //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
                     

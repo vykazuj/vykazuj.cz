@@ -46,8 +46,6 @@ class ChargePresenter extends BasePresenter
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
-            $month = 8;
-            $year = 2018;
             $myObj['data'] = $myRecordHandler->getRecordsByMonthYearUser($month, $year, $this->user->getId());
             
             /*
