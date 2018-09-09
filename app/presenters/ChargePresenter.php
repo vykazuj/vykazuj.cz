@@ -15,8 +15,6 @@ class ChargePresenter extends BasePresenter
 	public function renderDefault()
 	{
 		$this->template->anyVariable = 'any value';
-                $this->template->actualMonth = 8;
-                $this->template->actualYear = 2018;
                 $this->template->firstName = $this->user->getIdentity()->first_name;
                 $this->template->lastName = $this->user->getIdentity()->last_name; 
 	}
@@ -25,6 +23,21 @@ class ChargePresenter extends BasePresenter
             //$this->user->login(3);
             $myRecordHandler = new \RecordHandler($this->database);
             $this->template->myChargeableProjects = $myRecordHandler->getMyChargeableProjects($this->user->getId());
+            /*
+            $this->template->activeMonth = 1;
+            $this->template->activeYear = 2018;
+             */
+            $dateSessions = $this->getSession('Date'); 
+            
+            if(!isset($dateSessions->year))
+                {$dateSessions->year = $myRecordHandler->getMaxChargedYear($this->user->getId());}
+                
+            if(!isset($dateSessions->month))
+                {$dateSessions->month = $myRecordHandler->getMaxChargedMonthOfTheYear($this->user->getId(), $dateSessions->year);}
+                
+            $this->template->actualMonth = $dateSessions->month;  
+            $this->template->actualYear = $dateSessions->year;    
+            
         }
         
         public function actionGetChargeRecord($month, $year){
@@ -33,8 +46,6 @@ class ChargePresenter extends BasePresenter
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
-            $month = 8;
-            $year = 2018;
             $myObj['data'] = $myRecordHandler->getRecordsByMonthYearUser($month, $year, $this->user->getId());
             
             /*

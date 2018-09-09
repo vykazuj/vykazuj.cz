@@ -32,7 +32,7 @@ class Template8710bd97ee extends Latte\Runtime\Template
 	function prepare()
 	{
 		extract($this->params);
-		if (isset($this->params['myChargeableProject'])) trigger_error('Variable $myChargeableProject overwritten in foreach on line 71');
+		if (isset($this->params['myChargeableProject'])) trigger_error('Variable $myChargeableProject overwritten in foreach on line 73');
 		$this->parentName = "@login.latte";
 		Nette\Bridges\ApplicationLatte\UIRuntime::initialize($this, $this->parentName, $this->blocks);
 		
@@ -81,32 +81,82 @@ class Template8710bd97ee extends Latte\Runtime\Template
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
             <li><a href="#">2018</a></li>
-            <li><a href="#">Leden</a></li>
-            <li><a href="#">Únor</a></li>
-            <li><a href="#">Březen</a></li>
-            <li><a href="#">Duben</a></li>
-            <li><a href="#">Květen</a></li>
-            <li><a href="#">Červen</a></li>
-            <li><a href="#">Červenec</a></li>
-            <li class="active"><a href="#">Srpen</a></li>
-            <li><a href="#">Září</a></li>
-            <li><a href="#">Říjen</a></li>
-            <li><a href="#">Listopad</a></li>
-            <li><a href="#">Prosinec</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==1) {
+			?> active<?php
+		}
+?>" month="1">Leden</li>
+            <li class="monthLink<?php
+		if ($actualMonth==2) {
+			?> active<?php
+		}
+?>" month="2">Únor</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==3) {
+			?> active<?php
+		}
+?>" month="3">Březen</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==4) {
+			?> active<?php
+		}
+?>" month="4">Duben</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==5) {
+			?> active<?php
+		}
+?>" month="5">Květen</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==6) {
+			?> active<?php
+		}
+?>" month="6">Červen</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==7) {
+			?> active<?php
+		}
+?>" month="7">Červenec</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==8) {
+			?> active<?php
+		}
+?>" month="8">Srpen</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==9) {
+			?> active<?php
+		}
+?>" month="9">Září</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==10) {
+			?> active<?php
+		}
+?>" month="10">Říjen</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==11) {
+			?> active<?php
+		}
+?>" month="11">Listopad</a></li>
+            <li class="monthLink<?php
+		if ($actualMonth==12) {
+			?> active<?php
+		}
+?>" month="12">Prosinec</a></li>
           </ul>
         </div>
         
         <div class="container timetable-blank">
             <div class="container container-inner timetable">
                 <table class="table table-hover timetable" id="my-charged-records-table">
-                    <tbody>
+                    <thead>
                       <tr>
-                        <th colspan="2">Datum</th>
+                        <th colspan="3">Datum</th>
                         <th class="text-left">Projekt</th>
                         <th>Čas</th>
                         <th>Přesčas</th>
                         <th colspan="3">Akce</th>
                       </tr>
+                    </thead>
+                    <tbody>
                     </tbody>
                   </table>
             </div>
@@ -133,16 +183,16 @@ class Template8710bd97ee extends Latte\Runtime\Template
 <?php
 			$iterations = 0;
 			foreach ($myChargeableProjects as $myChargeableProject) {
-				?>                      <option value="<?php echo LR\Filters::escapeHtmlAttr($myChargeableProject->id) /* line 71 */ ?>" title="<?php
-				echo LR\Filters::escapeHtmlAttr($myChargeableProject->name) /* line 71 */ ?>">
+				?>                      <option value="<?php echo LR\Filters::escapeHtmlAttr($myChargeableProject->id) /* line 73 */ ?>" title="<?php
+				echo LR\Filters::escapeHtmlAttr($myChargeableProject->name) /* line 73 */ ?>">
                           <?php
 				if (strlen($myChargeableProject->name)>30) {
-					?> <?php echo LR\Filters::escapeHtmlText(substr($myChargeableProject->name, 0, 27).'...') /* line 72 */ ?>
+					?> <?php echo LR\Filters::escapeHtmlText(substr($myChargeableProject->name, 0, 27).'...') /* line 74 */ ?>
 
                           <?php
 				}
 				else {
-					echo LR\Filters::escapeHtmlText($myChargeableProject->name) /* line 73 */ ?>
+					echo LR\Filters::escapeHtmlText($myChargeableProject->name) /* line 75 */ ?>
 
 <?php
 				}
@@ -306,16 +356,11 @@ class Template8710bd97ee extends Latte\Runtime\Template
                     });
         }
 
-
-        var daysOfWeek = ["Po","Út","St","Čt","Pá","So","Ne"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 230 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 231 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 232 */ ?>;
-        //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
-         $.ajax(
+        function loadActualRecords(month, year){
+                 $.ajax(
             {
               type: 'GET',
-              url: home_url+'/charge/get-charge-record?month=1&abc=15&userId=5647',
+              url: home_url+'/charge/get-charge-record?month='+month+'&year='+year,
               dataType: 'json',
               cache: false,
               success: function(data)
@@ -336,7 +381,27 @@ class Template8710bd97ee extends Latte\Runtime\Template
                 
               }
             });  
-            
+        }
+        
+        function deleteActualRecors(){
+            $.each($("#my-charged-records-table").children("tbody").children(), function (){ $(this).remove();});
+        }
+        
+        $("li.monthLink").click(function(){
+            var newMonth = $(this).attr('month');
+            deleteActualRecors();
+            loadActualRecords(newMonth, 2018);
+            $('li.active').removeClass('active');
+            $(this).addClass('active');
+        });
+        
+        var daysOfWeek = ["Po","Út","St","Čt","Pá","So","Ne"];
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 270 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 271 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 272 */ ?>;
+        loadActualRecords(actualMonth, actualYear);
+        //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
+                    
                     
                      new Chart(
                 document.getElementById("hours-chart"),
@@ -537,6 +602,17 @@ class Template8710bd97ee extends Latte\Runtime\Template
     margin-top: 10px;
 }
 
+.nav-pills > li {
+  background-color: #FFFFFF;
+  margin-left: -1px;
+  padding: 5px;
+  flex-grow: 1;
+  color: #20252D;
+  font-weight: 600;
+  font-size: 18px;
+  cursor: pointer;
+}  
+
 select#my-chargeable-projects {
     padding: 1px 1px 1px 5px;
     color: #333333;
@@ -589,8 +665,7 @@ svg {
 
 @media screen and (max-width: 1000px) {
         body{ font-size: 14px;}
-        .nav-pills > li { padding: 3px;}
-        .nav-pills > li > a { font-size: 12px;}
+        .nav-pills > li { padding: 3px; font-size: 12px;}
         .panel-left > h2.red{ font-size: 20px;}
         .panel-left > span.full-name{ font-size: 16px;}
         .panel-left > span.job-title{ font-size: 10px;}
@@ -600,8 +675,7 @@ svg {
 
 @media screen and (max-width: 1250px) {
         body{ font-size: 16px;}
-        .nav-pills > li { padding: 4px;}
-        .nav-pills > li > a { font-size: 14px;}
+        .nav-pills > li { padding: 4px; font-size: 14px;}
         .panel-left > h2.red{ font-size: 22px;}
         .panel-left > span.full-name{ font-size: 18px;}
         .panel-left > span.job-title{ font-size: 12px;}

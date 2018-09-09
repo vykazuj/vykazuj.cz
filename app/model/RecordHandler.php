@@ -59,4 +59,12 @@ class RecordHandler {
             {return false;}
     }
     
+    function getMaxChargedYear($userId){
+        return $this->database->fetchField("select max(year) from record r where r.user_id = ?",$userId);
+    }
+    
+    function getMaxChargedMonthOfTheYear($userId, $year){
+        return $this->database->fetchField("select max(month) from record r where r.user_id = ? and r.year = ? ",$userId, $year);
+    }
+    
 }
