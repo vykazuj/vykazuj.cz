@@ -4,407 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "feb59a5f3be9e9e0740d103295bf5282",
+    "content-hash": "c75dbfdd9814dc9a3b302355cbe18863",
     "packages": [
         {
-            "name": "dg/adminer-custom",
-            "version": "v1.9.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dg/adminer-custom.git",
-                "reference": "f1982e3b59d1435e70c0f58a78d3b417a4887ccd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dg/adminer-custom/zipball/f1982e3b59d1435e70c0f58a78d3b417a4887ccd",
-                "reference": "f1982e3b59d1435e70c0f58a78d3b417a4887ccd",
-                "shasum": ""
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "Customization for Adminer, the best database management tool written in PHP.",
-            "keywords": [
-                "database",
-                "elasticsearch",
-                "mongodb",
-                "mssql",
-                "mysql",
-                "oracle",
-                "postgresql",
-                "sqlite"
-            ],
-            "time": "2017-08-30T07:41:05+00:00"
-        },
-        {
-            "name": "firebase/php-jwt",
-            "version": "v3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "fa8a06e96526eb7c0eeaa47e4f39be59d21f16e1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/fa8a06e96526eb7c0eeaa47e4f39be59d21f16e1",
-                "reference": "fa8a06e96526eb7c0eeaa47e4f39be59d21f16e1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Firebase\\JWT\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Neuman Vong",
-                    "email": "neuman+pear@twilio.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Anant Narayanan",
-                    "email": "anant@php.net",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
-            "homepage": "https://github.com/firebase/php-jwt",
-            "time": "2015-07-22T18:31:08+00:00"
-        },
-        {
-            "name": "google/apiclient",
-            "version": "v2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/google/google-api-php-client.git",
-                "reference": "cd4d61678bc26267f3e5371735ae3f579709ea30"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/cd4d61678bc26267f3e5371735ae3f579709ea30",
-                "reference": "cd4d61678bc26267f3e5371735ae3f579709ea30",
-                "shasum": ""
-            },
-            "require": {
-                "firebase/php-jwt": "~2.0|~3.0",
-                "google/apiclient-services": "*@dev",
-                "google/auth": "0.8",
-                "guzzlehttp/guzzle": "~5.2|~6.0",
-                "guzzlehttp/psr7": "^1.2",
-                "monolog/monolog": "^1.17",
-                "php": ">=5.4",
-                "phpseclib/phpseclib": "~2.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4",
-                "squizlabs/php_codesniffer": "~2.3",
-                "symfony/css-selector": "~2.1",
-                "symfony/dom-crawler": "~2.1",
-                "tedivm/stash": "^0.14.1"
-            },
-            "suggest": {
-                "tedivm/stash": "For caching certs and tokens (using Google_Client::setCache)"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Google_": "src/"
-                },
-                "classmap": [
-                    "src/Google/Service/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "Client library for Google APIs",
-            "homepage": "http://developers.google.com/api-client-library/php",
-            "keywords": [
-                "google"
-            ],
-            "time": "2016-06-08T01:30:25+00:00"
-        },
-        {
-            "name": "google/apiclient-services",
-            "version": "v0.69",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "6e2507a5bb39d970ae98cc2f1421012e7b38248f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/6e2507a5bb39d970ae98cc2f1421012e7b38248f",
-                "reference": "6e2507a5bb39d970ae98cc2f1421012e7b38248f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Google_Service_": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "Client library for Google APIs",
-            "homepage": "http://developers.google.com/api-client-library/php",
-            "keywords": [
-                "google"
-            ],
-            "time": "2018-09-08T00:22:43+00:00"
-        },
-        {
-            "name": "google/auth",
-            "version": "v0.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/google/google-auth-library-php.git",
-                "reference": "ec4edcb043e523267973fda308d9412d7db78e17"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/google/google-auth-library-php/zipball/ec4edcb043e523267973fda308d9412d7db78e17",
-                "reference": "ec4edcb043e523267973fda308d9412d7db78e17",
-                "shasum": ""
-            },
-            "require": {
-                "firebase/php-jwt": "~2.0|~3.0",
-                "guzzlehttp/guzzle": "~5.3|~6.0",
-                "guzzlehttp/psr7": "1.2.*",
-                "php": ">=5.4",
-                "psr/cache": "^1.0",
-                "psr/http-message": "^1.0"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "^1.11",
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ],
-                "psr-4": {
-                    "Google\\Auth\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "Google Auth Library for PHP",
-            "homepage": "http://github.com/google/google-auth-library-php",
-            "keywords": [
-                "Authentication",
-                "google",
-                "oauth2"
-            ],
-            "time": "2016-05-11T16:56:35+00:00"
-        },
-        {
-            "name": "guzzlehttp/guzzle",
-            "version": "6.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "d094e337976dff9d8e2424e8485872194e768662"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/d094e337976dff9d8e2424e8485872194e768662",
-                "reference": "d094e337976dff9d8e2424e8485872194e768662",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/promises": "~1.0",
-                "guzzlehttp/psr7": "~1.1",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "ext-curl": "*",
-                "phpunit/phpunit": "~4.0",
-                "psr/log": "~1.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "6.2-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/functions_include.php"
-                ],
-                "psr-4": {
-                    "GuzzleHttp\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                }
-            ],
-            "description": "Guzzle is a PHP HTTP client library",
-            "homepage": "http://guzzlephp.org/",
-            "keywords": [
-                "client",
-                "curl",
-                "framework",
-                "http",
-                "http client",
-                "rest",
-                "web service"
-            ],
-            "time": "2016-03-21T20:02:09+00:00"
-        },
-        {
-            "name": "guzzlehttp/promises",
-            "version": "v1.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/promises.git",
-                "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646",
-                "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Promise\\": "src/"
-                },
-                "files": [
-                    "src/functions_include.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                }
-            ],
-            "description": "Guzzle promises library",
-            "keywords": [
-                "promise"
-            ],
-            "time": "2016-12-20T10:07:11+00:00"
-        },
-        {
-            "name": "guzzlehttp/psr7",
-            "version": "1.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/psr7.git",
-                "reference": "2e89629ff057ebb49492ba08e6995d3a6a80021b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/2e89629ff057ebb49492ba08e6995d3a6a80021b",
-                "reference": "2e89629ff057ebb49492ba08e6995d3a6a80021b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "psr/http-message": "~1.0"
-            },
-            "provide": {
-                "psr/http-message-implementation": "1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Psr7\\": "src/"
-                },
-                "files": [
-                    "src/functions_include.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                }
-            ],
-            "description": "PSR-7 message implementation",
-            "keywords": [
-                "http",
-                "message",
-                "stream",
-                "uri"
-            ],
-            "time": "2016-02-18T21:54:00+00:00"
-        },
-        {
             "name": "latte/latte",
-            "version": "v2.4.6",
+            "version": "v2.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/latte.git",
-                "reference": "6d560edc49b052de6821acb48a1f438862d5b48b"
+                "reference": "95ca6bab6caaa3efa3b5d7d4537f9a45cb89ed90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/latte/zipball/6d560edc49b052de6821acb48a1f438862d5b48b",
-                "reference": "6d560edc49b052de6821acb48a1f438862d5b48b",
+                "url": "https://api.github.com/repos/nette/latte/zipball/95ca6bab6caaa3efa3b5d7d4537f9a45cb89ed90",
+                "reference": "95ca6bab6caaa3efa3b5d7d4537f9a45cb89ed90",
                 "shasum": ""
             },
             "require": {
@@ -463,65 +76,35 @@
                 "template",
                 "twig"
             ],
-            "time": "2017-08-29T08:24:52+00:00"
+            "time": "2018-06-03T17:34:15+00:00"
         },
         {
-            "name": "monolog/monolog",
-            "version": "1.23.0",
+            "name": "michalsvec/nette-opauth",
+            "version": "v0.6.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
+                "url": "https://github.com/michalsvec/nette-opauth.git",
+                "reference": "ce116b42984265503d35d2f4269e8c7718fd3049"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
-                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+                "url": "https://api.github.com/repos/michalsvec/nette-opauth/zipball/ce116b42984265503d35d2f4269e8c7718fd3049",
+                "reference": "ce116b42984265503d35d2f4269e8c7718fd3049",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0",
-                "psr/log": "~1.0"
-            },
-            "provide": {
-                "psr/log-implementation": "1.0.0"
-            },
-            "require-dev": {
-                "aws/aws-sdk-php": "^2.4.9 || ^3.0",
-                "doctrine/couchdb": "~1.0@dev",
-                "graylog2/gelf-php": "~1.0",
-                "jakub-onderka/php-parallel-lint": "0.9",
-                "php-amqplib/php-amqplib": "~2.4",
-                "php-console/php-console": "^3.1.3",
-                "phpunit/phpunit": "~4.5",
-                "phpunit/phpunit-mock-objects": "2.3.0",
-                "ruflin/elastica": ">=0.90 <3.0",
-                "sentry/sentry": "^0.13",
-                "swiftmailer/swiftmailer": "^5.3|^6.0"
-            },
-            "suggest": {
-                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-                "ext-mongo": "Allow sending log messages to a MongoDB server",
-                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
-                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
-                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
-                "php-console/php-console": "Allow sending log messages to Google Chrome",
-                "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-                "sentry/sentry": "Allow sending log messages to a Sentry server"
+                "nette/nette": "~2.1",
+                "opauth/facebook": "*",
+                "opauth/google": "*",
+                "opauth/linkedin": "*",
+                "opauth/opauth": "*",
+                "opauth/twitter": "*"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
             "autoload": {
-                "psr-4": {
-                    "Monolog\\": "src/Monolog"
-                }
+                "classmap": [
+                    "src/NetteOpauth/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -529,32 +112,29 @@
             ],
             "authors": [
                 {
-                    "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be"
+                    "name": "Michal Svec",
+                    "homepage": "http://michalsvec.cz"
                 }
             ],
-            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-            "homepage": "http://github.com/Seldaek/monolog",
+            "description": "Opauth extension for Nette framework",
             "keywords": [
-                "log",
-                "logging",
-                "psr-3"
+                "OPAuth",
+                "nette"
             ],
-            "time": "2017-06-19T01:22:40+00:00"
+            "time": "2015-09-30T19:32:52+00:00"
         },
         {
             "name": "nette/application",
-            "version": "v2.4.9",
+            "version": "v2.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/application.git",
-                "reference": "f69175cbe5cb9ea3db51dab01b6f0574dc6c94d5"
+                "reference": "fe1915f880d8e5d16217bad467950733fd5cbad3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/application/zipball/f69175cbe5cb9ea3db51dab01b6f0574dc6c94d5",
-                "reference": "f69175cbe5cb9ea3db51dab01b6f0574dc6c94d5",
+                "url": "https://api.github.com/repos/nette/application/zipball/fe1915f880d8e5d16217bad467950733fd5cbad3",
+                "reference": "fe1915f880d8e5d16217bad467950733fd5cbad3",
                 "shasum": ""
             },
             "require": {
@@ -628,20 +208,20 @@
                 "routing",
                 "seo"
             ],
-            "time": "2017-08-24T21:30:36+00:00"
+            "time": "2018-05-16T09:28:51+00:00"
         },
         {
             "name": "nette/bootstrap",
-            "version": "v2.4.5",
+            "version": "v2.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/bootstrap.git",
-                "reference": "804925787764d708a7782ea0d9382a310bb21968"
+                "reference": "268816e3f1bb7426c3a4ceec2bd38a036b532543"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/bootstrap/zipball/804925787764d708a7782ea0d9382a310bb21968",
-                "reference": "804925787764d708a7782ea0d9382a310bb21968",
+                "url": "https://api.github.com/repos/nette/bootstrap/zipball/268816e3f1bb7426c3a4ceec2bd38a036b532543",
+                "reference": "268816e3f1bb7426c3a4ceec2bd38a036b532543",
                 "shasum": ""
             },
             "require": {
@@ -704,20 +284,20 @@
                 "configurator",
                 "nette"
             ],
-            "time": "2017-08-20T17:36:59+00:00"
+            "time": "2018-05-17T12:52:20+00:00"
         },
         {
             "name": "nette/caching",
-            "version": "v2.5.6",
+            "version": "v2.5.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/caching.git",
-                "reference": "1231735b5135ca02bd381b70482c052d2a90bdc9"
+                "reference": "7fba7c7ab2585fafb7b31152f2595e1551120555"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/caching/zipball/1231735b5135ca02bd381b70482c052d2a90bdc9",
-                "reference": "1231735b5135ca02bd381b70482c052d2a90bdc9",
+                "url": "https://api.github.com/repos/nette/caching/zipball/7fba7c7ab2585fafb7b31152f2595e1551120555",
+                "reference": "7fba7c7ab2585fafb7b31152f2595e1551120555",
                 "shasum": ""
             },
             "require": {
@@ -773,24 +353,24 @@
                 "nette",
                 "sqlite"
             ],
-            "time": "2017-08-30T12:12:25+00:00"
+            "time": "2018-03-21T11:04:32+00:00"
         },
         {
             "name": "nette/component-model",
-            "version": "v2.3.1",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/component-model.git",
-                "reference": "b6197fa6867d816b08457ac73b04ba70f78682e3"
+                "reference": "6e7980f5ddec31f68a39e767799b1b0be9dd1014"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/component-model/zipball/b6197fa6867d816b08457ac73b04ba70f78682e3",
-                "reference": "b6197fa6867d816b08457ac73b04ba70f78682e3",
+                "url": "https://api.github.com/repos/nette/component-model/zipball/6e7980f5ddec31f68a39e767799b1b0be9dd1014",
+                "reference": "6e7980f5ddec31f68a39e767799b1b0be9dd1014",
                 "shasum": ""
             },
             "require": {
-                "nette/utils": "^2.4 || ~3.0.0",
+                "nette/utils": "^2.5 || ~3.0.0",
                 "php": ">=5.6.0"
             },
             "conflict": {
@@ -804,7 +384,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -828,22 +408,26 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "Nette Component Model",
+            "description": "⚛ Nette Component Model",
             "homepage": "https://nette.org",
-            "time": "2017-07-11T08:59:35+00:00"
+            "keywords": [
+                "components",
+                "nette"
+            ],
+            "time": "2018-03-20T16:32:50+00:00"
         },
         {
             "name": "nette/database",
-            "version": "v2.4.4",
+            "version": "v2.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/database.git",
-                "reference": "9b16e3ea2d9c21579962a17d81e17e4f71f59d6b"
+                "reference": "b094b7ae07daa7d4c188168f78b15eb2f4f27212"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/database/zipball/9b16e3ea2d9c21579962a17d81e17e4f71f59d6b",
-                "reference": "9b16e3ea2d9c21579962a17d81e17e4f71f59d6b",
+                "url": "https://api.github.com/repos/nette/database/zipball/b094b7ae07daa7d4c188168f78b15eb2f4f27212",
+                "reference": "b094b7ae07daa7d4c188168f78b15eb2f4f27212",
                 "shasum": ""
             },
             "require": {
@@ -902,20 +486,80 @@
                 "queries",
                 "sqlite"
             ],
-            "time": "2017-07-27T10:58:17+00:00"
+            "time": "2018-06-01T15:50:27+00:00"
         },
         {
-            "name": "nette/di",
-            "version": "v2.4.10",
+            "name": "nette/deprecated",
+            "version": "v2.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nette/di.git",
-                "reference": "a4b3be935b755f23aebea1ce33d7e3c832cdff98"
+                "url": "https://github.com/nette/deprecated.git",
+                "reference": "d03c5bfd679d15ddf39abf99dedf054b1078c7ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/di/zipball/a4b3be935b755f23aebea1ce33d7e3c832cdff98",
-                "reference": "a4b3be935b755f23aebea1ce33d7e3c832cdff98",
+                "url": "https://api.github.com/repos/nette/deprecated/zipball/d03c5bfd679d15ddf39abf99dedf054b1078c7ff",
+                "reference": "d03c5bfd679d15ddf39abf99dedf054b1078c7ff",
+                "shasum": ""
+            },
+            "require-dev": {
+                "latte/latte": "^2.2",
+                "nette/application": "^2.2",
+                "nette/bootstrap": "^2.2.1",
+                "nette/caching": "^2.2",
+                "nette/forms": "^2.2",
+                "nette/mail": "^2.2",
+                "nette/robot-loader": "^2.2",
+                "nette/safe-stream": "^2.2",
+                "nette/security": "^2.2",
+                "nette/tester": "^1.1",
+                "nette/utils": "^2.2",
+                "tracy/tracy": "^2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ],
+                "files": [
+                    "src/loader.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "https://nette.org/contributors"
+                }
+            ],
+            "description": "Nette Deprecated: APIs and features removed from Nette Framework",
+            "homepage": "https://nette.org",
+            "keywords": [
+                "nette"
+            ],
+            "time": "2017-07-14T07:25:32+00:00"
+        },
+        {
+            "name": "nette/di",
+            "version": "v2.4.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/di.git",
+                "reference": "3f8f212b02d5c17feb97a7e0a39ab306f40c06ca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/di/zipball/3f8f212b02d5c17feb97a7e0a39ab306f40c06ca",
+                "reference": "3f8f212b02d5c17feb97a7e0a39ab306f40c06ca",
                 "shasum": ""
             },
             "require": {
@@ -971,31 +615,31 @@
                 "nette",
                 "static"
             ],
-            "time": "2017-08-31T22:42:00+00:00"
+            "time": "2018-06-11T08:46:01+00:00"
         },
         {
             "name": "nette/finder",
-            "version": "v2.4.1",
+            "version": "v2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/finder.git",
-                "reference": "4d43a66d072c57d585bf08a3ef68d3587f7e9547"
+                "reference": "ee951a656cb8ac622e5dd33474a01fd2470505a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/finder/zipball/4d43a66d072c57d585bf08a3ef68d3587f7e9547",
-                "reference": "4d43a66d072c57d585bf08a3ef68d3587f7e9547",
+                "url": "https://api.github.com/repos/nette/finder/zipball/ee951a656cb8ac622e5dd33474a01fd2470505a0",
+                "reference": "ee951a656cb8ac622e5dd33474a01fd2470505a0",
                 "shasum": ""
             },
             "require": {
-                "nette/utils": "^2.4 || ~3.0.0",
+                "nette/utils": "~2.4",
                 "php": ">=5.6.0"
             },
             "conflict": {
                 "nette/nette": "<2.2"
             },
             "require-dev": {
-                "nette/tester": "^2.0",
+                "nette/tester": "~2.0",
                 "tracy/tracy": "^2.3"
             },
             "type": "library",
@@ -1025,22 +669,28 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "Nette Finder: Files Searching",
+            "description": "🔍 Nette Finder: find files and directories with an intuitive API.",
             "homepage": "https://nette.org",
-            "time": "2017-07-10T23:47:08+00:00"
+            "keywords": [
+                "filesystem",
+                "glob",
+                "iterator",
+                "nette"
+            ],
+            "time": "2018-06-28T11:49:23+00:00"
         },
         {
             "name": "nette/forms",
-            "version": "v2.4.6",
+            "version": "v2.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/forms.git",
-                "reference": "70224011c6ca3941f5aeeb4efbe31d2cb3b13652"
+                "reference": "57dbcea96334e3d6034d8a44bd609a51a4f941d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/forms/zipball/70224011c6ca3941f5aeeb4efbe31d2cb3b13652",
-                "reference": "70224011c6ca3941f5aeeb4efbe31d2cb3b13652",
+                "url": "https://api.github.com/repos/nette/forms/zipball/57dbcea96334e3d6034d8a44bd609a51a4f941d7",
+                "reference": "57dbcea96334e3d6034d8a44bd609a51a4f941d7",
                 "shasum": ""
             },
             "require": {
@@ -1095,20 +745,20 @@
                 "nette",
                 "validation"
             ],
-            "time": "2017-08-25T12:45:48+00:00"
+            "time": "2018-06-28T11:15:32+00:00"
         },
         {
             "name": "nette/http",
-            "version": "v2.4.7",
+            "version": "v2.4.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/http.git",
-                "reference": "234d02d2fb6d65b728ddd3816608b47e6a2f21ae"
+                "reference": "a36e6bad0aae8bacf849c150b5e0ecacef0d9eca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/http/zipball/234d02d2fb6d65b728ddd3816608b47e6a2f21ae",
-                "reference": "234d02d2fb6d65b728ddd3816608b47e6a2f21ae",
+                "url": "https://api.github.com/repos/nette/http/zipball/a36e6bad0aae8bacf849c150b5e0ecacef0d9eca",
+                "reference": "a36e6bad0aae8bacf849c150b5e0ecacef0d9eca",
                 "shasum": ""
             },
             "require": {
@@ -1119,7 +769,7 @@
                 "nette/nette": "<2.2"
             },
             "require-dev": {
-                "nette/di": "^2.4.6 || ~3.0.0",
+                "nette/di": "^2.4.8 || ~3.0.0",
                 "nette/tester": "^2.0",
                 "tracy/tracy": "^2.4"
             },
@@ -1167,20 +817,20 @@
                 "session",
                 "url"
             ],
-            "time": "2017-08-24T21:04:00+00:00"
+            "time": "2018-09-03T19:16:55+00:00"
         },
         {
             "name": "nette/mail",
-            "version": "v2.4.3",
+            "version": "v2.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/mail.git",
-                "reference": "2511b0cfa7c181c5fe333838152e308605594c53"
+                "reference": "13312eb627d913f2630018a07a9e40cb7003dc76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/mail/zipball/2511b0cfa7c181c5fe333838152e308605594c53",
-                "reference": "2511b0cfa7c181c5fe333838152e308605594c53",
+                "url": "https://api.github.com/repos/nette/mail/zipball/13312eb627d913f2630018a07a9e40cb7003dc76",
+                "reference": "13312eb627d913f2630018a07a9e40cb7003dc76",
                 "shasum": ""
             },
             "require": {
@@ -1226,22 +876,29 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "Nette Mail: Sending E-mails",
+            "description": "📧 Nette Mail: handy email creation and transfer library for PHP with both text and MIME-compliant support.",
             "homepage": "https://nette.org",
-            "time": "2017-07-13T16:51:28+00:00"
+            "keywords": [
+                "mail",
+                "mailer",
+                "mime",
+                "nette",
+                "smtp"
+            ],
+            "time": "2018-03-18T16:30:02+00:00"
         },
         {
             "name": "nette/neon",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/neon.git",
-                "reference": "9eacd50553b26b53a3977bfb2fea2166d4331622"
+                "reference": "5e72b1dd3e2d34f0863c5561139a19df6a1ef398"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/neon/zipball/9eacd50553b26b53a3977bfb2fea2166d4331622",
-                "reference": "9eacd50553b26b53a3977bfb2fea2166d4331622",
+                "url": "https://api.github.com/repos/nette/neon/zipball/5e72b1dd3e2d34f0863c5561139a19df6a1ef398",
+                "reference": "5e72b1dd3e2d34f0863c5561139a19df6a1ef398",
                 "shasum": ""
             },
             "require": {
@@ -1280,22 +937,106 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "Nette NEON: parser & generator for Nette Object Notation",
+            "description": "🍸 Nette NEON: encodes and decodes NEON file format.",
             "homepage": "http://ne-on.org",
-            "time": "2017-07-11T18:29:08+00:00"
+            "keywords": [
+                "export",
+                "import",
+                "neon",
+                "nette",
+                "yaml"
+            ],
+            "time": "2018-03-21T12:12:21+00:00"
         },
         {
-            "name": "nette/php-generator",
-            "version": "v2.6.3",
+            "name": "nette/nette",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nette/php-generator.git",
-                "reference": "78c898808d3a1018cc81f9d7108bc645129776c8"
+                "url": "https://github.com/nette/nette.git",
+                "reference": "25381e4ec7902734e49924c1ffd07017830c5f31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/php-generator/zipball/78c898808d3a1018cc81f9d7108bc645129776c8",
-                "reference": "78c898808d3a1018cc81f9d7108bc645129776c8",
+                "url": "https://api.github.com/repos/nette/nette/zipball/25381e4ec7902734e49924c1ffd07017830c5f31",
+                "reference": "25381e4ec7902734e49924c1ffd07017830c5f31",
+                "shasum": ""
+            },
+            "require": {
+                "latte/latte": "^2.4",
+                "nette/application": "^2.4",
+                "nette/bootstrap": "^2.4",
+                "nette/caching": "^2.5",
+                "nette/component-model": "^2.3",
+                "nette/database": "^2.4",
+                "nette/deprecated": "^2.3",
+                "nette/di": "^2.4",
+                "nette/finder": "^2.4",
+                "nette/forms": "^2.4",
+                "nette/http": "^2.4",
+                "nette/mail": "^2.4",
+                "nette/neon": "^2.4",
+                "nette/php-generator": "^2.4",
+                "nette/reflection": "^2.4",
+                "nette/robot-loader": "^2.4",
+                "nette/safe-stream": "^2.3",
+                "nette/security": "^2.4",
+                "nette/tokenizer": "^2.2",
+                "nette/utils": "^2.4",
+                "tracy/tracy": "^2.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "Nette/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "https://nette.org/contributors"
+                }
+            ],
+            "description": "Nette Framework - innovative framework for fast and easy development of secured web applications in PHP. Write less, have cleaner code and your work will bring you joy.",
+            "homepage": "https://nette.org",
+            "keywords": [
+                "Forms",
+                "database",
+                "debugging",
+                "framework",
+                "mailing",
+                "mvc",
+                "templating"
+            ],
+            "time": "2016-05-03T15:59:52+00:00"
+        },
+        {
+            "name": "nette/php-generator",
+            "version": "v2.6.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/php-generator.git",
+                "reference": "c1f6b2163c5471c4d94cd94b93362f12bceef183"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/php-generator/zipball/c1f6b2163c5471c4d94cd94b93362f12bceef183",
+                "reference": "c1f6b2163c5471c4d94cd94b93362f12bceef183",
                 "shasum": ""
             },
             "require": {
@@ -1336,9 +1077,15 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "Nette PHP Generator",
+            "description": "🐘 Nette PHP Generator: generates neat PHP code for you. Supports new PHP 7.1 features.",
             "homepage": "https://nette.org",
-            "time": "2017-07-14T07:06:27+00:00"
+            "keywords": [
+                "code",
+                "nette",
+                "php",
+                "scaffolding"
+            ],
+            "time": "2018-04-26T16:47:39+00:00"
         },
         {
             "name": "nette/reflection",
@@ -1406,35 +1153,36 @@
         },
         {
             "name": "nette/robot-loader",
-            "version": "dev-master",
+            "version": "v2.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/robot-loader.git",
-                "reference": "fc76c70e740b10f091e502b2e393d0be912f38d4"
+                "reference": "1f7f8792ce4d94162959e6b766822d6051623bca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/robot-loader/zipball/fc76c70e740b10f091e502b2e393d0be912f38d4",
-                "reference": "fc76c70e740b10f091e502b2e393d0be912f38d4",
+                "url": "https://api.github.com/repos/nette/robot-loader/zipball/1f7f8792ce4d94162959e6b766822d6051623bca",
+                "reference": "1f7f8792ce4d94162959e6b766822d6051623bca",
                 "shasum": ""
             },
             "require": {
                 "ext-tokenizer": "*",
-                "nette/finder": "^2.3 || ^3.0",
-                "nette/utils": "^2.4 || ^3.0",
+                "nette/caching": "~2.2",
+                "nette/finder": "~2.3",
+                "nette/utils": "~2.4",
                 "php": ">=5.6.0"
             },
             "conflict": {
                 "nette/nette": "<2.2"
             },
             "require-dev": {
-                "nette/tester": "^2.0",
+                "nette/tester": "~2.0",
                 "tracy/tracy": "^2.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -1467,7 +1215,7 @@
                 "nette",
                 "trait"
             ],
-            "time": "2018-08-13T14:19:06+00:00"
+            "time": "2017-08-14T20:23:02+00:00"
         },
         {
             "name": "nette/safe-stream",
@@ -1532,16 +1280,16 @@
         },
         {
             "name": "nette/security",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/security.git",
-                "reference": "8a3051f9b16d4d7bfa18b6b0ff6f9f6f418f9801"
+                "reference": "9b60f156626394f859a42a04dfbdcbe59095a37c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/security/zipball/8a3051f9b16d4d7bfa18b6b0ff6f9f6f418f9801",
-                "reference": "8a3051f9b16d4d7bfa18b6b0ff6f9f6f418f9801",
+                "url": "https://api.github.com/repos/nette/security/zipball/9b60f156626394f859a42a04dfbdcbe59095a37c",
+                "reference": "9b60f156626394f859a42a04dfbdcbe59095a37c",
                 "shasum": ""
             },
             "require": {
@@ -1584,22 +1332,83 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "Nette Security: Access Control Component",
+            "description": "🔑 Nette Security: provides authentication, authorization and a role-based access control management via ACL (Access Control List)",
             "homepage": "https://nette.org",
-            "time": "2017-07-11T09:41:59+00:00"
+            "keywords": [
+                "Authentication",
+                "acl",
+                "authorization",
+                "nette"
+            ],
+            "time": "2018-04-02T19:47:47+00:00"
         },
         {
-            "name": "nette/utils",
-            "version": "v2.4.8",
+            "name": "nette/tokenizer",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nette/utils.git",
-                "reference": "f1584033b5af945b470533b466b81a789d532034"
+                "url": "https://github.com/nette/tokenizer.git",
+                "reference": "88373e9f79007245af0ccd8132fde117421723b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/f1584033b5af945b470533b466b81a789d532034",
-                "reference": "f1584033b5af945b470533b466b81a789d532034",
+                "url": "https://api.github.com/repos/nette/tokenizer/zipball/88373e9f79007245af0ccd8132fde117421723b2",
+                "reference": "88373e9f79007245af0ccd8132fde117421723b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "conflict": {
+                "nette/nette": "<2.2"
+            },
+            "require-dev": {
+                "nette/tester": "~1.7",
+                "tracy/tracy": "^2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "https://nette.org/contributors"
+                }
+            ],
+            "description": "Nette Tokenizer",
+            "homepage": "https://nette.org",
+            "time": "2017-09-08T14:16:06+00:00"
+        },
+        {
+            "name": "nette/utils",
+            "version": "v2.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/utils.git",
+                "reference": "183069866dc477fcfbac393ed486aaa6d93d19a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/utils/zipball/183069866dc477fcfbac393ed486aaa6d93d19a5",
+                "reference": "183069866dc477fcfbac393ed486aaa6d93d19a5",
                 "shasum": ""
             },
             "require": {
@@ -1623,12 +1432,15 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.4-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
                 "classmap": [
                     "src/"
+                ],
+                "files": [
+                    "src/loader.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1665,45 +1477,168 @@
                 "utility",
                 "validation"
             ],
-            "time": "2017-08-20T17:32:29+00:00"
+            "time": "2018-05-02T17:16:08+00:00"
         },
         {
-            "name": "phpseclib/phpseclib",
-            "version": "2.0.11",
+            "name": "opauth/facebook",
+            "version": "0.4.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "7053f06f91b3de78e143d430e55a8f7889efc08b"
+                "url": "https://github.com/opauth/facebook.git",
+                "reference": "c682783d588f20b8515d157b59ddeefd49d95ede"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/7053f06f91b3de78e143d430e55a8f7889efc08b",
-                "reference": "7053f06f91b3de78e143d430e55a8f7889efc08b",
+                "url": "https://api.github.com/repos/opauth/facebook/zipball/c682783d588f20b8515d157b59ddeefd49d95ede",
+                "reference": "c682783d588f20b8515d157b59ddeefd49d95ede",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "opauth/opauth": ">=0.2.0",
+                "php": ">=5.2.0"
             },
-            "require-dev": {
-                "phing/phing": "~2.7",
-                "phpunit/phpunit": "^4.8.35|^5.7|^6.0",
-                "sami/sami": "~2.0",
-                "squizlabs/php_codesniffer": "~2.0"
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "U-Zyn Chua",
+                    "email": "chua@uzyn.com",
+                    "homepage": "http://uzyn.com"
+                }
+            ],
+            "description": "Facebook strategy for Opauth",
+            "homepage": "http://opauth.org",
+            "keywords": [
+                "Authentication",
+                "auth",
+                "facebook"
+            ],
+            "time": "2018-08-16T05:01:06+00:00"
+        },
+        {
+            "name": "opauth/google",
+            "version": "0.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/opauth/google.git",
+                "reference": "35df77684c14acb346a8c3753ae3809852d1a47e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/opauth/google/zipball/35df77684c14acb346a8c3753ae3809852d1a47e",
+                "reference": "35df77684c14acb346a8c3753ae3809852d1a47e",
+                "shasum": ""
+            },
+            "require": {
+                "opauth/opauth": ">=0.2.0",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "U-Zyn Chua",
+                    "email": "chua@uzyn.com",
+                    "homepage": "http://uzyn.com"
+                }
+            ],
+            "description": "Google strategy for Opauth",
+            "homepage": "http://opauth.org",
+            "keywords": [
+                "Authentication",
+                "auth",
+                "google"
+            ],
+            "time": "2012-10-18T14:39:52+00:00"
+        },
+        {
+            "name": "opauth/linkedin",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/opauth/linkedin.git",
+                "reference": "76df2b9520b02f4e87d1d0bd6ce64a375dcba03c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/opauth/linkedin/zipball/76df2b9520b02f4e87d1d0bd6ce64a375dcba03c",
+                "reference": "76df2b9520b02f4e87d1d0bd6ce64a375dcba03c",
+                "shasum": ""
+            },
+            "require": {
+                "opauth/opauth": ">=0.4.0",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "U-Zyn Chua",
+                    "email": "chua@uzyn.com",
+                    "homepage": "http://uzyn.com"
+                }
+            ],
+            "description": "LinkedIn strategy for Opauth",
+            "homepage": "http://opauth.org",
+            "keywords": [
+                "Authentication",
+                "auth",
+                "linked in",
+                "linkedin"
+            ],
+            "time": "2013-06-15T11:21:21+00:00"
+        },
+        {
+            "name": "opauth/opauth",
+            "version": "0.4.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/opauth/opauth.git",
+                "reference": "3f979012d0bdf2d447bb02b97f7f7d9f482c77e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/opauth/opauth/zipball/3f979012d0bdf2d447bb02b97f7f7d9f482c77e8",
+                "reference": "3f979012d0bdf2d447bb02b97f7f7d9f482c77e8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
             },
             "suggest": {
-                "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
-                "ext-libsodium": "SSH2/SFTP can make use of some algorithms provided by the libsodium-php extension.",
-                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
-                "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
+                "opauth/facebook": "Allows Facebook authentication",
+                "opauth/google": "Allows Google authentication",
+                "opauth/twitter": "Allows Twitter authentication"
             },
             "type": "library",
             "autoload": {
-                "files": [
-                    "phpseclib/bootstrap.php"
-                ],
-                "psr-4": {
-                    "phpseclib\\": "phpseclib/"
-                }
+                "classmap": [
+                    "lib/Opauth/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1711,80 +1646,47 @@
             ],
             "authors": [
                 {
-                    "name": "Jim Wigginton",
-                    "email": "terrafrost@php.net",
-                    "role": "Lead Developer"
-                },
-                {
-                    "name": "Patrick Monnerat",
-                    "email": "pm@datasphere.ch",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Andreas Fischer",
-                    "email": "bantu@phpbb.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Hans-Jürgen Petrich",
-                    "email": "petrich@tronic-media.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Graham Campbell",
-                    "email": "graham@alt-three.com",
-                    "role": "Developer"
+                    "name": "U-Zyn Chua",
+                    "email": "chua@uzyn.com",
+                    "homepage": "http://uzyn.com"
                 }
             ],
-            "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
-            "homepage": "http://phpseclib.sourceforge.net",
+            "description": "Multi-provider authentication framework for PHP",
+            "homepage": "http://opauth.org",
             "keywords": [
-                "BigInteger",
-                "aes",
-                "asn.1",
-                "asn1",
-                "blowfish",
-                "crypto",
-                "cryptography",
-                "encryption",
-                "rsa",
-                "security",
-                "sftp",
-                "signature",
-                "signing",
-                "ssh",
-                "twofish",
-                "x.509",
-                "x509"
+                "Authentication",
+                "OpenId",
+                "auth",
+                "facebook",
+                "google",
+                "oauth",
+                "omniauth",
+                "twitter"
             ],
-            "time": "2018-04-15T16:55:05+00:00"
+            "time": "2018-02-25T03:18:21+00:00"
         },
         {
-            "name": "psr/cache",
-            "version": "1.0.1",
+            "name": "opauth/twitter",
+            "version": "0.3.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-fig/cache.git",
-                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+                "url": "https://github.com/opauth/twitter.git",
+                "reference": "9c09fb3d714b8bf7b35ebc235346cf2feced69e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
-                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "url": "https://api.github.com/repos/opauth/twitter/zipball/9c09fb3d714b8bf7b35ebc235346cf2feced69e3",
+                "reference": "9c09fb3d714b8bf7b35ebc235346cf2feced69e3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "opauth/opauth": ">=0.2.0",
+                "php": ">=5.2.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
             "autoload": {
-                "psr-4": {
-                    "Psr\\Cache\\": "src/"
+                "psr-0": {
+                    "": "."
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1793,127 +1695,32 @@
             ],
             "authors": [
                 {
-                    "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
+                    "name": "U-Zyn Chua",
+                    "email": "chua@uzyn.com",
+                    "homepage": "http://uzyn.com"
                 }
             ],
-            "description": "Common interface for caching libraries",
+            "description": "Twitter strategy for Opauth",
+            "homepage": "http://opauth.org",
             "keywords": [
-                "cache",
-                "psr",
-                "psr-6"
+                "Authentication",
+                "auth",
+                "twitter"
             ],
-            "time": "2016-08-06T20:24:11+00:00"
-        },
-        {
-            "name": "psr/http-message",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/http-message.git",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Http\\Message\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interface for HTTP messages",
-            "homepage": "https://github.com/php-fig/http-message",
-            "keywords": [
-                "http",
-                "http-message",
-                "psr",
-                "psr-7",
-                "request",
-                "response"
-            ],
-            "time": "2016-08-06T14:39:51+00:00"
-        },
-        {
-            "name": "psr/log",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/log.git",
-                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Log\\": "Psr/Log/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interface for logging libraries",
-            "homepage": "https://github.com/php-fig/log",
-            "keywords": [
-                "log",
-                "psr",
-                "psr-3"
-            ],
-            "time": "2016-10-10T12:19:37+00:00"
+            "time": "2017-03-28T05:03:36+00:00"
         },
         {
             "name": "tracy/tracy",
-            "version": "v2.4.9",
+            "version": "v2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "efe45da0aa3a50ce5356be39f2168d7925d94f3d"
+                "reference": "93f89fbff33db4d583062104c71d6083b717371a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/efe45da0aa3a50ce5356be39f2168d7925d94f3d",
-                "reference": "efe45da0aa3a50ce5356be39f2168d7925d94f3d",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/93f89fbff33db4d583062104c71d6083b717371a",
+                "reference": "93f89fbff33db4d583062104c71d6083b717371a",
                 "shasum": ""
             },
             "require": {
@@ -1931,7 +1738,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.4-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
@@ -1944,9 +1751,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause",
-                "GPL-2.0",
-                "GPL-3.0"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -1967,85 +1772,15 @@
                 "nette",
                 "profiler"
             ],
-            "time": "2017-08-16T17:13:36+00:00"
+            "time": "2018-08-13T16:46:17+00:00"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "nette/tester",
-            "version": "v2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nette/tester.git",
-                "reference": "ee0ad514d66409037a0e72fe798112fd8cdae92e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nette/tester/zipball/ee0ad514d66409037a0e72fe798112fd8cdae92e",
-                "reference": "ee0ad514d66409037a0e72fe798112fd8cdae92e",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6.0"
-            },
-            "bin": [
-                "src/tester"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause",
-                "GPL-2.0",
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "David Grudl",
-                    "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
-                }
-            ],
-            "description": "Nette Tester: enjoyable unit testing in PHP with code coverage reporter. 🍏🍏🍎🍏",
-            "homepage": "https://tester.nette.org",
-            "keywords": [
-                "Xdebug",
-                "assertions",
-                "clover",
-                "code coverage",
-                "nette",
-                "phpdbg",
-                "phpunit",
-                "testing",
-                "unit"
-            ],
-            "time": "2017-08-22T06:46:57+00:00"
-        }
-    ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "nette/robot-loader": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {
-        "php": ">=5.6.0"
-    },
-    "platform-dev": [],
-    "platform-overrides": {
-        "php": "5.6"
-    }
+    "platform": [],
+    "platform-dev": []
 }

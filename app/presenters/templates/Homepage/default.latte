@@ -13,6 +13,17 @@
                 <img src="{$basePath}/images/granton_logo.png" />  
                 <h1 class="h1 mb-4 font-weight-semibold">Vykazuj.cz</h1>
                 <label for="inputEmail" class="sr-only">Email address</label>
+                <br>sdfsdf<br><p>
+                    
+                    {if Nette\Config\Configurator::detectDebugMode()}
+	<a href="{plink Auth:callback, strategy => 'fake'}">Fake login</a><br/>
+{/if}
+<a href="{plink Auth:google}">Sign-in with Google</a><br/>
+<a href="{plink Auth:facebook}">Sign-in with Facebook</a><br/>
+<a href="{plink Auth:twitter}">Sign-in with Twitter</a><br/>
+<a href="{plink Auth:linkedin}">Sign-in with LinkedIn</a><br/>
+                    
+                </p>
                 {input name}
                 {input password}
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Přihlásit se</button>
