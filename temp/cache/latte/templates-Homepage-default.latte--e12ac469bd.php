@@ -39,7 +39,7 @@ class Templatee12ac469bd extends Latte\Runtime\Template
 	function prepare()
 	{
 		extract($this->params);
-		if (isset($this->params['flash'])) trigger_error('Variable $flash overwritten in foreach on line 33');
+		if (isset($this->params['flash'])) trigger_error('Variable $flash overwritten in foreach on line 22');
 		$this->parentName = "@login.latte";
 		Nette\Bridges\ApplicationLatte\UIRuntime::initialize($this, $this->parentName, $this->blocks);
 		
@@ -68,22 +68,9 @@ class Templatee12ac469bd extends Latte\Runtime\Template
                 <img src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 13 */ ?>/images/granton_logo.png">  
                 <h1 class="h1 mb-4 font-weight-semibold">Vykazuj.cz</h1>
                 <label for="inputEmail" class="sr-only">Email address</label>
-                <br>sdfsdf<br><p>
-                    
-<?php
-		if (Nette\Config\Configurator::detectDebugMode()) {
-			?>	<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:callback", ['strategy' => 'fake'])) ?>">Fake login</a><br>
-<?php
-		}
-		?><a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:google")) ?>">Sign-in with Google</a><br>
-<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:facebook")) ?>">Sign-in with Facebook</a><br>
-<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:twitter")) ?>">Sign-in with Twitter</a><br>
-<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:linkedin")) ?>">Sign-in with LinkedIn</a><br>
-                    
-                </p>
-                <?php echo end($this->global->formsStack)["name"]->getControl() /* line 27 */ ?>
+                <?php echo end($this->global->formsStack)["name"]->getControl() /* line 16 */ ?>
 
-                <?php echo end($this->global->formsStack)["password"]->getControl() /* line 28 */ ?>
+                <?php echo end($this->global->formsStack)["password"]->getControl() /* line 17 */ ?>
 
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Přihlásit se</button>
             <?php
@@ -110,7 +97,7 @@ class Templatee12ac469bd extends Latte\Runtime\Template
 ?><i class="fas fa-check-circle awesomegreen"></i>
 <?php
 				}
-				?>                      <?php echo LR\Filters::escapeHtmlText($flash->message) /* line 39 */ ?>
+				?>                      <?php echo LR\Filters::escapeHtmlText($flash->message) /* line 28 */ ?>
 
                   </span>
               </div>

@@ -2,10 +2,17 @@
 
 namespace App\Presenters;
 
-class AuthPresenter extends BasePresenter
-{
+use NetteOpauth;
+
+class AuthPresenter extends BasePresenter{
 	/** @var NetteOpauth\NetteOpauth */
 	protected $opauth;
+        private $database;
+        
+        function __construct(\Nette\Database\Context $database)
+        {
+            $this->database = $database;
+        }
 
 	/**
 	 * @param NetteOpauth\NetteOpauth
@@ -20,7 +27,7 @@ class AuthPresenter extends BasePresenter
 	 *
 	 * @param string|NULL $strategy strategy used depends on selected provider - 'fake' for localhost testing
 	 */
-	public function actionAuth($strategy = NULL)
+	public function actionAuth($strategy)
 	{
 		$this->opauth->auth($strategy);
 	}

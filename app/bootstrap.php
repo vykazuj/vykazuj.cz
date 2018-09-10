@@ -10,7 +10,6 @@ $configurator = new Nette\Configurator;
 $configurator->onCompile[] = function (\Nette\Config\Configurator $configurator, \Nette\DI\Compiler $compiler) {
 	$compiler->addExtension('opauth', new NetteOpauth\DI\Extension());
 };
-\NetteOpauth\NetteOpauth::register($container->router);
 
 //$configurator->setDebugMode('23.75.345.200'); // enable for your remote IP
 $configurator->setDebugMode(true);
@@ -30,6 +29,7 @@ $configurator->addConfig(__DIR__ . '/config/config.neon');
 
 $container = $configurator->createContainer();
 // register routers
+\NetteOpauth\NetteOpauth::register($container->getService('router'));
 
 
 return $container;
