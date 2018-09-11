@@ -27,6 +27,22 @@ class MyAuthenticator implements NS\IAuthenticator
         if ($row["status"]=="registered") {
             throw new NS\AuthenticationException('Účet není aktivní. Potvrďte jí podle instrukcí v e-mailu.');
         }
-        return new NS\Identity($row->id, $row->role, ['username' => $row->username, 'first_name' => $row->first_name, 'last_name' => $row->last_name]);
+        return new NS\Identity($row->id, $row->role, ['username' => $row->username, 'first_name' => $row->first_name, 'last_name' => $row->last_name, 'image' => $row->image]);
+    }
+    
+    function authenticateExternal($source, $source_id)
+    {
+                
+        $rows = $this->database->fetchAll('select * from users where source=? and source_id=?',$source, $source_id);
+        $sideRow = NULL;
+        foreach ($rows as $sideRow){
+            $row = $sideRow;
+        }
+        
+        //$row = $this->database->fetch("select * from users where username = ? and status = ? ",$username, "active");
+        if (!$row) {
+            throw new NS\AuthenticationException('Nesprávné jméno či heslo.');
+        }
+        return new NS\Identity($row->id, $row->role, ['username' => $row->username, 'first_name' => $row->first_name, 'last_name' => $row->last_name, 'image' => $row->image]);
     }
 }

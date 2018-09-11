@@ -1,0 +1,16 @@
+
+{block content}
+<body>
+<p>
+                    
+                    {if Nette\Config\Configurator::detectDebugMode()}
+	<a href="{plink Auth:callback, strategy => 'fake'}">Fake login</a><br/>
+{/if}
+<a href="{plink Auth:Google}">Sign-in with Google</a><br/>
+<a href="{plink Auth:Facebook}">Sign-in with Facebook</a><br/>
+<a href="{plink Auth:Twitter}">Sign-in with Twitter</a><br/>
+<a href="{plink Auth:LinkedIn}">Sign-in with LinkedIn</a><br/>
+                    
+                </p>
+</body>
+{/block}

@@ -26,6 +26,8 @@ class MyRegistrator
         
         //unset($input["agree_ladder"]);
         $input["status"] = 'registered';
+        $input["source"] = 'vykazuj';
+        $input["source_id"] = '';
         $input["email_confirmation"] = $randstring;
         $input["password"]= Passwords::hash($input["password"]);
         
@@ -50,6 +52,45 @@ class MyRegistrator
 
     }
 
+    function isExternalRegistered($source, $source_id){
+        $rowCount = $this->database->query('select * from users where source = ? and source_id = ?',$source, $source_id)->getRowCount();
+        if($rowCount > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    function registerFromExternalSource($input, $source)
+    {
+        if($source==="google"){
+            $user["status"] = 'active';
+            $user["first_name"] = $input->first_name;
+            $user["username"] = $source.$input->id;
+            $user["last_name"] = $input->last_name;
+            $user["source"] = $source;
+            $user["source_id"] = $input->id;
+            $user["email"] = $input->email;
+            $user["image"] = $input->getImage();
+            $objDateTime = new DateTime('NOW');
+            $user["created"]= $objDateTime->format('c');
+
+            try
+            {
+                //$this->database->query('INSERT INTO users ?', $input);
+                $this->database->table("users")->insert($user);
+
+            }
+            catch(\PDOException $e)
+            {
+                return 'Registrace zákazníka se nepovedla. Kontaktujte admina s chybovou hláškou: '.$e->getMessage();
+            }
+            return true;
+        }
+    }
+    
+    
     function getAttributes($userId){
         return $this->database->table("users")->get($userId);
     }

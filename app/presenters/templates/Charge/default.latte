@@ -6,7 +6,13 @@
 <div class="row">
     <div class="col-3 col-lg-2 text-center panel-left">
         <h2 class="h1 mb-4 font-weight-semibold red">Vykazuj.cz</h2>
-        <img src="{$basePath}/images/{if $lastName == 'Haase'}drhaase{elseif $lastName == 'Lamaj'}jamal{else}honza{/if}.jpg" class="rounded-circle" alt="Cinque Terre">
+        <img src="
+             {if (isset($userImage) && $userImage!='') }
+                 {$userImage}
+             {else}
+                {$basePath}/images/{if $lastName == 'Haase'}drhaase{elseif $lastName == 'Lamaj'}jamal{else}honza{/if}.jpg
+             {/if}
+                " class="rounded-circle" alt="Cinque Terre" width="150px">
         <span class="full-name">{$firstName} {$lastName}</span>
         <span class="job-title">{if $lastName == 'Haase' || $lastName == 'Lamaj'}Slave{else}Jednatel{/if}</span>
         <div class="list-group">

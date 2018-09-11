@@ -1,13 +1,11 @@
 {layout "@login.latte"}
 
-{block scripts}
 
-{/block}
 
 {block content}
   <body class="text-center">
-      <div class="container">
-        <div class="panel panel-body">
+      <div class="container text-center">
+        <div class="panel panel-body text-center">
 
             {form loginForm}
                 <img src="{$basePath}/images/granton_logo.png" />  
@@ -16,8 +14,9 @@
                 {input name}
                 {input password}
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Přihlásit se</button>
+                <br>
             {/form}
-
+                <button class="btn btn-lg btn-success btn-block" id="btn-google">Přihlásit pomocí <i class="fab fa-google"></i>mail</button>
             {ifset $flashes}
               <div n:foreach="$flashes as $flash" n:class="$flash->type">
                   <span n:class="$flash->type">
@@ -84,5 +83,11 @@ input:-webkit-autofill, input:-webkit-autofill:focus,  input:-webkit-autofill:vi
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.btn-block{
+    display: inline-block;
+    max-width: 300px;
+}
 </style>
+
 {/block}

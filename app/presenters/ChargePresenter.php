@@ -17,6 +17,7 @@ class ChargePresenter extends BasePresenter
 		$this->template->anyVariable = 'any value';
                 $this->template->firstName = $this->user->getIdentity()->first_name;
                 $this->template->lastName = $this->user->getIdentity()->last_name; 
+                $this->template->userImage = $this->user->getIdentity()->image; 
 	}
         
         public function actionDefault(){
@@ -48,23 +49,6 @@ class ChargePresenter extends BasePresenter
             $myObj['code'] = '0';
             $myObj['data'] = $myRecordHandler->getRecordsByMonthYearUser($month, $year, $this->user->getId());
             
-            /*
-            for($i=0;$i<31;$i++){
-                $myObj['data'][$i]['id'] = round(rand(0, 5555 ));
-                $myObj['data'][$i]['day'] = $i+1;
-                $myObj['data'][$i]['project_id'] = round(rand(0, 4 ));
-                $myObj['data'][$i]['hours'] = round(rand(4, 8));
-                $myObj['data'][$i]['hours_over'] = round(rand(0, 2));
-                $myObj['data'][$i]['month'] = $month;
-                $myObj['data'][$i]['year'] = $year;
-                $myObj['data'][$i]['user_id'] = 3;
-                $myObj['data'][$i]['status'] = 'created';
-                $myObj['data'][$i]['note'] = 'Vytvořeno skriptem';
-                //$this->database->table('record')->insert($myObj['data'][$i]);
-                $myObj['data'][$i]['project_name'] = $this->projectName[$myObj['data'][$i]['project_id']];
-            }
-            */
-
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));
              
@@ -180,10 +164,11 @@ class ChargePresenter extends BasePresenter
         
         public function actionGetMyChargeableProjects(){
             
+            $myRecordHandler = new \RecordHandler($this->database);
             $myObj = null;
                 try
                     { 
-                    $row = $this->database->query('SELECT * from project');
+                    $row = $myRecordHandler->getMyChargeableProjects($this->user->getId());
                     $myObj['result'] = 'OK';
                     $myObj['code'] = '0';
                     $myObj['data'] = $row;
@@ -198,4 +183,5 @@ class ChargePresenter extends BasePresenter
             $this->sendResponse(new JsonResponse($myJSON));
              
         }
+        
 }
