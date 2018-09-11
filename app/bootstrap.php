@@ -3,6 +3,7 @@
 const ENVIROMENT = 'DEV';
 require __DIR__ . '/../vendor/autoload.php';
 use Tracy\Debugger;
+use Nette\Utils\ObjectHelpers;
 Debugger::enable();
 Debugger::$showBar = true;
 $configurator = new Nette\Configurator;
