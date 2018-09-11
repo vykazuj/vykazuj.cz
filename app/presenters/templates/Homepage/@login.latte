@@ -26,6 +26,22 @@
 <script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
 <script src="{$basePath}/js/jquery-3.3.1.min.js"></script>        
 <script src="{$basePath}/js/bootstrap.min.js"></script>
+        <script src="{$basePath}/js/fontawesome/svg-with-js/js/fontawesome-all.js"></script>
+
+<script>
+    $(document).ready(function() 
+    {   
+        function loginWithGoogle(){
+            window.location.replace({$basePath}+"/auth/google");
+            return false;
+        };
+        
+        $("#btn-google").click( function (){
+            loginWithGoogle();
+        });
+    });
+</script>
+
 {/block}
 
 </body>

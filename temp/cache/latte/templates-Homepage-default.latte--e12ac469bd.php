@@ -6,13 +6,11 @@ use Latte\Runtime as LR;
 class Templatee12ac469bd extends Latte\Runtime\Template
 {
 	public $blocks = [
-		'scripts' => 'blockScripts',
 		'content' => 'blockContent',
 		'head' => 'blockHead',
 	];
 
 	public $blockTypes = [
-		'scripts' => 'html',
 		'content' => 'html',
 		'head' => 'html',
 	];
@@ -24,12 +22,9 @@ class Templatee12ac469bd extends Latte\Runtime\Template
 ?>
 
 
-<?php
-		if ($this->getParentName()) return get_defined_vars();
-		$this->renderBlock('scripts', get_defined_vars());
-?>
 
 <?php
+		if ($this->getParentName()) return get_defined_vars();
 		$this->renderBlock('content', get_defined_vars());
 		$this->renderBlock('head', get_defined_vars());
 		return get_defined_vars();
@@ -39,15 +34,9 @@ class Templatee12ac469bd extends Latte\Runtime\Template
 	function prepare()
 	{
 		extract($this->params);
-		if (isset($this->params['flash'])) trigger_error('Variable $flash overwritten in foreach on line 22');
+		if (isset($this->params['flash'])) trigger_error('Variable $flash overwritten in foreach on line 21');
 		$this->parentName = "@login.latte";
 		Nette\Bridges\ApplicationLatte\UIRuntime::initialize($this, $this->parentName, $this->blocks);
-		
-	}
-
-
-	function blockScripts($_args)
-	{
 		
 	}
 
@@ -57,27 +46,28 @@ class Templatee12ac469bd extends Latte\Runtime\Template
 		extract($_args);
 ?>
   <body class="text-center">
-      <div class="container">
-        <div class="panel panel-body">
+      <div class="container text-center">
+        <div class="panel panel-body text-center">
 
             <?php
-		/* line 12 */
+		/* line 10 */
 		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form = $_form = $this->global->formsStack[] = $this->global->uiControl["loginForm"], []);
 ?>
 
-                <img src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 13 */ ?>/images/granton_logo.png">  
+                <img src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 11 */ ?>/images/granton_logo.png">  
                 <h1 class="h1 mb-4 font-weight-semibold">Vykazuj.cz</h1>
                 <label for="inputEmail" class="sr-only">Email address</label>
-                <?php echo end($this->global->formsStack)["name"]->getControl() /* line 16 */ ?>
+                <?php echo end($this->global->formsStack)["name"]->getControl() /* line 14 */ ?>
 
-                <?php echo end($this->global->formsStack)["password"]->getControl() /* line 17 */ ?>
+                <?php echo end($this->global->formsStack)["password"]->getControl() /* line 15 */ ?>
 
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Přihlásit se</button>
+                <br>
             <?php
 		echo Nette\Bridges\FormsLatte\Runtime::renderFormEnd(array_pop($this->global->formsStack));
 ?>
 
-
+                <button class="btn btn-lg btn-success btn-block" id="btn-google">Přihlásit pomocí <i class="fab fa-google"></i>mail</button>
 <?php
 		if (isset($flashes)) {
 			$iterations = 0;
@@ -97,7 +87,7 @@ class Templatee12ac469bd extends Latte\Runtime\Template
 ?><i class="fas fa-check-circle awesomegreen"></i>
 <?php
 				}
-				?>                      <?php echo LR\Filters::escapeHtmlText($flash->message) /* line 28 */ ?>
+				?>                      <?php echo LR\Filters::escapeHtmlText($flash->message) /* line 27 */ ?>
 
                   </span>
               </div>
@@ -167,7 +157,13 @@ input:-webkit-autofill, input:-webkit-autofill:focus,  input:-webkit-autofill:vi
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.btn-block{
+    display: inline-block;
+    max-width: 300px;
+}
 </style>
+
 <?php
 	}
 

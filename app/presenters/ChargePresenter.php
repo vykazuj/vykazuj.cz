@@ -17,6 +17,7 @@ class ChargePresenter extends BasePresenter
 		$this->template->anyVariable = 'any value';
                 $this->template->firstName = $this->user->getIdentity()->first_name;
                 $this->template->lastName = $this->user->getIdentity()->last_name; 
+                $this->template->userImage = $this->user->getIdentity()->image; 
 	}
         
         public function actionDefault(){

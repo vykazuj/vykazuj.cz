@@ -92,6 +92,22 @@ class Templatece9b0cc833 extends Latte\Runtime\Template
 <script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
 <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 27 */ ?>/js/jquery-3.3.1.min.js"></script>        
 <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 28 */ ?>/js/bootstrap.min.js"></script>
+        <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 29 */ ?>/js/fontawesome/svg-with-js/js/fontawesome-all.js"></script>
+
+<script>
+    $(document).ready(function() 
+    {   
+        function loginWithGoogle(){
+            window.location.replace(<?php echo LR\Filters::escapeJs($basePath) /* line 35 */ ?>+"/auth/google");
+            return false;
+        };
+        
+        $("#btn-google").click( function (){
+            loginWithGoogle();
+        });
+    });
+</script>
+
 <?php
 	}
 

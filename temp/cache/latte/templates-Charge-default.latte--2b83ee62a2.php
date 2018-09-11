@@ -32,7 +32,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 	function prepare()
 	{
 		extract($this->params);
-		if (isset($this->params['myChargeableProject'])) trigger_error('Variable $myChargeableProject overwritten in foreach on line 73');
+		if (isset($this->params['myChargeableProject'])) trigger_error('Variable $myChargeableProject overwritten in foreach on line 79');
 		$this->parentName = "@login.latte";
 		Nette\Bridges\ApplicationLatte\UIRuntime::initialize($this, $this->parentName, $this->blocks);
 		
@@ -48,19 +48,31 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 <div class="row">
     <div class="col-3 col-lg-2 text-center panel-left">
         <h2 class="h1 mb-4 font-weight-semibold red">Vykazuj.cz</h2>
-        <img src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 9 */ ?>/images/<?php
-		if ($lastName == 'Haase') {
-			?>drhaase<?php
-		}
-		elseif ($lastName == 'Lamaj') {
-			?>jamal<?php
+        <img src="
+<?php
+		if ((isset($userImage) && $userImage!='')) {
+			?>                 <?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($userImage)) /* line 11 */ ?>
+
+<?php
 		}
 		else {
-			?>honza<?php
+			?>                <?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 13 */ ?>/images/<?php
+			if ($lastName == 'Haase') {
+				?>drhaase<?php
+			}
+			elseif ($lastName == 'Lamaj') {
+				?>jamal<?php
+			}
+			else {
+				?>honza<?php
+			}
+?>.jpg
+<?php
 		}
-?>.jpg" class="rounded-circle" alt="Cinque Terre">
-        <span class="full-name"><?php echo LR\Filters::escapeHtmlText($firstName) /* line 10 */ ?> <?php
-		echo LR\Filters::escapeHtmlText($lastName) /* line 10 */ ?></span>
+?>
+                " class="rounded-circle" alt="Cinque Terre" width="150px">
+        <span class="full-name"><?php echo LR\Filters::escapeHtmlText($firstName) /* line 16 */ ?> <?php
+		echo LR\Filters::escapeHtmlText($lastName) /* line 16 */ ?></span>
         <span class="job-title"><?php
 		if ($lastName == 'Haase' || $lastName == 'Lamaj') {
 			?>Slave<?php
@@ -183,16 +195,16 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 <?php
 			$iterations = 0;
 			foreach ($myChargeableProjects as $myChargeableProject) {
-				?>                      <option value="<?php echo LR\Filters::escapeHtmlAttr($myChargeableProject->id) /* line 73 */ ?>" title="<?php
-				echo LR\Filters::escapeHtmlAttr($myChargeableProject->name) /* line 73 */ ?>">
+				?>                      <option value="<?php echo LR\Filters::escapeHtmlAttr($myChargeableProject->id) /* line 79 */ ?>" title="<?php
+				echo LR\Filters::escapeHtmlAttr($myChargeableProject->name) /* line 79 */ ?>">
                           <?php
 				if (strlen($myChargeableProject->name)>30) {
-					?> <?php echo LR\Filters::escapeHtmlText(substr($myChargeableProject->name, 0, 27).'...') /* line 74 */ ?>
+					?> <?php echo LR\Filters::escapeHtmlText(substr($myChargeableProject->name, 0, 27).'...') /* line 80 */ ?>
 
                           <?php
 				}
 				else {
-					echo LR\Filters::escapeHtmlText($myChargeableProject->name) /* line 75 */ ?>
+					echo LR\Filters::escapeHtmlText($myChargeableProject->name) /* line 81 */ ?>
 
 <?php
 				}
@@ -396,9 +408,9 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
         });
         
         var daysOfWeek = ["Po","Út","St","Čt","Pá","So","Ne"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 270 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 271 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 272 */ ?>;
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 276 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 277 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 278 */ ?>;
         loadActualRecords(actualMonth, actualYear);
         //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
                     
