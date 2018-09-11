@@ -37,18 +37,30 @@ class AuthPresenter extends BasePresenter{
 	 */
 	public function actionCallback($strategy)
 	{
-                //$strategy="Google";
 		if ($strategy === NULL) {
 			$this->flashMessage("Authentication failed.", "danger");
 			$this->redirect('Homepage:default');
 		}
 		$identity = $this->opauth->callback($strategy);
+                        $this->flashMessage($strategy, "info");
+                        
+                foreach($identity->data as $key => $value){
+                    if(!is_array($value)){
+                        //$this->flashMessage($key." = ".$value, "info");
+                    }
+                }
+                
+                $myRegistrator = new \MyRegistrator($this->database);
+                
+                if(!$myRegistrator->isExternalRegistered(strtolower($strategy), $identity->getId())){
+                    $answer = $myRegistrator->registerFromExternalSource($identity, strtolower($strategy));
+                }
 
 		// Here is a good place for transformation of 3rd part identities to your app identity.
 		// Like pairing with your app accounts.
 
-		$this->user->login($identity);
-		$this->redirect("Homepage:default");
+		$this->user->loginExternal($strategy, $identity->getId());
+		$this->redirect("Charge:default");
 	}
 
 	/**

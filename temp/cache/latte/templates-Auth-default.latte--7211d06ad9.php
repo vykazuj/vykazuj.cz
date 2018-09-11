@@ -46,10 +46,10 @@ class Template7211d06ad9 extends Latte\Runtime\Template
 			?>	<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:callback", ['strategy' => 'fake'])) ?>">Fake login</a><br>
 <?php
 		}
-		?><a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:auth", ['Google'])) ?>">Sign-in with Google</a><br>
-<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:auth", ['Facebook'])) ?>">Sign-in with Facebook</a><br>
-<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:auth", ['Twitter'])) ?>">Sign-in with Twitter</a><br>
-<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:auth", ['LinkedIn'])) ?>">Sign-in with LinkedIn</a><br>
+		?><a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:Google")) ?>">Sign-in with Google</a><br>
+<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:Facebook")) ?>">Sign-in with Facebook</a><br>
+<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:Twitter")) ?>">Sign-in with Twitter</a><br>
+<a href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiPresenter->link("Auth:LinkedIn")) ?>">Sign-in with LinkedIn</a><br>
                     
                 </p>
 </body>
