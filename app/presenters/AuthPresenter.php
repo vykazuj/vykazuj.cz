@@ -37,6 +37,7 @@ class AuthPresenter extends BasePresenter{
 	 */
 	public function actionCallback($strategy)
 	{
+                //$strategy="Google";
 		if ($strategy === NULL) {
 			$this->flashMessage("Authentication failed.", "danger");
 			$this->redirect('Homepage:default');

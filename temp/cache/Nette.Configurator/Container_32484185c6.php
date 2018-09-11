@@ -448,8 +448,8 @@ class Container_32484185c6 extends Nette\DI\Container
 	public function createServiceOpauth__opauth(): NetteOpauth\NetteOpauth
 	{
 		$service = new NetteOpauth\NetteOpauth([
-			'path' => 'http://vykazuj.cz/auth/',
-			'callback_url' => 'http://vykazuj.cz/auth/callback',
+			'path' => '/vykazuj/www/auth/',
+			'callback_url' => '{path}callback',
 			'security_salt' => '123abc456def',
 			'debug' => true,
 			'callback_transport' => 'session',
