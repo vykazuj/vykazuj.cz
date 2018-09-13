@@ -16,7 +16,8 @@
         <span class="full-name">{$firstName} {$lastName}</span>
         <span class="job-title">{if $lastName == 'Haase' || $lastName == 'Lamaj'}Slave{else}Jednatel{/if}</span>
         <div class="list-group">
-            <a href="#" class="list-group-item active"><i class="far fa-clock"></i>Timesheety</a>
+            <a n:href="Charge:default" class="list-group-item active"><i class="far fa-clock"></i>Timesheety</a>
+            <a n:href="Clients:default" class="list-group-item"><i class="fas fa-users"></i>Klienti</a>
             <a href="#" class="list-group-item"><i class="fas fa-chart-line"></i>Statistiky</a>
             <a href="#" class="list-group-item"><i class="fas fa-cog"></i>Nastavení</a>
         </div>

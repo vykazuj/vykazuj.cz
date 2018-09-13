@@ -32,7 +32,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 	function prepare()
 	{
 		extract($this->params);
-		if (isset($this->params['myChargeableProject'])) trigger_error('Variable $myChargeableProject overwritten in foreach on line 79');
+		if (isset($this->params['myChargeableProject'])) trigger_error('Variable $myChargeableProject overwritten in foreach on line 80');
 		$this->parentName = "@login.latte";
 		Nette\Bridges\ApplicationLatte\UIRuntime::initialize($this, $this->parentName, $this->blocks);
 		
@@ -82,7 +82,8 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 		}
 ?></span>
         <div class="list-group">
-            <a href="#" class="list-group-item active"><i class="far fa-clock"></i>Timesheety</a>
+            <a class="list-group-item active" href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link("Charge:default")) ?>"><i class="far fa-clock"></i>Timesheety</a>
+            <a class="list-group-item" href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link("Clients:default")) ?>"><i class="fas fa-users"></i>Klienti</a>
             <a href="#" class="list-group-item"><i class="fas fa-chart-line"></i>Statistiky</a>
             <a href="#" class="list-group-item"><i class="fas fa-cog"></i>Nastavení</a>
         </div>
@@ -195,16 +196,16 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 <?php
 			$iterations = 0;
 			foreach ($myChargeableProjects as $myChargeableProject) {
-				?>                      <option value="<?php echo LR\Filters::escapeHtmlAttr($myChargeableProject->id) /* line 79 */ ?>" title="<?php
-				echo LR\Filters::escapeHtmlAttr($myChargeableProject->name) /* line 79 */ ?>">
+				?>                      <option value="<?php echo LR\Filters::escapeHtmlAttr($myChargeableProject->id) /* line 80 */ ?>" title="<?php
+				echo LR\Filters::escapeHtmlAttr($myChargeableProject->name) /* line 80 */ ?>">
                           <?php
 				if (strlen($myChargeableProject->name)>30) {
-					?> <?php echo LR\Filters::escapeHtmlText(substr($myChargeableProject->name, 0, 27).'...') /* line 80 */ ?>
+					?> <?php echo LR\Filters::escapeHtmlText(substr($myChargeableProject->name, 0, 27).'...') /* line 81 */ ?>
 
                           <?php
 				}
 				else {
-					echo LR\Filters::escapeHtmlText($myChargeableProject->name) /* line 81 */ ?>
+					echo LR\Filters::escapeHtmlText($myChargeableProject->name) /* line 82 */ ?>
 
 <?php
 				}
@@ -408,9 +409,9 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
         });
         
         var daysOfWeek = ["Po","Út","St","Čt","Pá","So","Ne"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 276 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 277 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 278 */ ?>;
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 277 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 278 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 279 */ ?>;
         loadActualRecords(actualMonth, actualYear);
         //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
                     

@@ -54,7 +54,6 @@ class Templatea36e42e9fb extends Latte\Runtime\Template
 		$this->renderBlock('scripts', get_defined_vars());
 ?>
 
-
 <?php
 		$this->renderBlock('content', get_defined_vars());
 ?>
