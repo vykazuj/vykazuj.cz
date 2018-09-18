@@ -24,24 +24,17 @@
     </div>
         
         
-    <div class="col-9 col-lg-8 text-center panel-mid">
+    <div class="col-9 col-lg-10 text-center panel-mid">
         <div class="container timetable-blank">
-          <ul class="nav nav-pills">
-            <li class="" month="1">TMCZ</li>
-            <li class="" month="1">ČSAS</li>
-            <li class="" month="1">AirBank</li>
-            <li class="" month="1">Coca-Cola</li>
-            <li class="" month="1">Bangalore</li>
-            <li class="" month="1">Blizzard</li>
-            <li class="" month="1">Activision</li>
-            <li class="" month="1">War Horse</li>
+          <ul class="nav nav-pills" id="my-clients-header">
+            <li class="nav-pills-red" id="add-new-client"><i class="fas fa-plus-circle"></i>Nový klient</li>
           </ul>
         </div>
         
         <div class="container timetable-blank">
             <div class="container container-inner timetable">
                 <br>
-                <h1 class="text-left font-weight-semibold">Granton s.r.o.</h1>
+                <h1 class="text-left font-weight-semibold"><input type="text" value="Granton s.r.o." id="client_name_label" class="client_labels_all" finder="name"></h1>
                 
                 <div class="row">
                     
@@ -49,14 +42,14 @@
                         IČO:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold">
-                        24211427<br>
+                        <input type="text" value="24211427" id="client_ico_label" class="client_not_name_label client_labels_all" finder="ico"><br>
                     </div>
                     
                     <div class="col-lg-1 col-3 text-left">
                         Telefon:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold">
-                        724 903 098<br>
+                        <input type="text" value="724 903 098" id="client_phone_label" class="client_not_name_label client_labels_all" finder="phone"><br>
                     </div>
                 </div>
                 
@@ -65,15 +58,15 @@
                     <div class="col-lg-1 col-3 text-left">
                         Kontakt:<br>
                     </div>
-                    <div class="col-lg-5 col-9 text-left font-weight-semibold">
-                        Ing. Jan Kuba<br>
+                    <div class="col-lg-5 col-9 text-left font-weight-semibold" >
+                        <input type="text" value="Ing. Jan Kuba" id="client_contact_label" class="client_not_name_label client_labels_all" finder="contact"><br>
                     </div>
                     
                     <div class="col-lg-1 col-3 text-left">
                         Email:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold">
-                        info@granton.cz<br>
+                        <input type="text" value="info@granton.cz" id="client_email_label" class="client_not_name_label client_labels_all" finder="email"><br>
                     </div>
                 </div>
                 
@@ -82,15 +75,24 @@
                         Adresa:<br>
                     </div>
                     <div class="col-lg-11 col-9 text-left font-weight-semibold">
-                        V Pachmance 540, Nebušice 164 00 Praha<br>
+                        <input type="text" value="V Pachmance 540, Nebušice 164 00 Praha" id="client_address_label" class="client_not_name_label client_labels_all" finder="address"><br>
                     </div>
                 </div>
                 
+                
+                <div class="row">
+                    
+                    <div class="col-lg-1 col-3 text-left">
+                        <span class="nav-pills-red" id="save-client">Uložit</span><br>
+                    </div>                    
+                </div>
+                
+                
                 <hr class="gray">
                 
-                <div class="row clients-row-head">
+                <div class="row clients-row-head" id ="clients-row-head">
                     <div class="col-xl-10 col-md-9 col-6 text-left font-weight-semibold">
-                        Projekt:
+                        Projekt: <span class="nav-pills-red" id="new-project">Nový</span>
                     </div>
                     <div class="col-xl-2 col-md-3 col-6 text-right font-weight-semibold">
                         MD rate
@@ -134,7 +136,7 @@
         </div>
     </div>
         
-        
+        <!--
         <div class="col-0 col-lg-2 d-none d-lg-block text-left panel-right">
             <ul class="nav nav-pills">
             <li class="nav-pills-red"><a href="#">Předvyplnit</a></li>
@@ -155,18 +157,190 @@
             </li>
             </ul>
         </div>
+        -->
 </div>
 
 </body>
   <script>
-     
+
+        var home_url = {$basePath};  
+               
+        function updateClientDetails(clientId, finder, value){
+            $("#save-client").text("Ukládám...");
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/update-client-details?clientId='+clientId+'&param='+finder+'&value='+value,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                    $("#save-client").text('Chyba');
+                }else{
+                    $("#save-client").text('Uloženo');
+                }     
+                
+              }
+            });  
+            
+        }
+        
+        function cleanClientRows(){
+            $(".clients-row").remove();
+        }
+        
+        function addClientRow(name, rate){
+            var row = '<div class="row clients-row"><div class="col-xl-9 col-md-8 col-sm-12 col-12 text-left">'+name;
+            row = row +'</div><div class="col-xl-3 col-md-4 col-sm-12 col-12 text-right">'+rate;
+            row = row +'<small><i class="fas fa-pencil-alt fa-1x clients-svg"></i><i class="fas fa-trash-alt fa-1x clients-svg"></i></small></div></div>';         
+            $("#clients-row-head").after(row);
+        }
+        
+        function createNewProject(){
+            var clientId = $("#client_name_label").attr("clientid");
+            $("#new-project").text("Přidávám...");
+            $.ajax(
+                {
+                  type: 'GET',
+                  url: home_url+'/clients/create-new-project?clientId='+clientId,
+                  dataType: 'json',
+                  cache: false,
+                  success: function(data)
+                  { 
+                    var json = $.parseJSON(data);
+                    if(json.result!=='OK'){
+                        alert(json.code);
+                        $("#new-project").text('Chyba');
+                    }else{
+                        addClientRow('Nový projekt', '10000 Kč');
+                        $("#new-project").text('Nový');
+                    }
+                  }
+                });      
+        }      
+        
+        function getMyClientProjects(id){
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/get-my-client-projects?clientId='+id,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                }else{
+                    var raw_data = json.data;
+                    for (i in raw_data)
+                    {
+                       addClientRow(raw_data[i]['name'],10000);
+                      //setSelectAction(raw_data[i].id);
+                    }
+                }     
+                
+              }
+            });  
+        }
+        
+        function getMyClient(id){
+                 $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/get-my-client?clientId='+id,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                }else{
+                    var raw_data = json.data;
+                    for (i in raw_data)
+                    {
+                      $("#client_name_label").val(raw_data[i]['name']);  
+                      $("#client_name_label").attr("clientid",raw_data[i]['id']);   
+                      $("#client_ico_label").val(raw_data[i]['ico']);   
+                      $("#client_email_label").val(raw_data[i]['email']);   
+                      $("#client_phone_label").val(raw_data[i]['phone']);   
+                      $("#client_address_label").val(raw_data[i]['address']);   
+                      $("#client_contact_label").val(raw_data[i]['contact']);   
+                      
+                      //setSelectAction(raw_data[i].id);
+                      cleanClientRows();
+                      getMyClientProjects(id);
+                      setUpMyClientDetails();
+                    }
+                }     
+                
+              }
+            });  
+        }
+        
+        
+        function getMyClients(){
+                 $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/get-my-clients',
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                }else{
+                    var raw_data = json.data;
+                    var max_id = 0;
+                    for (i in raw_data)
+                    {
+                        var temp = '<li class="client-link" clientid="'+raw_data[i]['id']+'">'+raw_data[i]['name']+'</li>';
+                      $("#my-clients-header").append(temp); 
+                      if(raw_data[i]['id'] > max_id){ max_id = raw_data[i]['id']; }
+                      //setSelectAction(raw_data[i].id);
+                    }
+                    setUpMyClientsLinks();
+                    if(max_id!==0){ getMyClient(max_id);}
+                }     
+                
+              }
+            });  
+        }   
+        
+        function setUpMyClientsLinks(){
+            $("#my-clients-header").children(".client-link").click( function(){
+                var clientid = $(this).attr("clientid");
+                getMyClient(clientid);
+            });
+        }
+        
+        function setUpMyClientDetails(){
+            $(".client_labels_all").focusout( function(){
+                var finder = $(this).attr("finder");
+                var value = $(this).val();
+                var clientId = $("#client_name_label").attr("clientid");
+                updateClientDetails(clientId, finder, value);
+            });
+        }
+        
     $(document).ready(function() 
     {   
-
-      
-    
-    
+        getMyClients();        
+        $("#add-new-client").click( function(){
+            window.location.href = home_url+"/clients/create-new-client";
         });
+        
+        $("#new-project").click( function(){
+            createNewProject();
+        });
+                         
+    });
 
     </script>
     
@@ -194,6 +368,37 @@
     -ms-flex-align: center;
     align-items: center;
     font-size:20px;
+}
+
+input.client_not_name_label{
+    font-weight: 600 !important;
+    text-align: left !important;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 0px solid white;
+    width: 100%;
+    padding-left: 10px;
+}
+
+input.client_not_name_label:hover{
+    background-color: #f7f7f7;
+}
+
+input#client_name_label{
+    font-weight: 600 !important;
+    text-align: left !important;
+    font-size: 2.5rem;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 0px solid white;
+}
+
+input#client_name_label:hover{
+    background-color: #f7f7f7;
+}
+
+#add-new-client{
+    color: #FFFFFF;
 }
 
 .chartjs-size-monitor{
@@ -235,6 +440,28 @@
     padding-top: 60px;
     background: #f8f9fa;
 
+}
+
+#save-client{
+    background-color: #E52428;
+    color: #FFFFFF;
+    text-align: center;
+    cursor: pointer;
+    padding-left:5px;
+    padding-right:5px;
+    border-radius: 5px;
+    font-weight: 600 !important;
+}
+
+#new-project{
+    background-color: #E52428;
+    color: #FFFFFF;
+    text-align: center;
+    cursor: pointer;
+    padding-left:5px;
+    padding-right:5px;
+    border-radius: 5px;
+    font-weight: 600 !important;
 }
 
 .panel-right > ul > li > span.graph-title{

@@ -39,5 +39,83 @@ class ClientsPresenter extends BasePresenter
             $this->template->actualYear = $dateSessions->year;    
              */
             
-        }        
+        }       
+        
+        public function actionGetMyClients(){
+            $myClientHandler = new \ClientHandler($this->database);
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $myObj['data'] = $myClientHandler->getMyClients($this->user->getId());
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
+        public function actionGetMyClient($clientId){
+            $myClientHandler = new \ClientHandler($this->database);
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $myObj['data'] = $myClientHandler->getMyClient($this->user->getId(), $clientId);
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
+        public function actionGetMyClientProjects($clientId){
+            $myClientHandler = new \ClientHandler($this->database);
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $myObj['data'] = $myClientHandler->getMyClientProjects($this->user->getId(), $clientId);
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
+        public function actionCreateNewClient(){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myClientHandler->createNewClient($this->user->getId());
+            
+            $this->redirect("Clients:default");
+        }
+        
+        public function actionCreateNewProject($clientId){
+            $myClientHandler = new \ClientHandler($this->database);            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
+                $myClientHandler->createNewProject($this->user->getId(), $clientId);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'Nemáte právo na přidání';
+            }
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
+        public function actionUpdateClientDetails($clientId, $param, $value){
+            $myClientHandler = new \ClientHandler($this->database);
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
+                $myClientHandler->updateClient($clientId, $param, $value);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'Nemáte právo na úpravu';
+            }
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
 }
