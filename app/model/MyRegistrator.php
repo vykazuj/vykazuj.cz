@@ -78,9 +78,8 @@ class MyRegistrator
 
             $company["id"] = null;
             $company["name"] = $input->first_name.' '.$input->last_name;
-            $company["ico"] = null;
-            $company["address"] = null;
-            $company["owner_id"] = null;
+            $company["ico"] = 'ičo';
+            $company["address"] = 'adresa';
             
             
             try
