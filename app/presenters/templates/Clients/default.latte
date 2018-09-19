@@ -187,16 +187,67 @@
             });  
             
         }
+                
+        function updateProjectDetails(projectId, value){
+            $("#save-client").text("Ukládám...");
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/update-project-details?projectId='+projectId+'&value='+value,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                    $("#save-client").text('Chyba');
+                }else{
+                    $("#save-client").text('Uloženo');
+                }     
+                
+              }
+            });  
+        }
+        
+        function deleteProject(projectId){
+            $("#save-client").text("Mažu...");
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/delete-project?projectId='+projectId,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                    $("#save-client").text('Chyba');
+                }else{
+                    $("#save-client").text('Nový');
+                    $("input[projectid='"+projectId+"']").parent().parent().remove();
+                }     
+                
+              }
+            });  
+        }
         
         function cleanClientRows(){
             $(".clients-row").remove();
         }
         
-        function addClientRow(name, rate){
-            var row = '<div class="row clients-row"><div class="col-xl-9 col-md-8 col-sm-12 col-12 text-left">'+name;
+        
+        function addClientRow(data, rate){
+            var row = '<div class="row clients-row"><div class="col-xl-9 col-md-8 col-sm-12 col-12 text-left">\n\
+                       <input type="text" value="'+data["name"]+'" projectid="'+data["id"]+'" class="project_labels_all">';
             row = row +'</div><div class="col-xl-3 col-md-4 col-sm-12 col-12 text-right">'+rate;
-            row = row +'<small><i class="fas fa-pencil-alt fa-1x clients-svg"></i><i class="fas fa-trash-alt fa-1x clients-svg"></i></small></div></div>';         
+            row = row +'<small>';
+            // row = row +'<i class="fas fa-pencil-alt fa-1x clients-svg"></i>';
+            row = row +'<span class="delete_project" projectid="'+data["id"]+'"><i class="fas fa-trash-alt fa-1x clients-svg"></i></span></small></div></div>';         
             $("#clients-row-head").after(row);
+            
+            
         }
         
         function createNewProject(){
@@ -215,8 +266,9 @@
                         alert(json.code);
                         $("#new-project").text('Chyba');
                     }else{
-                        addClientRow('Nový projekt', '10000 Kč');
-                        $("#new-project").text('Nový');
+                        var raw_data = json.data;
+                        addClientRow(raw_data,'10 000 Kč');
+                        $("#new-project").text("Přidat další");
                     }
                   }
                 });      
@@ -238,9 +290,10 @@
                     var raw_data = json.data;
                     for (i in raw_data)
                     {
-                       addClientRow(raw_data[i]['name'],10000);
+                       addClientRow(raw_data[i],'10 000 Kč');
                       //setSelectAction(raw_data[i].id);
                     }
+                      setUpMyProjectsDetails();
                 }     
                 
               }
@@ -273,8 +326,8 @@
                       
                       //setSelectAction(raw_data[i].id);
                       cleanClientRows();
-                      getMyClientProjects(id);
                       setUpMyClientDetails();
+                      getMyClientProjects(id);
                     }
                 }     
                 
@@ -329,6 +382,20 @@
             });
         }
         
+        function setUpMyProjectsDetails(){
+            $(".project_labels_all").focusout( function(){
+                var projectId = $(this).attr("projectid");
+                var value = $(this).val();
+                updateProjectDetails(projectId, value);
+            });
+            
+            $(".delete_project").click( function(){
+                var projectId = $(this).attr("projectid");
+                deleteProject(projectId);
+            });
+            
+        }
+        
     $(document).ready(function() 
     {   
         getMyClients();        
@@ -369,6 +436,16 @@
     align-items: center;
     font-size:20px;
 }
+
+input.project_labels_all{
+    text-align: left !important;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 0px solid white;
+    width: 100%;
+    padding-left: 10px;
+}
+
 
 input.client_not_name_label{
     font-weight: 600 !important;

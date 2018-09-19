@@ -39,6 +39,14 @@ class ClientHandler {
             {return false;}
     }
     
+    function isMyProject($userId, $projectId){
+        $rowNum = $this->database->query('select * from users_project_rel where user_id = ? and project_id = ?',$userId, $projectId)->getRowCount();
+        if($rowNum>0)
+            {return true;}
+        else
+            {return false;}
+    }
+    
     function updateClient($clientId, $param, $value){
         $os = array("company_id", "name", "ico","contact", "phone", "email","address");
         if (in_array($param, $os)) {
@@ -46,6 +54,21 @@ class ClientHandler {
         }else{
             return false;
         }
+    }
+    
+    function updateProject($projectId, $param, $value){
+        $os = array("name");
+        if (in_array($param, $os)) {
+            return $this->database->query("update project set ".$param." = ? where id = ?", $value, $projectId);
+        }else{
+            return false;
+        }
+    }
+    
+    function deleteProject($projectId){
+
+        return $this->database->query("delete from project where id = ?", $projectId);
+
     }
     
     function getMyCompany($userId){
@@ -79,7 +102,7 @@ class ClientHandler {
         $userProjectRel["rel"] = 'user';
         $row2 = $this->database->table('users_project_rel')->insert($userProjectRel);
         
-        return $row2;
+        return $row->toArray();
     }
     
 }

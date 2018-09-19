@@ -91,7 +91,7 @@ class ClientsPresenter extends BasePresenter
             $myObj['code'] = '0';
             
             if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
-                $myClientHandler->createNewProject($this->user->getId(), $clientId);
+                $myObj['data'] = $myClientHandler->createNewProject($this->user->getId(), $clientId);
             }else{
                 $myObj['result'] = 'NOT OK';
                 $myObj['code'] = 'Nemáte právo na přidání';
@@ -109,6 +109,42 @@ class ClientsPresenter extends BasePresenter
             
             if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
                 $myClientHandler->updateClient($clientId, $param, $value);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'Nemáte právo na úpravu';
+            }
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
+        public function actionUpdateProjectDetails($projectId, $value){
+            $myClientHandler = new \ClientHandler($this->database);
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if($myClientHandler->isMyProject($this->user->getId(), $projectId)){
+                $myClientHandler->updateProject($projectId, 'name', $value);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'Nemáte právo na úpravu';
+            }
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
+        public function actionDeleteProject($projectId){
+            $myClientHandler = new \ClientHandler($this->database);
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if($myClientHandler->isMyProject($this->user->getId(), $projectId)){
+                $myClientHandler->deleteProject($projectId);
             }else{
                 $myObj['result'] = 'NOT OK';
                 $myObj['code'] = 'Nemáte právo na úpravu';
