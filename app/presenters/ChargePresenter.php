@@ -184,4 +184,13 @@ class ChargePresenter extends BasePresenter
              
         }
         
+
+	public function actionCreateTimesheet(){
+            /*
+            $myGame = $this->myGame;
+            $myDiplom = new \DiplomHandler($this->database, $myGame);
+            return $myDiplom->createDiplom();
+            $this->redirect('Game:default');
+            */
+	}  
 }
