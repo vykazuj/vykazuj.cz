@@ -27,7 +27,7 @@
     <div class="col-9 col-lg-8 text-center panel-mid">
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
-            <li><a href="#">2018</a></li>
+            <li><a href="#" id="yearPick">2018</a></li>
             <li class="monthLink{if $actualMonth==1} active{/if}" month="1">Leden</li>
             <li class="monthLink{if $actualMonth==2} active{/if}" month="2">Únor</a></li>
             <li class="monthLink{if $actualMonth==3} active{/if}" month="3">Březen</a></li>
@@ -222,31 +222,55 @@
         }
 
         function setActionOnAddRecord(obj){
-                            obj.click( function(){
+                        obj.click( function(){
                             var parent = obj.parent();
                             var recordId = obj.attr('recordid');
                             var projectId = $("#my-chargeable-projects").val();
-                            $.ajax(
-                            {
+                            if(Number(recordId)>0){
+                                $.ajax(
+                                {
 
-                               type: 'GET',
-                               url: home_url+'/charge/create-record?id='+recordId+'&projectId='+projectId,
-                               dataType: 'json',
-                               cache: false,
-                               success: function(data)
-                                    {
-                                        var json = $.parseJSON(data); 
-                                        if(json.result==='OK'){
-                                            parent.after(createNewRowUnderDate(json.data));
-                                            setSVGActions(json.data.id);
-                                            setSelectOption(json.data.id, json.data.project_id);
-                                            
-                                        }else{
-                                            alert(json.code);
+                                   type: 'GET',
+                                   url: home_url+'/charge/create-record?id='+recordId+'&projectId='+projectId,
+                                   dataType: 'json',
+                                   cache: false,
+                                   success: function(data)
+                                        {
+                                            var json = $.parseJSON(data); 
+                                            if(json.result==='OK'){
+                                                parent.after(createNewRowUnderDate(json.data));
+                                                setSVGActions(json.data.id);
+                                                setSelectOption(json.data.id, json.data.project_id);
+
+                                            }else{
+                                                alert(json.code);
+                                            }
                                         }
-                                    }
-                            });
+                                });
+                            }else{
+                                var year = Number($("#yearPick").text());
+                                var day = Number($(this).parent().children("td.rowDay").text());
+                                $.ajax(
+                                {
+                                    
+                                   type: 'GET',
+                                   url: home_url+'/charge/create-record-by-date?projectId='+projectId+'&month='+actualMonth+'&day='+day+'&year='+year,
+                                   dataType: 'json',
+                                   cache: false,
+                                   success: function(data)
+                                        {
+                                            var json = $.parseJSON(data); 
+                                            if(json.result==='OK'){
+                                                parent.after(createNewRowUnderDate(json.data));
+                                                setSVGActions(json.data.id);
+                                                setSelectOption(json.data.id, json.data.project_id);
 
+                                            }else{
+                                                alert(json.code);
+                                            }
+                                        }
+                                });
+                            }
                     });
         }
 
@@ -311,7 +335,7 @@
               for (let i = 1; i <= days; i++){
                 var date = new Date(actualMonth+'/'+i+'/'+actualYear);
                 var dayName = daysOfWeek[date.getDay()];
-                $("#my-charged-records-table > tbody").append( '<tr id="'+i+'"><td class="tiny rowPlus addRecord" recordId="'+i+'"><i class="fas fa-plus-circle"></i></td>'+
+                $("#my-charged-records-table > tbody").append( '<tr id="-'+i+'"><td class="tiny rowPlus addRecord" recordId="'+i+'"><i class="fas fa-plus-circle"></i></td>'+
                 '<td class="tiny rowDay">'+i+'</td>'+
                 '<td class="tiny rowDayOfWeek">'+dayName+'</td>'+
                 '<td class="wide rowProjectName" recordId="'+i+'"><select class="my-chargeable-projects-no-border" recordId="'+i+'"></select></td>'+
@@ -360,29 +384,29 @@
                                                 hrouda++;
                                                 
                                             }else{
-                                                $("#my-charged-records-table > tbody").append( '<tr id="'+i+'"><td class="tiny rowPlus addRecord" recordid="'+i+'"><i class="fas fa-plus-circle"></i></td>'+
+                                                $("#my-charged-records-table > tbody").append( '<tr id="'+-i+'"><td class="tiny rowPlus addRecord" recordid="'+-i+'"><i class="fas fa-plus-circle"></i></td>'+
                                                 '<td class="tiny rowDay">'+i+'</td>'+
                                                 '<td class="tiny rowDayOfWeek">'+dayName+'</td>'+
-                                                '<td class="wide rowProjectName"><span class="my-chargeable-projects-no-border"></span></td>'+
-                                                '<td class="tiny rowHours" "><span class="value">'+0+'</span>h ' +
-                                                '<td class="tiny rowHoursOver" ><span class="value">'+ 0 +'</span>h ' +
-                                                '<td class="tiny rowShare"><i class="fas fa-share-alt"></i></td>'+
-                                                '<td class="tiny rowPencil"><i class="fas fa-pencil-alt"></i></td>'+
-                                                '<td class="tiny rowTrash deleteRecord" recordid="'+i+'"><i class="fas fa-trash-alt deleteRecord"></i></td>'+
+                                                '<td class="wide rowProjectName"><span class="my-chargeable-projects-no-border grayer">(žádný záznam)</span></td>'+
+                                                '<td class="tiny rowHours" "><span class="value invisible">'+0+'</span>' +
+                                                '<td class="tiny rowHoursOver" ><span class="value invisible">'+ 0 +'</span>' +
+                                                '<td class="tiny rowShare"><i class="fas fa-share-alt invisible"></i></td>'+
+                                                '<td class="tiny rowPencil"><i class="fas fa-pencil-alt invisible"></i></td>'+
+                                                '<td class="tiny rowTrash deleteRecord" recordid="'+-i+'"><i class="fas fa-trash-alt deleteRecord invisible"></i></td>'+
                                                 '</tr>');
-                                                setSVGActions(i);
-                                                setSelectOption(i, i);     
+                                                setSVGActions(-i);
+                                                setSelectOption(-i, -i);     
                                             }
                                             while (json.data.length!=hrouda && i==json.data[hrouda].day){
-                                                    $("#my-charged-records-table > tbody").append( '<tr id="'+json.data[hrouda].id+'"><td class="tiny rowPlus addRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-plus-circle"></i></td>'+
-                                                    '<td class="tiny rowDay"></td>'+
-                                                    '<td class="tiny rowDayOfWeek"></td>'+
-                                                    '<td class="wide rowProjectName"><span class="my-chargeable-projects-no-border">'+json.data[hrouda].projectName+'</span></td>'+
-                                                    '<td class="tiny rowHours"><span class="value">'+json.data[hrouda].hours+'</span>h ' +
-                                                    '<td class="tiny rowHoursOver"><span class="value">'+ json.data[hrouda].hours_over+'</span>h ' +
-                                                    '<td class="tiny rowShare"><i class="fas fa-share-alt"></i></td>'+
-                                                    '<td class="tiny rowPencil"><i class="fas fa-pencil-alt"></i></td>'+
-                                                    '<td class="tiny rowTrash deleteRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-trash-alt deleteRecord"></i></td>'+
+                                                    $("#my-charged-records-table > tbody").append( '<tr id="'+json.data[hrouda].id+'"><td class="no-top-border tiny rowPlus addRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-plus-circle"></i></td>'+
+                                                    '<td class="no-top-border tiny rowDay"></td>'+
+                                                    '<td class="no-top-border tiny rowDayOfWeek"></td>'+
+                                                    '<td class="no-top-border wide rowProjectName"><span class="my-chargeable-projects-no-border">'+json.data[hrouda].projectName+'</span></td>'+
+                                                    '<td class="no-top-border tiny rowHours"><span class="value">'+json.data[hrouda].hours+'</span>h ' +
+                                                    '<td class="no-top-border tiny rowHoursOver"><span class="value">'+ json.data[hrouda].hours_over+'</span>h ' +
+                                                    '<td class="no-top-border tiny rowShare"><i class="fas fa-share-alt"></i></td>'+
+                                                    '<td class="no-top-border tiny rowPencil"><i class="fas fa-pencil-alt"></i></td>'+
+                                                    '<td class="no-top-border tiny rowTrash deleteRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-trash-alt deleteRecord"></i></td>'+
                                                     '</tr>');
                                                     setSVGActions(json.data[hrouda].id);
                                                     setSelectOption(json.data[hrouda].id, json.data[hrouda].project_id); 
@@ -410,6 +434,7 @@
             //loadActualRecords(newMonth, 2018);
             $('li.active').removeClass('active');
             $(this).addClass('active');
+            actualMonth = newMonth;
         });
         
 
@@ -505,6 +530,10 @@
     -ms-flex-align: center;
     align-items: center;
     font-size:20px;
+}
+
+.grayer{
+    color: #dee2e6;
 }
 
 .chartjs-size-monitor{
@@ -610,6 +639,12 @@
     width:10px;
     text-align: center;
 }
+.table-hover > tbody > tr > td.no-top-border{
+    border-top: 0px solid black;
+}
+
+
+
 .table-hover > tbody > tr > td.wide{
     text-align: left;
 }
