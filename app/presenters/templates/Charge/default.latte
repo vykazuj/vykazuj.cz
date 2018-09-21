@@ -219,7 +219,6 @@
                             var parent = obj.parent();
                             var recordId = obj.attr('recordid');
                             var projectId = $("#my-chargeable-projects").val();
-                            alert(recordId);
                             if(Number(recordId)>0){
                                 $.ajax(
                                 {
@@ -244,7 +243,6 @@
                             }else{
                                 var year = Number($("#yearPick").text());
                                 var day = Number($(this).parent().children("td.rowDay").text());
-                                alert(day+''+actualMonth+''+year);
                                 $.ajax(
                                 {
                                     
