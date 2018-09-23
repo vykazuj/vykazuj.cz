@@ -96,7 +96,7 @@ class ChargePresenter extends BasePresenter
             $myObj = null;
             $myObj['project_id'] = $projectId;
             $myObj['hours'] = $hours;
-            $myObj['hours_over'] = $hours_over;
+            $myObj['hours_over'] = 0;
             $myObj['month'] = $month;
             $myObj['year'] = $year;
             $myObj['user_id'] = $this->user->getId();

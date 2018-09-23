@@ -139,7 +139,7 @@
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
-        <button type="button" class="btn btn-primary" id="preFillButton">Předvyplnit</button>
+        <button type="button" class="btn btn-primary" id="preFillButton" data-dismiss="modal">Předvyplnit</button>
       </div>
     </div>
   </div>
@@ -271,7 +271,7 @@
                         {
                             var json = $.parseJSON(data); 
                             if(json.result==='OK'){
-                               alert('Záznamy nahrány.');
+                               fillMeCalendar(actualMonth, year);
                             }else{
                                 alert(json.code);
                             }
@@ -414,7 +414,8 @@
         //Posrane je to posrane
         
         function fillMeCalendar(month, year){
-             $.ajax(
+            $("#my-charged-records-table").children("tbody").children().remove(); 
+            $.ajax(
                     {
                         type: 'GET',
                         url: home_url+ '/charge/get-charge-record?month='+month+'&year='+year,
