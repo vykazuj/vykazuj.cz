@@ -76,11 +76,20 @@ class MyRegistrator
             $objDateTime = new DateTime('NOW');
             $user["created"]= $objDateTime->format('c');
 
+            $company["id"] = null;
+            $company["name"] = $input->first_name.' '.$input->last_name;
+            $company["ico"] = 'ičo';
+            $company["address"] = 'adresa';
+            
+            
             try
             {
                 //$this->database->query('INSERT INTO users ?', $input);
-                $this->database->table("users")->insert($user);
-
+                $user = $this->database->table("users")->insert($user);
+                $company["owner_id"] = $user["id"];
+                $company = $this->database->table("company")->insert($company);
+                $myClientHandler = new ClientHandler($this->database);
+                $myClientHandler->createNewClient($user["id"]);
             }
             catch(\PDOException $e)
             {
