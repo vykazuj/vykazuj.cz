@@ -84,7 +84,48 @@ class ChargePresenter extends BasePresenter
 
         }
         
-
+        public function actionBulkRecords($projectId, $hours, $hours_over, $month, $year){
+            $myRecordHandler = new \RecordHandler($this->database);
+            if(!$myRecordHandler->isMyChargeableProject($projectId, $this->user->getId())){
+                $myObj2['result'] = 'NOK';
+                $myObj2['code'] = 'Nemáte právo na tento projekt.';
+                $myJSON = json_encode($myObj2);
+                $this->sendResponse(new JsonResponse($myJSON));
+            }
+            
+            $myObj = null;
+            $myObj['project_id'] = $projectId;
+            $myObj['hours'] = $hours;
+            $myObj['hours_over'] = $hours_over;
+            $myObj['month'] = $month;
+            $myObj['year'] = $year;
+            $myObj['user_id'] = $this->user->getId();
+            $myObj['status'] = 'created';
+            $myObj['note'] = 'Vytvořeno jen tak';
+            $myObj2['result'] = 'OK';
+            $myObj2['code'] = '0';
+            $days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+            for($i=1; $i<=$days; $i++){
+                try
+                        { 
+                            $dayOfWeek = date("l", mktime(0,0,0,$month,$i,$year));
+                            if($dayOfWeek != "Sunday" && $dayOfWeek != "Saturday"){
+                                $myObj['day'] = $i;
+                                $myRecordHandler->insertNewRecord($myObj); 
+                            }
+                        }
+                    catch (\Nette\Neon\Exception $e) {
+                        $myObj2['result'] = 'NOK';
+                        $myObj2['code'] = $e->getMessage();
+                        $myObj2['data'] = $e->getMessage();
+                    }  
+            }
+                            
+            $myJSON = json_encode($myObj2);
+            $this->sendResponse(new JsonResponse($myJSON));
+            
+        }
+        
         public function actionCreateRecordByDate($projectId, $hours, $hours_over, $day, $month, $year){
             $myRecordHandler = new \RecordHandler($this->database);
             
