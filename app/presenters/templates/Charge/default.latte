@@ -546,6 +546,7 @@
         });
         
         $("#preFillButton").click(function (){
+            deleteActualRecors();
             projectId = $("#my-chargeable-projects-bulk").val();
             hours = $("#my-hours-bulk").val();
             bulkRecors(projectId, hours);
