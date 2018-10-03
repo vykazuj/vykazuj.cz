@@ -43,25 +43,39 @@
           </ul>
         </div>
         
-        <div class="container timetable-blank">
-            <div class="container container-inner timetable">
-                <table class="table table-hover timetable" id="my-charged-records-table">
-                    <thead>
-                      <tr>
-                        <th colspan="3">Datum</th>
-                        <th class="text-left">Projekt</th>
-                        <th>Čas(h)</th>
-                        <th>Přesčas(h)</th>
-                        <th colspan="3">Akce</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
+            <div class="container timetable-blank" >
+                <div class="container container-inner timetable" id="my-charged-records-table">
+                        <div class="row" id="my-charged-records-table-asd">
+                            <div class="col-lg-8">
+                                <div class="row">
+                                    <div class="col-lg-1 col-md-9 text-righ font-weight-semibold">
+                                    </div>
+                                    <div class="col-lg-2 col-md-9 text-mid font-weight-semibold">
+                                        Datum
+                                    </div>
+                                    <div class="col-lg-9 col-md-3 text-mid font-weight-semibold">
+                                        Projekt
+                                    </div>
+                                </div>
+                            </div>
+
+                             <div class="col-lg-4">
+                                <div class="row">
+                                    <span class="font-weight-semibold">
+                                        Čas(h)
+                                    </span>
+                                    <span class="font-weight-semibold">
+                                        Přesčas(h)
+                                    </span>
+                                    <span class="text-left font-weight-semibold">
+                                        Akce
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
-    </div>
-        
         
         <div class="col-0 col-lg-2 d-none d-lg-block text-left panel-right">
             <ul class="nav nav-pills">
@@ -164,7 +178,7 @@
 
 
         function createNewRow(obj){
-            var selectHTML = $("#my-chargeable-projects").html();
+            var selectHTML = $("#my-chargeable-projects").html(); 
             alert(selectHTML);
             var abc='<tr id="'+obj["id"]+'">'+
                     '<td class="tiny rowPlus addRecord" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></td>'+
@@ -180,20 +194,7 @@
             return abc;
         }
     
-        function createNewRowUnderDate(obj){
-            let radek='<tr id="'+obj["id"]+'"><td class="tiny rowPlus addRecord" recordid="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></td>'+
-                      '<td class="tiny rowDay"></td>'+
-                      '<td class="tiny rowDayOfWeek"></td>'+
-                      '<td class="wide rowProjectName"><span class="my-chargeable-projects-no-border">'+obj["projectName"]+'</span></td>'+
-                      '<td class="tiny rowHours"><input type="number" min=0 max=24 step=0.5 value="'+obj["hours"]+'" class="value"></input>' +
-                      '<td class="tiny rowHoursOver"><span class="value">'+0+'</span>' +
-                      '<td class="tiny rowShare"><i class="fas fa-share-alt"></i></td>'+
-                      '<td class="tiny rowSave"><i class="fas fa-save"></i></td>'+
-                      '<td class="tiny rowTrash deleteRecord" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></td>'+
-                      '</tr>';
-                      
-                        return radek;
-                }
+   
        
     
         function setSVGActions(id){
@@ -205,9 +206,9 @@
                  
         function updateRecord(recordId){      
 
-            hours = Number($("td.rowHours[recordid='"+recordId+"']").children("input").val()); 
-            hoursOver = Number($("td.rowHoursOver[recordid='"+recordId+"']").children("input").val());  
-            projectId = Number($("td.rowProjectName[recordid='"+recordId+"']").children("select").val());  
+            hours = Number($("div.rowHours[recordid='"+recordId+"']").children("input").val()); 
+            hoursOver = Number($("div.rowHoursOver[recordid='"+recordId+"']").children("input").val());  
+            projectId = Number($("div.rowProjectName[recordid='"+recordId+"']").children("select").val());  
             
             $.ajax(
             {
@@ -233,11 +234,11 @@
                 updateRecord(id);
             });
             
-            $("td.rowHours[recordid='"+id+"']").children("input").focusout(function (){
+            $("div.rowHours[recordid='"+id+"']").children("input").focusout(function (){
                 updateRecord(id);
             });
             
-            $("td.rowHoursOver[recordid='"+id+"']").children("input").focusout(function (){
+            $("div.rowHoursOver[recordid='"+id+"']").children("input").focusout(function (){
                 updateRecord(id);
             });
         }
@@ -245,7 +246,7 @@
         
         function setActionOnDeleteRecord(obj){
                             obj.click( function(){
-                            var recordId = obj.attr('recordid');                       
+                            var recordId = obj.attr('recordid');                  
                             $.ajax(
                             {
                                type: 'GET',
@@ -254,8 +255,8 @@
                                cache: false,
                                success: function(data)
                                     { var json = $.parseJSON(data); 
-                                        if(json.result==='OK'){
-                                            $("tr#"+recordId).remove();
+                                        if(json.result==='OK'){ 
+                                            $("#"+recordId).remove();     
                                         }else{
                                             alert(json.code);
                                         }
@@ -288,7 +289,6 @@
 
         function setActionOnAddRecord(obj){
                         obj.click( function(){
-                            var parent = obj.parent();
                             var recordId = obj.attr('recordid');
                             var projectId = $("#my-chargeable-projects").val();
                             if(Number(recordId)>0){
@@ -303,7 +303,7 @@
                                         {
                                             var json = $.parseJSON(data); 
                                             if(json.result==='OK'){
-                                                parent.after(createNewRowUnderDate(json.data));
+                                                $("#"+recordId).after(createNewRowUnderDate(json.data));
                                                 setSVGActions(json.data.id);
                                                 setSelectOption(json.data.id, json.data.project_id);
 
@@ -313,8 +313,10 @@
                                         }
                                 });
                             }else{
+                                
                                 var year = Number($("#yearPick").text());
-                                var day = Number($(this).parent().children("td.rowDay").text());
+                                var day = Number($(this).parent().children("div.rowDay").text());
+                                let dayName =$(this).parent().children("div.rowDayOfWeek").text();
                                 $.ajax(
                                 {
                                     
@@ -326,7 +328,8 @@
                                         {
                                             var json = $.parseJSON(data); 
                                             if(json.result==='OK'){
-                                                parent.after(createNewRowUnderDate(json.data));
+                                                $("#"+recordId).html(createChargedRow(json.data,day,dayName));
+                                               // $("#"+recordId).remove();
                                                 setSVGActions(json.data.id);
                                                 setSelectOption(json.data.id, json.data.project_id);
 
@@ -418,10 +421,68 @@
                 }  
             }
 
+        function createChargedRow(obj, day, dayName){
+            let selectHTML = $("#my-chargeable-projects").html();
+            
+            let row='<div class="row" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold  rowPlus" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay" recordId="'+obj["id"]+'">'+day+'</div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek" recordId="'+obj["id"]+'"">'+dayName+'</div>'+
+                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
+                    '</div></div>'+
+                    '<div class="col-md-12 col-lg-4"><div class="row">'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours" recordId="'+obj["id"]+'">'+obj["hours"]+'</div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver" recordId="'+obj["id"]+'">'+obj["hours_over"]+'</div>'+
+                    '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowShare" recordId="'+obj["id"]+'"><i class="fas fa-share-alt"></i></span>'+
+                    '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowSave" recordId="'+obj["id"]+'"><i class="fas fa-save"></i></span>'+
+                    '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowTrash" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></span>'+
+                    '</div></div></div>';
+
+                    return row;
+            //$("#my-charged-records-table").append(row);                           
+        }  
+
+          function createChargedRowBlank(i, day, dayName){
+            let selectHTML = $("#my-chargeable-projects").html();
+            let row='<div class="row" id="'+-i+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowPlus" recordId="'+-i+'"><i class="fas fa-plus-circle"></i></div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay" recordId="'+-i+'">'+day+'</div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek" recordId="'+-i+'">'+dayName+'</div>'+
+                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName" recordId="'+-i+'"></div>'+
+                    '</div></div>'+
+                    '<div class="col-md-12 col-lg-4"><div class="row">'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours" recordId="'+-i+'">'+0+'</div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver" recordId="'+-i+'">'+0+'</div>'+
+                    '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowShare" recordId="'+-i+'"><i class="fas fa-share-alt"></i></div>'+
+                    '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowSave" recordId="'+-i+'"><i class="fas fa-save"></i></div>'+
+                    '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowTrash" recordid="'+-i+'"><i class="fas fa-trash-alt deleteRecord"></i></div>'+
+                    '</div></div></div>';
+            //$("#my-charged-records-table").append(row); 
+            return row;                          
+        } 
+
+            function createNewRowUnderDate(obj){
+                let selectHTML = $("#my-chargeable-projects").html();
+                let row='<div class="row" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowPlus" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay" recordId="'+obj["id"]+'"></div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek" recordId="'+obj["id"]+'"></div>'+
+                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName" recordId="'+obj["id"]+'"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
+                    '</div></div>'+
+                    '<div class="col-md-12 col-lg-4"><div class="row">'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours" recordId="'+obj["id"]+'">'+obj["hours"]+'</div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver" recordId="'+obj["id"]+'">'+obj["hours_over"]+'</div>'+
+                    '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowShare" recordId="'+obj["id"]+'"><i class="fas fa-share-alt"></i></span>'+
+                    '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowSave" recordId="'+obj["id"]+'"><i class="fas fa-save"></i></span>'+
+                    '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowTrash" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></span>'+
+                    '</div></div></div>';
+                      
+                return row; 
+                }
+
         //Posrane je to posrane
         
-        function fillMeCalendar(month, year){
-            $("#my-charged-records-table").children("tbody").children().remove(); 
+        function fillMeCalendar(month, year){ 
             $.ajax(
                     {
                         type: 'GET',
@@ -433,52 +494,24 @@
                                 var json = $.parseJSON(data);
                                     if(json.result === 'OK')
                                         {  
-                                        let selectHTML = $("#my-chargeable-projects").html();
                                         let days = daysInMonth(month, year); 
                                         let hrouda = 0;   
                                         for(var i=1; i<=days;i++){
                                             var date = new Date(month+'/'+i+'/'+year);
                                             var dayName = daysOfWeek[date.getDay()];
                                             if(json.data.length!=hrouda && i==json.data[hrouda].day){
-                                               $("#my-charged-records-table > tbody").append( '<tr id="'+json.data[hrouda].id+'"><td class="tiny rowPlus addRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-plus-circle"></i></td>'+
-                                                '<td class="tiny rowDay" recordid="'+json.data[hrouda].id+'">'+i+'</td>'+
-                                                '<td class="tiny rowDayOfWeek">'+dayName+'</td>'+
-                                                '<td class="wide rowProjectName" recordid="'+json.data[hrouda].id+'"><select class="my-chargeable-projects-no-border" recordid="'+json.data[hrouda].id+'">'+selectHTML+'</select></td>'+
-                                                '<td class="midi rowHours" recordid="'+json.data[hrouda].id+'"><input type="number" min=0 max=24 step=0.5 value="'+json.data[hrouda].hours+'" class="my-hours-no-border"></input>' +
-                                                '<td class="midi rowHoursOver" recordid="'+json.data[hrouda].id+'"><input type="number" min=0 max=24 step=0.5 value="'+json.data[hrouda].hours_over+'" class="my-hours-no-border"></input>' +
-                                                '<td class="tiny rowShare"><i class="fas fa-share-alt"></i></td>'+
-                                                '<td class="tiny rowSave"><i class="fas fa-save"></i></td>'+
-                                                '<td class="tiny rowTrash deleteRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-trash-alt deleteRecord"></i></td>'+
-                                                '</tr>');
+                                                $("#my-charged-records-table").append(createChargedRow(json.data[hrouda], i, dayName));
                                                 setSVGActions(json.data[hrouda].id);
                                                 setSelectOption(json.data[hrouda].id, json.data[hrouda].project_id); 
                                                 hrouda++;
                                                 
                                             }else{
-                                                $("#my-charged-records-table > tbody").append( '<tr id="'+-i+'"><td class="tiny rowPlus addRecord" recordid="'+-i+'"><i class="fas fa-plus-circle"></i></td>'+
-                                                '<td class="tiny rowDay">'+i+'</td>'+
-                                                '<td class="tiny rowDayOfWeek">'+dayName+'</td>'+
-                                                '<td class="wide rowProjectName"><span class="my-chargeable-projects-no-border grayer">(žádný záznam)</span></td>'+
-                                                '<td class="midi rowHours" ">' +
-                                                '<td class="midi rowHoursOver" >' +
-                                                '<td class="tiny rowShare"><i class="fas fa-share-alt invisible"></i></td>'+
-                                                '<td class="tiny rowSave"><i class="fas fa-save invisible"></i></td>'+
-                                                '<td class="tiny rowTrash deleteRecord" recordid="'+-i+'"><i class="fas fa-trash-alt deleteRecord invisible"></i></td>'+
-                                                '</tr>');
+                                                $("#my-charged-records-table").append(createChargedRowBlank(i, i, dayName));
                                                 setSVGActions(-i);
                                                 setSelectOption(-i, -i);     
                                             }
                                             while (json.data.length!=hrouda && i==json.data[hrouda].day){
-                                                    $("#my-charged-records-table > tbody").append( '<tr id="'+json.data[hrouda].id+'"><td class="no-top-border tiny rowPlus addRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-plus-circle"></i></td>'+
-                                                    '<td class="no-top-border tiny rowDay"></td>'+
-                                                    '<td class="no-top-border tiny rowDayOfWeek"></td>'+
-                                                    '<td class="no-top-border wide rowProjectName" recordid="'+json.data[hrouda].id+'"><select class="my-chargeable-projects-no-border" recordid="'+json.data[hrouda].id+'">'+selectHTML+'</select></td>'+
-                                                    '<td class="no-top-border midi rowHours" recordid="'+json.data[hrouda].id+'"><input type="number" min=0 max=24 step=0.5 value="'+json.data[hrouda].hours+'" class="my-hours-no-border"></input>' +
-                                                    '<td class="no-top-border midi rowHoursOver" recordid="'+json.data[hrouda].id+'"><input type="number" min=0 max=24 step=0.5 value="'+json.data[hrouda].hours_over+'" class="my-hours-no-border"></input>' +
-                                                    '<td class="no-top-border tiny rowShare"><i class="fas fa-share-alt"></i></td>'+
-                                                    '<td class="no-top-border tiny rowSave"><i class="fas fa-save"></i></td>'+
-                                                    '<td class="no-top-border tiny rowTrash deleteRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-trash-alt deleteRecord"></i></td>'+
-                                                    '</tr>');
+                                                    $("#my-charged-records-table").append(createNewRowUnderDate(json.data[hrouda]));
                                                     setSVGActions(json.data[hrouda].id);
                                                     setSelectOption(json.data[hrouda].id, json.data[hrouda].project_id); 
                                                     hrouda++;
@@ -493,10 +526,14 @@
                 )
         }        
 
-        function deleteActualRecors(){
-            $.each($("#my-charged-records-table").children("tbody").children(), function (){ $(this).remove();});
+        function deleteActualRecors(){               
+            $.each($("#my-charged-records-table-asd").nextAll(), 
+                    function (){ 
+                        $(this).remove();}
+                );
+
         }
-        
+      
         $("li.monthLink").click(function(){
             var newMonth = $(this).attr('month');
             deleteActualRecors();
@@ -523,7 +560,8 @@
         //loadCalendar(actualMonth, actualYear); 
         //loadActualRecords(actualMonth, actualYear);
         //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
-                    
+       // addChargedRow('St', '12','8','0','asd')   ;
+
                     
                      new Chart(
                 document.getElementById("hours-chart"),
