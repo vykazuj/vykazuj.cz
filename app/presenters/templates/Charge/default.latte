@@ -205,11 +205,10 @@
         }
                  
         function updateRecord(recordId){      
+            let hours = Number($(".rowHours[recordid='"+recordId+"']").children("input").val()); 
+            let hoursOver = Number($(".rowHoursOver[recordid='"+recordId+"']").children("input").val());  
+            let projectId = $(".rowProjectName[recordid='"+recordId+"']").children("select").val();  
 
-            hours = Number($("div.rowHours[recordid='"+recordId+"']").children("input").val()); 
-            hoursOver = Number($("div.rowHoursOver[recordid='"+recordId+"']").children("input").val());  
-            projectId = Number($("div.rowProjectName[recordid='"+recordId+"']").children("select").val());  
-            
             $.ajax(
             {
                type: 'GET',
@@ -234,11 +233,11 @@
                 updateRecord(id);
             });
             
-            $("div.rowHours[recordid='"+id+"']").children("input").focusout(function (){
+            $(".rowHours[recordid='"+id+"']").focusout(function (){
                 updateRecord(id);
             });
             
-            $("div.rowHoursOver[recordid='"+id+"']").children("input").focusout(function (){
+            $(".rowHoursOver[recordid='"+id+"']").focusout(function (){
                 updateRecord(id);
             });
         }
@@ -437,11 +436,11 @@
                     '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold  rowPlus" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
                     '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay" recordId="'+obj["id"]+'">'+day+'</div>'+
                     '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek" recordId="'+obj["id"]+'"">'+dayName+'</div>'+
-                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
+                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName" recordId="'+obj["id"]+'"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
                     '</div></div>'+
                     '<div class="col-md-12 col-lg-4"><div class="row">'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours" recordId="'+obj["id"]+'">'+obj["hours"]+'</div>'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver" recordId="'+obj["id"]+'">'+obj["hours_over"]+'</div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours" recordId="'+obj["id"]+'"><input type="number" min=0 max=24 step=0.5 value="'+obj["hours"]+'" class="value"></input></div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver" recordId="'+obj["id"]+'"><input type="number" min=0 max=16 step=0.5 value="'+obj["hours_over"]+'" class="value"></input></div>'+
                     '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowShare" recordId="'+obj["id"]+'"><i class="fas fa-share-alt"></i></span>'+
                     '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowSave" recordId="'+obj["id"]+'"><i class="fas fa-save"></i></span>'+
                     '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowTrash" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></span>'+
@@ -479,8 +478,8 @@
                     '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName" recordId="'+obj["id"]+'"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
                     '</div></div>'+
                     '<div class="col-md-12 col-lg-4"><div class="row">'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours" recordId="'+obj["id"]+'">'+obj["hours"]+'</div>'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver" recordId="'+obj["id"]+'">'+obj["hours_over"]+'</div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours" recordId="'+obj["id"]+'"><input type="number" min=0 max=24 step=0.5 value="'+obj["hours"]+'" class="value"></input></div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver" recordId="'+obj["id"]+'"><input type="number" min=0 max=16 step=0.5 value="'+obj["hours_over"]+'" class="value"></input></div>'+
                     '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowShare" recordId="'+obj["id"]+'"><i class="fas fa-share-alt"></i></span>'+
                     '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowSave" recordId="'+obj["id"]+'"><i class="fas fa-save"></i></span>'+
                     '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowTrash" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></span>'+
