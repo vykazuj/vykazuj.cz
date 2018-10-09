@@ -256,7 +256,16 @@
                                success: function(data)
                                     { var json = $.parseJSON(data); 
                                         if(json.result==='OK'){ 
+                                            //console.log($(".rowDay[recordid='"+recordId+"']").html());
+                                            if($(".rowDay[recordid='"+recordId+"']").html()>0){
+                                                let day=$(".rowDay[recordid='"+recordId+"']").html();
+                                                let dayName=$(".rowDayOfWeek[recordid='"+recordId+"']").html();
+                                                $("#"+recordId).replaceWith(createChargedRowBlank(day, day, dayName));
+                                                setSVGActions(-day);
+                                                setSelectOption(-day, -day);
+                                            } else {
                                             $("#"+recordId).remove();     
+                                            }                                                 
                                         }else{
                                             alert(json.code);
                                         }
@@ -328,7 +337,7 @@
                                         {
                                             var json = $.parseJSON(data); 
                                             if(json.result==='OK'){
-                                                $("#"+recordId).html(createChargedRow(json.data,day,dayName));
+                                                $("#"+recordId).replaceWith(createChargedRow(json.data,day,dayName));
                                                // $("#"+recordId).remove();
                                                 setSVGActions(json.data.id);
                                                 setSelectOption(json.data.id, json.data.project_id);
