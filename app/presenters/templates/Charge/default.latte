@@ -471,7 +471,47 @@
                       
                 return row; 
                 }
-
+                             
+                // Sum of totalHours
+                function hoursSum(){
+                  var totalSum = 0;                  
+                  $('.timetable .rowHours .value').each(function()
+                  {
+                     var inputVal = $(this).val();
+                     if ($.isNumeric(inputVal))
+                     {
+                         totalSum += parseFloat(inputVal);
+                     }
+                  });
+                  $('#totalHours').text(totalSum);
+                };
+                
+                // Sum of totalHoursOver
+                function hoursOverSum(){
+                    var totalSum1 = 0;                  
+                    $('.timetable .rowHoursOver .value').each(function()
+                    {
+                       var inputVal = $(this).val();
+                       if ($.isNumeric(inputVal))
+                       {
+                           totalSum1 += parseFloat(inputVal);
+                       }
+                    });
+                    $('#totalHoursOver').text(totalSum1); 
+                }    
+                
+                // Sum of totalHours on input value
+                $('.timetable').on('input','.value', function()
+                {   
+                     hoursSum();
+                });   
+                
+                // Sum of totalHoursOver on input value
+                $('.timetable').on('input','.value', function()
+                {
+                    hoursOverSum();
+                });                
+                
         //Posrane je to posrane
         
         function fillMeCalendar(month, year){ 
@@ -509,10 +549,12 @@
                                                     hrouda++;
                                                 }                                                                                      
                                             }
-                                        }
+                                            hoursSum();
+                                            hoursOverSum();
+                                                                                    }
                                     else {
                                             alert(json.code);
-                                        }
+                                        }                                 
                             }
                     }
                 )
@@ -617,53 +659,7 @@
                     }
                 }
             );
-                               
-            // Sum of totalHours on input value
-              $('.timetable').on('input','.value', function()
-              {
-                  var totalSum = 0;                  
-                  $('.timetable .rowHours .value').each(function()
-                  {
-                     var inputVal = $(this).val();
-                     if ($.isNumeric(inputVal))
-                     {
-                         totalSum += parseFloat(inputVal);
-                     }
-                  });
-                  $('#totalHours').text(totalSum);                      
-              });
-              
-             // Sum of totalHoursOver on input value
-             $('.timetable').on('input','.value', function()
-              {
-                  var totalSum1 = 0;                  
-                  $('.timetable .rowHoursOver .value').each(function()
-                  {
-                     var inputVal = $(this).val();
-                     if ($.isNumeric(inputVal))
-                     {
-                         totalSum1 += parseFloat(inputVal);
-                     }
-                  });
-                  $('#totalHoursOver').text(totalSum1);                      
-              });   
-                                      
-              
-                  
-              /*
-                  var totalSum2 = 0;                  
-                  $('.timetable .rowHours .value').each(function()
-                  {
-                     var inputVal = $(this).val();                                          
-                     if ($.isNumeric(inputVal))
-                     {
-                         totalSum2 += parseFloat(inputVal);
-                     }
-                  });
-                  console.log( "Anoooooo!!!");
-                  $('#totalHours').text(totalSum2);                      
-              
-               */   
+           
               function progress()
         {
             
