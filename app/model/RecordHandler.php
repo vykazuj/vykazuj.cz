@@ -27,6 +27,10 @@ class RecordHandler {
         return $this->database->fetchAll('select r.*, p.name as projectName from record r, project p where p.id = r.project_id and r.user_id = ? and r.year = ? and r.month = ? ORDER by day ASC',$userId, $year, $month);
     }
     
+    function getRecordsByMonthYearProjectUser($month, $year, $project, $userId){
+        return $this->database->fetchAll('select r.*, p.name as projectName from record r, project p where p.id = r.project_id and r.user_id = ? and r.year = ? and r.month = ? and r.project_id = ? ORDER by day ASC',$userId, $year, $month, $project);
+    }
+    
     function getRecordDetail($recordId){
         return $this->database->fetch('select * from record where id = ?', $recordId);
     }

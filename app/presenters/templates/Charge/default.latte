@@ -75,20 +75,37 @@
             <li class="nav-pills-graph">
                 
             <div style="margin-left:5%; width:90%; position:relative; text-align: center;">
+                
+            {ifset $flashes}
+                <div n:foreach="$flashes as $flash" n:class="$flash->type">
+                    {if $flash->type!='sound'}
+                    <span n:class="$flash->type">
+                        {if $flash->type == "error"}<i class="fas fa-times-circle awesomered"></i>
+                        {elseif $flash->type == "info"}<i class="fas fa-lightbulb awesomeyellow"></i>
+                        {elseif $flash->type == "success"}<i class="fas fa-check-circle awesomegreen"></i>
+                        {/if}
+                        {$flash->message}
+                    </span>
+                    {else}
+                        <script>
+                            sound = {$flash->message};
+                        </script>
+                    {/if}
+                </div>
+            {/ifset}
+            
+            
+                <a n:href="createTimesheet 2018, 9, 27, 0" target="_blank">Timesheet<i class="fas fa-download"></i></a>
+                
                     <br>
                     <span class="graph-title">
                         Vyber projekt:<br>
-                        {ifset $myChargeableProjects}
                     </span>    
                     <select class="my-chargeable-projects" id="my-chargeable-projects">
                        
                     </select>   
                     <br>
                         
-                  
-                  
-                    {/ifset}
-                </span>
                 <span class="graph-title">
                 <br>
                     Celkem   
@@ -205,7 +222,7 @@
                  
         function updateRecord(recordId){      
 
-            hours = Number($("td.rowHours[recordid='"+recordId+"']").children("input").val()); 
+            hours = Number($(".rowHours[recordid='"+recordId+"']").children("input").val()); 
             hoursOver = Number($("td.rowHoursOver[recordid='"+recordId+"']").children("input").val());  
             projectId = Number($("td.rowProjectName[recordid='"+recordId+"']").children("select").val());  
             
