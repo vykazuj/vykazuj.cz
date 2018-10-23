@@ -41,27 +41,43 @@
             <li class="monthLink{if $actualMonth==11} active{/if}" month="11">Listopad</a></li>
             <li class="monthLink{if $actualMonth==12} active{/if}" month="12">Prosinec</a></li>
           </ul>
-        </div>
-        
-        <div class="container timetable-blank">
-            <div class="container container-inner timetable">
-                <table class="table table-hover timetable" id="my-charged-records-table">
-                    <thead>
-                      <tr>
-                        <th colspan="3">Datum</th>
-                        <th class="text-left">Projekt</th>
-                        <th>Čas(h)</th>
-                        <th>Přesčas(h)</th>
-                        <th colspan="3">Akce</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
+        </div>        
+            <div id="progressContainer">
+                               
+            </div>   
+                
+                <div class="container container-inner timetable" id="my-charged-records-table">
+                        <div class="row" id="my-charged-records-table-first">
+                            <div class="col-lg-8">
+                                <div class="row">
+                                    <div class="col-lg-1 col-md-9 text-righ font-weight-semibold">
+                                    </div>
+                                    <div class="col-lg-2 col-md-9 text-mid font-weight-semibold">
+                                        Datum
+                                    </div>
+                                    <div class="col-lg-9 col-md-3 text-mid font-weight-semibold">
+                                        Projekt
+                                    </div>
+                                </div>
+                            </div>
+
+                             <div class="col-lg-4">
+                                <div class="row">
+                                    <div class="font-weight-semibold col-lg-3">
+                                        Čas(h)
+                                    </div>
+                                    <div class="font-weight-semibold col-lg-4">
+                                        Přesčas(h)
+                                    </div>
+                                    <div class="text-left font-weight-semibold col-lg-5">
+                                        Akce
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
-        </div>
-    </div>
-        
         
         <div class="col-0 col-lg-2 d-none d-lg-block text-left panel-right">
             <ul class="nav nav-pills">
@@ -95,7 +111,7 @@
                 </span>
                 <canvas id ="hours-chart" width="100">
                 </canvas>
-                <div class="graph-intitle">195<div class="graph-under-intitle">hodin</div></div>
+                <div class="graph-intitle" id="totalHours"><div class="graph-under-intitle">hodin</div></div>
                 
                 <br>
                 <span class="graph-title">
@@ -103,7 +119,7 @@
                 </span>
                 <canvas id ="hours-chart2" width="100">
                 </canvas>
-                <div class="graph-intitle">182<div class="graph-under-intitle">hodin</div></div>
+                <div class="graph-intitle" id="totalHoursOver"><div class="graph-under-intitle">hodin</div></div>
                 
                 
                 <br>
@@ -151,20 +167,20 @@
     </div>
   </div>
 </div>
-                
+
                 
 </body>
   <script>
      
     $(document).ready(function() 
-    {   
+    {          
         function daysInMonth (month, year) {
             return new Date(year, month, 0).getDate();
-        }     
-
-
+        }        
+       
+    
         function createNewRow(obj){
-            var selectHTML = $("#my-chargeable-projects").html();
+            var selectHTML = $("#my-chargeable-projects").html(); 
             alert(selectHTML);
             var abc='<tr id="'+obj["id"]+'">'+
                     '<td class="tiny rowPlus addRecord" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></td>'+
@@ -180,20 +196,7 @@
             return abc;
         }
     
-        function createNewRowUnderDate(obj){
-            let radek='<tr id="'+obj["id"]+'"><td class="tiny rowPlus addRecord" recordid="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></td>'+
-                      '<td class="tiny rowDay"></td>'+
-                      '<td class="tiny rowDayOfWeek"></td>'+
-                      '<td class="wide rowProjectName"><span class="my-chargeable-projects-no-border">'+obj["projectName"]+'</span></td>'+
-                      '<td class="tiny rowHours"><input type="number" min=0 max=24 step=0.5 value="'+obj["hours"]+'" class="value"></input>' +
-                      '<td class="tiny rowHoursOver"><span class="value">'+0+'</span>' +
-                      '<td class="tiny rowShare"><i class="fas fa-share-alt"></i></td>'+
-                      '<td class="tiny rowSave"><i class="fas fa-save"></i></td>'+
-                      '<td class="tiny rowTrash deleteRecord" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></td>'+
-                      '</tr>';
-                      
-                        return radek;
-                }
+   
        
     
         function setSVGActions(id){
@@ -204,11 +207,10 @@
         }
                  
         function updateRecord(recordId){      
+            let hours = Number($(".rowHours[recordid='"+recordId+"']").children("input").val()); 
+            let hoursOver = Number($(".rowHoursOver[recordid='"+recordId+"']").children("input").val());  
+            let projectId = $(".rowProjectName[recordid='"+recordId+"']").children("select").val();  
 
-            hours = Number($("td.rowHours[recordid='"+recordId+"']").children("input").val()); 
-            hoursOver = Number($("td.rowHoursOver[recordid='"+recordId+"']").children("input").val());  
-            projectId = Number($("td.rowProjectName[recordid='"+recordId+"']").children("select").val());  
-            
             $.ajax(
             {
                type: 'GET',
@@ -233,19 +235,19 @@
                 updateRecord(id);
             });
             
-            $("td.rowHours[recordid='"+id+"']").children("input").focusout(function (){
+            $(".rowHours[recordid='"+id+"']").focusout(function (){
                 updateRecord(id);
             });
             
-            $("td.rowHoursOver[recordid='"+id+"']").children("input").focusout(function (){
+            $(".rowHoursOver[recordid='"+id+"']").focusout(function (){
                 updateRecord(id);
             });
         }
              
         
         function setActionOnDeleteRecord(obj){
-                            obj.click( function(){
-                            var recordId = obj.attr('recordid');                       
+                            obj.click( function(){                                
+                            var recordId = obj.attr('recordid');                  
                             $.ajax(
                             {
                                type: 'GET',
@@ -254,8 +256,19 @@
                                cache: false,
                                success: function(data)
                                     { var json = $.parseJSON(data); 
-                                        if(json.result==='OK'){
-                                            $("tr#"+recordId).remove();
+                                        if(json.result==='OK'){ 
+                                            //console.log($(".rowDay[recordid='"+recordId+"']").html());
+                                            if($(".rowDay[recordid='"+recordId+"']").html()>0){
+                                                let day=$(".rowDay[recordid='"+recordId+"']").html();
+                                                let dayName=$(".rowDayOfWeek[recordid='"+recordId+"']").html();
+                                                $("#"+recordId).replaceWith(createChargedRowBlank(day, day, dayName));
+                                                setSVGActions(-day);
+                                                setSelectOption(-day, -day);
+                                                progress();
+                                            } else {
+                                            $("#"+recordId).remove();
+                                            progress();
+                                            }                                                 
                                         }else{
                                             alert(json.code);
                                         }
@@ -288,7 +301,6 @@
 
         function setActionOnAddRecord(obj){
                         obj.click( function(){
-                            var parent = obj.parent();
                             var recordId = obj.attr('recordid');
                             var projectId = $("#my-chargeable-projects").val();
                             if(Number(recordId)>0){
@@ -303,7 +315,7 @@
                                         {
                                             var json = $.parseJSON(data); 
                                             if(json.result==='OK'){
-                                                parent.after(createNewRowUnderDate(json.data));
+                                                $("#"+recordId).after(createNewRowUnderDate(json.data));
                                                 setSVGActions(json.data.id);
                                                 setSelectOption(json.data.id, json.data.project_id);
 
@@ -313,8 +325,10 @@
                                         }
                                 });
                             }else{
+                                
                                 var year = Number($("#yearPick").text());
-                                var day = Number($(this).parent().children("td.rowDay").text());
+                                var day = Number($(this).parent().children("div.rowDay").text());
+                                let dayName =$(this).parent().children("div.rowDayOfWeek").text();
                                 $.ajax(
                                 {
                                     
@@ -326,7 +340,8 @@
                                         {
                                             var json = $.parseJSON(data); 
                                             if(json.result==='OK'){
-                                                parent.after(createNewRowUnderDate(json.data));
+                                                $("#"+recordId).replaceWith(createChargedRow(json.data,day,dayName));
+                                               // $("#"+recordId).remove();
                                                 setSVGActions(json.data.id);
                                                 setSelectOption(json.data.id, json.data.project_id);
 
@@ -371,7 +386,7 @@
             }
         )
         }
-
+   
         function loadActualRecords(month, year){
                  $.ajax(
             {
@@ -393,35 +408,113 @@
                       setSelectOption(raw_data[i].id, raw_data[i].project_id);
                       //setSelectAction(raw_data[i].id);
                     }        
-                }     
-                
+                }              
               }
             });  
         }
         
-        //nakonec nepouzita funkce
-        function loadCalendar(actualMonth, actualYear){
-              let days = daysInMonth(actualMonth, actualYear);
-              for (let i = 1; i <= days; i++){
-                var date = new Date(actualMonth+'/'+i+'/'+actualYear);
-                var dayName = daysOfWeek[date.getDay()];
-                $("#my-charged-records-table > tbody").append( '<tr id="-'+i+'"><td class="tiny rowPlus addRecord" recordId="'+i+'"><i class="fas fa-plus-circle"></i></td>'+
-                '<td class="tiny rowDay">'+i+'</td>'+
-                '<td class="tiny rowDayOfWeek">'+dayName+'</td>'+
-                '<td class="wide rowProjectName" recordId="'+i+'"><select class="my-chargeable-projects-no-border" recordId="'+i+'"></select></td>'+
-                '<td class="tiny rowHours" recordId="'+i+'"><span class="value">'+0+'</span>h ' +
-                '<td class="tiny rowHoursOver" recordId="'+i+'"><span class="value">'+ 0 +'</span>h ' +
-                '<td class="tiny rowShare" recordId="'+i+'"><i class="fas fa-share-alt"></i></td>'+
-                '<td class="tiny rowSave" recordId="'+i+'"><i class="fas fa-save-alt"></i></td>'+
-                '<td class="tiny rowTrash deleteRecord" recordId="'+i+'"><i class="fas fa-trash-alt deleteRecord" recordId="'+i+'"></i></td>'+
-                '</tr>')
-                }  
-            }
+        function createChargedRow(obj, day, dayName){
+            let selectHTML = $("#my-chargeable-projects").html();
+            
+            let row='<div class="row rows-intable" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold  rowPlus tiny" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+obj["id"]+'">'+day+'</div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+obj["id"]+'"">'+dayName+'</div>'+
+                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName wide" recordId="'+obj["id"]+'"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
+                    '</div></div>'+
+                    '<div class="col-md-12 col-lg-4"><div class="row">'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+obj["id"]+'"><input type="number" min=0 max=24 step=0.5 value="'+obj["hours"]+'" class="value"></input></div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+obj["id"]+'"><input type="number" min=0 max=16 step=0.5 value="'+obj["hours_over"]+'" class="value"></input></div>'+
+                    '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowShare tiny" recordId="'+obj["id"]+'"><i class="fas fa-share-alt"></i></div>'+
+                    '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowSave tiny" recordId="'+obj["id"]+'"><i class="fas fa-save"></i></div>'+
+                    '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowTrash tiny" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></div>'+
+                    '</div></div></div>';
 
+                    return row;
+            //$("#my-charged-records-table").append(row);                           
+        }  
+
+          function createChargedRowBlank(i, day, dayName){
+            let selectHTML = $("#my-chargeable-projects").html();
+            let row='<div class="row rows-intable" id="'+-i+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowPlus tiny" recordId="'+-i+'"><i class="fas fa-plus-circle"></i></div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+-i+'">'+day+'</div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+-i+'">'+dayName+'</div>'+
+                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName wide" recordId="'+-i+'"></div>'+
+                    '</div></div>'+
+                    '<div class="col-md-12 col-lg-4"><div class="row">'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+-i+'"><input type="number" min=0 max=24 step=0.5 value="'+0+'" class="value"></input></div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+-i+'"><input type="number" min=0 max=24 step=0.5 value="'+0+'" class="value"></input></div>'+
+                    '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowShare tiny" recordId="'+-i+'"><i class="fas fa-share-alt"></i></div>'+
+                    '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowSave tiny" recordId="'+-i+'"><i class="fas fa-save"></i></div>'+
+                    '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowTrash tiny" recordid="'+-i+'"><i class="fas fa-trash-alt deleteRecord"></i></div>'+
+                    '</div></div></div>';
+            //$("#my-charged-records-table").append(row); 
+            return row;                          
+        } 
+
+            function createNewRowUnderDate(obj){
+                let selectHTML = $("#my-chargeable-projects").html();
+                let row='<div class="row rows-intable" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowPlus tiny" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+obj["id"]+'"></div>'+
+                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+obj["id"]+'"></div>'+
+                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName wide" recordId="'+obj["id"]+'"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
+                    '</div></div>'+
+                    '<div class="col-md-12 col-lg-4"><div class="row">'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+obj["id"]+'"><input type="number" min=0 max=24 step=0.5 value="'+obj["hours"]+'" class="value"></input></div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+obj["id"]+'"><input type="number" min=0 max=16 step=0.5 value="'+obj["hours_over"]+'" class="value"></input></div>'+
+                    '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowShare tiny" recordId="'+obj["id"]+'"><i class="fas fa-share-alt"></i></span>'+
+                    '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowSave tiny" recordId="'+obj["id"]+'"><i class="fas fa-save"></i></span>'+
+                    '<span class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowTrash tiny" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></span>'+
+                    '</div></div></div>';
+                      
+                return row; 
+                }
+                             
+                // Sum of totalHours
+                function hoursSum(){
+                  var totalSum = 0;                  
+                  $('.timetable .rowHours .value').each(function()
+                  {
+                     var inputVal = $(this).val();
+                     if ($.isNumeric(inputVal))
+                     {
+                         totalSum += parseFloat(inputVal);
+                     }
+                  });
+                  $('#totalHours').text(totalSum);
+                };
+                
+                // Sum of totalHoursOver
+                function hoursOverSum(){
+                    var totalSum1 = 0;                  
+                    $('.timetable .rowHoursOver .value').each(function()
+                    {
+                       var inputVal = $(this).val();
+                       if ($.isNumeric(inputVal))
+                       {
+                           totalSum1 += parseFloat(inputVal);
+                       }
+                    });
+                    $('#totalHoursOver').text(totalSum1); 
+                }    
+                
+                // Sum of totalHours on input value
+                $('.timetable').on('input','.value', function()
+                {   
+                     hoursSum();
+                });   
+                
+                // Sum of totalHoursOver on input value
+                $('.timetable').on('input','.value', function()
+                {
+                    hoursOverSum();
+                });                
+                
         //Posrane je to posrane
         
-        function fillMeCalendar(month, year){
-            $("#my-charged-records-table").children("tbody").children().remove(); 
+        function fillMeCalendar(month, year){ 
             $.ajax(
                     {
                         type: 'GET',
@@ -433,70 +526,48 @@
                                 var json = $.parseJSON(data);
                                     if(json.result === 'OK')
                                         {  
-                                        let selectHTML = $("#my-chargeable-projects").html();
                                         let days = daysInMonth(month, year); 
                                         let hrouda = 0;   
                                         for(var i=1; i<=days;i++){
                                             var date = new Date(month+'/'+i+'/'+year);
                                             var dayName = daysOfWeek[date.getDay()];
                                             if(json.data.length!=hrouda && i==json.data[hrouda].day){
-                                               $("#my-charged-records-table > tbody").append( '<tr id="'+json.data[hrouda].id+'"><td class="tiny rowPlus addRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-plus-circle"></i></td>'+
-                                                '<td class="tiny rowDay" recordid="'+json.data[hrouda].id+'">'+i+'</td>'+
-                                                '<td class="tiny rowDayOfWeek">'+dayName+'</td>'+
-                                                '<td class="wide rowProjectName" recordid="'+json.data[hrouda].id+'"><select class="my-chargeable-projects-no-border" recordid="'+json.data[hrouda].id+'">'+selectHTML+'</select></td>'+
-                                                '<td class="midi rowHours" recordid="'+json.data[hrouda].id+'"><input type="number" min=0 max=24 step=0.5 value="'+json.data[hrouda].hours+'" class="my-hours-no-border"></input>' +
-                                                '<td class="midi rowHoursOver" recordid="'+json.data[hrouda].id+'"><input type="number" min=0 max=24 step=0.5 value="'+json.data[hrouda].hours_over+'" class="my-hours-no-border"></input>' +
-                                                '<td class="tiny rowShare"><i class="fas fa-share-alt"></i></td>'+
-                                                '<td class="tiny rowSave"><i class="fas fa-save"></i></td>'+
-                                                '<td class="tiny rowTrash deleteRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-trash-alt deleteRecord"></i></td>'+
-                                                '</tr>');
+                                                $("#my-charged-records-table").append(createChargedRow(json.data[hrouda], i, dayName));
                                                 setSVGActions(json.data[hrouda].id);
                                                 setSelectOption(json.data[hrouda].id, json.data[hrouda].project_id); 
                                                 hrouda++;
                                                 
                                             }else{
-                                                $("#my-charged-records-table > tbody").append( '<tr id="'+-i+'"><td class="tiny rowPlus addRecord" recordid="'+-i+'"><i class="fas fa-plus-circle"></i></td>'+
-                                                '<td class="tiny rowDay">'+i+'</td>'+
-                                                '<td class="tiny rowDayOfWeek">'+dayName+'</td>'+
-                                                '<td class="wide rowProjectName"><span class="my-chargeable-projects-no-border grayer">(žádný záznam)</span></td>'+
-                                                '<td class="midi rowHours" ">' +
-                                                '<td class="midi rowHoursOver" >' +
-                                                '<td class="tiny rowShare"><i class="fas fa-share-alt invisible"></i></td>'+
-                                                '<td class="tiny rowSave"><i class="fas fa-save invisible"></i></td>'+
-                                                '<td class="tiny rowTrash deleteRecord" recordid="'+-i+'"><i class="fas fa-trash-alt deleteRecord invisible"></i></td>'+
-                                                '</tr>');
+                                                $("#my-charged-records-table").append(createChargedRowBlank(i, i, dayName));
                                                 setSVGActions(-i);
                                                 setSelectOption(-i, -i);     
                                             }
                                             while (json.data.length!=hrouda && i==json.data[hrouda].day){
-                                                    $("#my-charged-records-table > tbody").append( '<tr id="'+json.data[hrouda].id+'"><td class="no-top-border tiny rowPlus addRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-plus-circle"></i></td>'+
-                                                    '<td class="no-top-border tiny rowDay"></td>'+
-                                                    '<td class="no-top-border tiny rowDayOfWeek"></td>'+
-                                                    '<td class="no-top-border wide rowProjectName" recordid="'+json.data[hrouda].id+'"><select class="my-chargeable-projects-no-border" recordid="'+json.data[hrouda].id+'">'+selectHTML+'</select></td>'+
-                                                    '<td class="no-top-border midi rowHours" recordid="'+json.data[hrouda].id+'"><input type="number" min=0 max=24 step=0.5 value="'+json.data[hrouda].hours+'" class="my-hours-no-border"></input>' +
-                                                    '<td class="no-top-border midi rowHoursOver" recordid="'+json.data[hrouda].id+'"><input type="number" min=0 max=24 step=0.5 value="'+json.data[hrouda].hours_over+'" class="my-hours-no-border"></input>' +
-                                                    '<td class="no-top-border tiny rowShare"><i class="fas fa-share-alt"></i></td>'+
-                                                    '<td class="no-top-border tiny rowSave"><i class="fas fa-save"></i></td>'+
-                                                    '<td class="no-top-border tiny rowTrash deleteRecord" recordid="'+json.data[hrouda].id+'"><i class="fas fa-trash-alt deleteRecord"></i></td>'+
-                                                    '</tr>');
+                                                    $("#my-charged-records-table").append(createNewRowUnderDate(json.data[hrouda]));
                                                     setSVGActions(json.data[hrouda].id);
                                                     setSelectOption(json.data[hrouda].id, json.data[hrouda].project_id); 
                                                     hrouda++;
                                                 }                                                                                      
                                             }
-                                        }
+                                            hoursSum();
+                                            hoursOverSum();
+                                                                                    }
                                     else {
                                             alert(json.code);
-                                        }
+                                        }                                 
                             }
                     }
                 )
         }        
 
-        function deleteActualRecors(){
-            $.each($("#my-charged-records-table").children("tbody").children(), function (){ $(this).remove();});
+        function deleteActualRecors(){               
+            $.each($("#my-charged-records-table-first").nextAll(), 
+                    function (){ 
+                        $(this).remove();}
+                );
+
         }
-        
+      
         $("li.monthLink").click(function(){
             var newMonth = $(this).attr('month');
             deleteActualRecors();
@@ -509,9 +580,10 @@
         });
         
         $("#preFillButton").click(function (){
+            deleteActualRecors();
             projectId = $("#my-chargeable-projects-bulk").val();
             hours = $("#my-hours-bulk").val();
-            bulkRecors(projectId, hours);
+            bulkRecors(projectId, hours);         
             
         });
 
@@ -523,8 +595,9 @@
         //loadCalendar(actualMonth, actualYear); 
         //loadActualRecords(actualMonth, actualYear);
         //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
-                    
-                    
+       // addChargedRow('St', '12','8','0','asd')   ;
+       
+                                
                      new Chart(
                 document.getElementById("hours-chart"),
                 {   "type":"doughnut",
@@ -586,8 +659,42 @@
                     }
                 }
             );
-    
-    
+           
+              function progress()
+        {
+            
+            $('<div id="progress" class="docasny"></div>').appendTo($('#progressContainer'));
+            document.getElementById("progress").textContent = "Ukládám...";
+                        
+            var el = document.getElementById("progress");
+            var width = 1;
+            var id = setInterval(frame,3);
+            
+            function frame()
+            {
+                if (width>=100)
+                {
+                    clearInterval(id);                    
+                    
+                    document.getElementById("progress").textContent = "Uloženo...";
+                    document.getElementById("progress").style.backgroundColor = "lightgreen";
+                    
+                   function deleteText()
+                    {
+                        $('.docasny').remove();                        
+                    } 
+                    setTimeout(deleteText,1000);
+                   
+                }
+                else
+                {
+                    width++;
+                    el.style.width = width + '%';
+                }
+            }
+        } 
+              
+              
         }
         );
 
@@ -606,6 +713,16 @@
     -ms-flex-align: center;
     align-items: center;
     font-size:20px;
+}
+
+.rows-intable{
+    border-bottom: 1px solid #dee2e6;
+}
+
+.input{
+    border-radius:8px 8px 8px 8px;
+    border-style: none;
+    text-align: center;
 }
 
 .grayer{
@@ -693,10 +810,6 @@
 }
 
 .table-hover > tbody > tr:first-child > td {
-    border: 0px solid black;
-}
-
-.table-hover > tbody > tr:first-child > td {
     font-weight: 400;
 }
 .table-hover > tbody > tr > td:first-child {
@@ -711,7 +824,7 @@
     text-align: left;
     padding-left: 2px;
 }
-.table-hover > tbody > tr > td.tiny{
+.tiny{
     width:10px;
     text-align: center;
 }
@@ -725,9 +838,7 @@
     border-top: 0px solid black;
 }
 
-
-
-.table-hover > tbody > tr > td.wide{
+.wide{
     text-align: left;
 }
 
@@ -796,12 +907,18 @@ select.my-chargeable-projects-no-border, select.my-chargeable-projects-bulk-no-b
     margin-top: -5%;
 }
 
-#my-charged-records-table > tbody > tr > td.addRecord >svg {
-    visibility: hidden;
+.fa-plus-circle {
+    opacity:0;
 }
 
-#my-charged-records-table > tbody > tr:hover > td.addRecord >svg {
-    visibility: visible;
+.rows-intable:hover > div > div > div > svg {
+    opacity:1;
+
+    
+}
+
+.rows-intable:hover{
+    background: #dee2e6;
 }
 
 svg {
@@ -812,6 +929,19 @@ svg {
 
 .btn {
   font-size: 15pt;
+}
+
+#progressContainer
+{
+    width: 100%;
+    background-color: #ddd;
+}
+
+#progress
+{
+    width: 0%;
+    height: 25px;
+    background-color: #D3155B;
 }
 
 @media screen and (max-width: 1000px) {
