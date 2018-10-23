@@ -267,12 +267,22 @@ class ChargePresenter extends BasePresenter
         }
         
 
-	public function actionCreateTimesheet(){
+	public function actionCreateTimesheet($year, $month, $projectId, $withPrices){            
+
+            $myTimeSheet = new \DiplomHandler($this->database);
+            $myTimeSheet->setMonth($month);
+            $myTimeSheet->setYear($year);
+            $myTimeSheet->setUserId($this->user->getId());
+            $myTimeSheet->setUser($this->user);
+            $myTimeSheet->setProjectId($projectId);
+            
+            $myTimeSheet->createDiplom();
+            $this->redirect('Charge:default');
+            
             /*
             $myGame = $this->myGame;
             $myDiplom = new \DiplomHandler($this->database, $myGame);
             return $myDiplom->createDiplom();
-            $this->redirect('Game:default');
             */
 	}  
 }
