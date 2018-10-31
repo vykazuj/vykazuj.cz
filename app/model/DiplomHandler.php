@@ -85,9 +85,15 @@ class DiplomHandler {
         $pdf->SetAutoPageBreak($auto_page_break, $bMargin);
         $pdf->setPageMark();
 
+        // nemaz, pouziju to na vykazy pro HOnzu / jednatele
         $myRecordHandler = new RecordHandler($this->database);
+        $myClientHandler = new ClientHandler($this->database);
+        $myUserHandler = new MyRegistrator($this->database);
         $records = $myRecordHandler->getRecordsByMonthYearProjectUser($this->month, $this->year, $this->projectId, $this->userId);
-
+        $company = $myClientHandler->getMyCompany($this->userId);
+        $clientId = $myRecordHandler->getProjectDetail($this->projectId)->client_id;
+        $client =  $myClientHandler->getMyClient($this->userId, $clientId);
+        $myDetails = $myUserHandler->getAttributes($this->userId);
         /*
         $rankings = $myGame->getRankings();
         $totalRanking = $myGame->getTotalRanking();
@@ -99,52 +105,114 @@ class DiplomHandler {
         $pdf->setPrintFooter(false);
         
         
-        $pdf->SetFont('dejavuserifcondensed', 'i', 72);
+        $pdf->SetFont('dejavuserifcondensed', 'b', 16);
         $pdf->SetFillColor(255, 255, 255);
         
+        $pdf->SetLineWidth(0.2);
+        $pdf->SetDrawColor(0,0,0);
+        $pdf->Line(15, 10, 200, 10);
+
+        $pdf->SetXY(15, 15);
+        $txt = 'Submitted by';
+        $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
+        
         $pdf->SetXY(100, 15);
-        $txt = 'Výkaz práce';
+        $txt = 'Authorised by';
+        $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
+
+        $pdf->SetFont('dejavuserifcondensed', '', 10);
+        $pdf->SetXY(15, 30);
+        $txt = 'Name: '.$myDetails->first_name.' '.$myDetails->last_name;
         $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
         
-        
-        $pdf->SetFont('dejavuserifcondensed', 'i', 24);
-        $pdf->SetXY(90, 45);
-        $txt = 'Něco něco';
+        $pdf->SetXY(15, 35);
+        $txt = 'Role:';
         $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
         
+        $pdf->SetXY(100, 30);
+        $txt = 'Name:';
+        $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
         
+        $pdf->SetXY(100, 35);
+        $txt = 'Role:';
+        $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
         
+        $pdf->SetLineWidth(2.5);
+        $pdf->SetDrawColor(210,210,210);
+        $pdf->Line(15, 45, 200, 45);         
         
-        $pdf->SetFont('dejavuserifcondensed', '', 24);
-        $pdf->SetXY(13, 65);
-        $txt = 'Jméno: ';
-        $pdf->MultiCell(75, 0, $txt, 0, 'L', 1, 0, '', '', true);
+        $todayDate = date("j F Y"); 
+        $pdf->SetXY(15, 50);
+        $txt = 'Date: '.$todayDate;
+        $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
+
+        $pdf->SetXY(100, 50);
+        $txt = 'Date: '.$todayDate;
+        $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
+
+        $pdf->SetXY(15, 60);
+        $txt = 'Signed:';
+        $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
+
+        $pdf->SetXY(100, 60);
+        $txt = 'Signed:';
+        $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
+
         
-        $pdf->SetXY(13, 87);
-        $txt = 'Výsledné skóre: ';
-        $pdf->MultiCell(75, 0, $txt, 0, 'L', 1, 0, '', '', true);
+        $pdf->SetLineWidth(2.5);
+        $pdf->SetDrawColor(210,210,210);
+        $pdf->Line(15, 75, 200, 75);  
+
+          
+        $pdf->SetLineWidth(0.2);
+        $pdf->SetDrawColor(0,0,0);
         
-        $pdf->SetXY(13, 109);
-        $txt = 'Výsledná známka: ';
-        $pdf->MultiCell(75, 0, $txt, 0, 'L', 1, 0, '', '', true);
-                
-        $pdf->SetFont('dejavuserifcondensed', 'b', 12);
-        $pdf->SetXY(13, 133);
-        $txt = 'Povedlo se Vám: ';
-        $pdf->MultiCell(75, 0, $txt, 0, 'L', 1, 0, '', '', true);
+        $pdf->SetFont('dejavuserifcondensed', '', 10);
         
-        $pdf->SetFont('dejavuserifcondensed', '', 12);
-        $x=13;
-        $y=138;
-        $counter=0;
+
+        
         if($records!=NULL){
+            $tbl = '<table cellspacing="0" cellpadding="1" border="1">
+                    <tr>
+                        <td width="160" align="center"><b>Date</b></td>
+                        <td width="335" align="center"> <b>Project</b></td>
+                        <td width="75" align="center"><b>Hours</b></td>
+                        <td width="85" align="center"><b>Hours over</b></td>
+                    </tr>
+            </table>';  
+      
+
+        $pdf->SetXY(15, 80);
+        $pdf->writeHTML($tbl, true, false, false, false, '');
+
+        $x=15;
+        $y=85;
+        $counter=0;
+        $sumHours=0;
+        $sumOver=0;
+
         foreach($records as $record){
-            if($counter>9){break;};
+            
+            if($counter>30){break;};
+        
             $pdf->SetXY($x, $y);
-            $txt = $record->day."/".$record->month."/".$record->year." - ".$record->hours."+".$record->hours_over."h";
-            $pdf->MultiCell(115, 0, $txt, 0, 'L', 1, 0, '', '', true);
+            $tbl = '<table cellspacing="0" cellpadding="1" border="1">
+                        <tr>
+                            <td width="160" align="center">'.$record->day.'.'.$record->month.'.'.$record->year.'</td>
+                            <td width="335" align="center">asd</td>
+                            <td width="75" align="center">'.$record->hours.'</td>
+                            <td width="85" align="center">'.$record->hours_over.'</td>
+                        </tr>
+                    </table>'; 
+           
+            $pdf->writeHTML($tbl, true, false, false, false, '');
+        // $txt = $record->day."/".$record->month."/".$record->year." - ".$record->hours."+".$record->hours_over."h";
+ 
+        //$pdf->MultiCell(115, 0, $txt, 0, 'L', 1, 0, '', '', true);
             $y+=5;
             $counter++;
+            $sumHours+=$record->hours;
+            $sumOver+=$record->hours_over;
             }
         }else{
                 $pdf->SetXY($x, $y);
@@ -153,8 +221,21 @@ class DiplomHandler {
                 $y+=5;
                 $counter++;
         }
-        
+          
+        $pdf->SetXY($x, $y);
+        $tbl = '<table cellspacing="0" cellpadding="1" border="1">
+                        <tr>
+                            <td width="160" align="center"><b>Total</b></td>
+                            <td width="335" align="center"></td>
+                            <td width="75" align="center"><b>'.$sumHours.'</b></td>
+                            <td width="85" align="center"><b>'.$sumOver.'</b></td>
+                        </tr>
+                    </table>'; 
+           
+        $pdf->writeHTML($tbl, true, false, false, false, '');
+
         $pdf->lastPage();
         $pdf->Output('diplom.pdf', 'I');
      }   
 }
+        

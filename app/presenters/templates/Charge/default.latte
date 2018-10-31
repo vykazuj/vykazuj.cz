@@ -92,7 +92,7 @@
                 
             <div style="margin-left:5%; width:90%; position:relative; text-align: center;">
             <br>
-                <a n:href="createTimesheet 2018, 9, 27, 0" target="_blank">Timesheet<i class="fas fa-download"></i></a>
+                <a n:href="createTimesheet 2018, 12, 4, 0" target="_blank">Timesheet<i class="fas fa-download"></i></a>
                     <br>
                     <span class="graph-title">
                         Vyber projekt:<br>
@@ -418,7 +418,7 @@
         function createChargedRow(obj, day, dayName){
             let selectHTML = $("#my-chargeable-projects").html();
             
-            let row='<div class="row rows-intable" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+            let row='<div class="row rows-intable withL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
                     '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold  rowPlus tiny" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
                     '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+obj["id"]+'">'+day+'</div>'+
                     '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+obj["id"]+'"">'+dayName+'</div>'+
@@ -438,7 +438,7 @@
 
           function createChargedRowBlank(i, day, dayName){
             let selectHTML = $("#my-chargeable-projects").html();
-            let row='<div class="row rows-intable" id="'+-i+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+            let row='<div class="row rows-intable withL" id="'+-i+'"><div class="col-md-12 col-lg-8"><div class="row">'+
                     '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowPlus tiny" recordId="'+-i+'"><i class="fas fa-plus-circle"></i></div>'+
                     '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+-i+'">'+day+'</div>'+
                     '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+-i+'">'+dayName+'</div>'+
@@ -457,7 +457,7 @@
 
             function createNewRowUnderDate(obj){
                 let selectHTML = $("#my-chargeable-projects").html();
-                let row='<div class="row rows-intable" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                let row='<div class="row rows-intable withoutL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
                     '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowPlus tiny" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
                     '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+obj["id"]+'"></div>'+
                     '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+obj["id"]+'"></div>'+
@@ -717,8 +717,12 @@
     font-size:20px;
 }
 
-.rows-intable{
+.withL{
     border-bottom: 1px solid #dee2e6;
+}
+
+.withoutL{
+    border-bottom: 0px solid #dee2e6;
 }
 
 .input{
