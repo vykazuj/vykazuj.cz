@@ -80,12 +80,12 @@ class ClientHandler {
         $companyId = $company["id"];
         $client["id"] = null;
         $client["company_id"] = $companyId;
-        $client["name"] = 'Nový klient';
-        $client["ico"] = 'ičo';
-        $client["phone"] = 'telefon';
-        $client["email"] = 'email';
-        $client["contact"] = 'kontaktní osoba';
-        $client["address"] = 'adresa';
+        $client["name"] = 'Zadejte název klienta';
+        $client["ico"] = 'Zadejte IČO';
+        $client["phone"] = 'Zadejte telefon';
+        $client["email"] = 'Zadejte email';
+        $client["contact"] = 'Zadejte kontaktní osobu';
+        $client["address"] = 'Zadejte adresa';
         return $this->database->table('client')->insert($client);
     }
     

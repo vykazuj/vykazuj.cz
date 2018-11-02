@@ -189,7 +189,7 @@
         }
                 
         function updateProjectDetails(projectId, value){
-            $("#save-client").text("Ukládám...");
+            $("#new-project").text("Ukládám...");
             $.ajax(
             {
               type: 'GET',
@@ -201,9 +201,9 @@
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
                     alert(json.code);
-                    $("#save-client").text('Chyba');
+                    $("#new-project").text('Chyba');
                 }else{
-                    $("#save-client").text('Uloženo');
+                    $("#new-project").text('Přidat další');
                 }     
                 
               }
@@ -211,7 +211,7 @@
         }
         
         function deleteProject(projectId){
-            $("#save-client").text("Mažu...");
+            $("#new-project").text("Mažu...");
             $.ajax(
             {
               type: 'GET',
@@ -223,9 +223,9 @@
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
                     alert(json.code);
-                    $("#save-client").text('Chyba');
+                    $("#new-project").text('Chyba');
                 }else{
-                    $("#save-client").text('Nový');
+                    $("#new-project").text('Přidat další');
                     $("input[projectid='"+projectId+"']").parent().parent().remove();
                 }     
                 
@@ -237,7 +237,7 @@
             $(".clients-row").remove();
         }
         
-        
+               
         function addClientRow(data, rate){
             var row = '<div class="row clients-row"><div class="col-xl-9 col-md-8 col-sm-12 col-12 text-left">\n\
                        <input type="text" value="'+data["name"]+'" projectid="'+data["id"]+'" class="project_labels_all">';
@@ -245,8 +245,7 @@
             row = row +'<small>';
             // row = row +'<i class="fas fa-pencil-alt fa-1x clients-svg"></i>';
             row = row +'<span class="delete_project" projectid="'+data["id"]+'"><i class="fas fa-trash-alt fa-1x clients-svg"></i></span></small></div></div>';         
-            $("#clients-row-head").after(row);
-            
+            $("#clients-row-head").after(row);          
             
         }
         
@@ -269,6 +268,7 @@
                         var raw_data = json.data;
                         addClientRow(raw_data,'10 000 Kč');
                         $("#new-project").text("Přidat další");
+                        setUpMyProjectsDetails();
                     }
                   }
                 });      
