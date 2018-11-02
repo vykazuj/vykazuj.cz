@@ -3978,9 +3978,6 @@ input[type="button"].btn-block {
   margin-left: -1px;
   padding: 5px;
   flex-grow: 1;
-  color: #20252D;
-  font-weight: 600;
-  font-size: 18px;
 }  
 .nav-pills > li.active {
   background-color: #EDEDED;
