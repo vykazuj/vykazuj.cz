@@ -4,7 +4,7 @@
 <body>
 
 <div class="row">
-    <div class="col-3 col-lg-2 text-center panel-left">
+    <div class="col-12 col-lg-2 col-sm-12  col-xs-12 text-center panel-left">
         <h2 class="h1 mb-4 font-weight-semibold red">Vykazuj.cz</h2>
         <img src="
              {if (isset($userImage) && $userImage!='') }
@@ -24,7 +24,7 @@
     </div>
         
         
-    <div class="col-9 col-lg-10 text-center panel-mid">
+    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">
         <div class="container timetable-blank">
           <ul class="nav nav-pills" id="my-clients-header">
             <li class="nav-pills-red" id="add-new-client"><i class="fas fa-plus-circle"></i>Nový klient</li>
@@ -32,7 +32,7 @@
         </div>
         
         <div class="container timetable-blank">
-            <div class="container container-inner timetable">
+            <div class="container-inner timetable">
                 <br>
                 <h1 class="text-left font-weight-semibold"><input type="text" value="Granton s.r.o." id="client_name_label" class="client_labels_all" finder="name"></h1>
                 
@@ -691,14 +691,23 @@ div.clients-row{
 div.clients-row:hover{
     background-color: #EDEDED;
 }
-@media screen and (max-width: 1000px) {
+
+
+@media screen and (max-width: 992px) {
         body{ font-size: 14px;}
         .nav-pills > li { padding: 3px; font-size: 12px;}
-        .panel-left > h2.red{ font-size: 20px;}
-        .panel-left > span.full-name{ font-size: 16px;}
-        .panel-left > span.job-title{ font-size: 10px;}
+        .panel-left { height: 100%;}
+        .panel-left > h2.red{ font-size: 20px; display: none;}
+        .panel-left > span.full-name{ font-size: 16px; display: none;}
+        .panel-left > span.job-title{ font-size: 10px; display: none;}
+        .panel-left > img { display: none;}
         .table-hover > tbody > tr > td:first-child { font-size: 16px;}
         .table th, .table td {  padding-left: 0rem; vertical-align: middle;}
+        .list-group { margin-top: 0px; display: inline-flex; -ms-flex-direction: column; flex-direction: row;}
+        .list-group-item {  margin-bottom: 0px; padding: 0.5rem 0.5rem; }
+        input#client_name_label { font-size: 1.5rem; }
+        .timetable-blank { margin-top: 0px; }
+        .panel-mid { padding-top: 20px;}
 }
 
 @media screen and (max-width: 1250px) {
