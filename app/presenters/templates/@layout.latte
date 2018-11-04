@@ -11,19 +11,84 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="{$basePath}/css/style.css">
+        <link href="{$basePath}/css/bootstrap.css" rel="stylesheet" media="screen">
+        <link href="https://fonts.googleapis.com/css?family=Titillium+Web:600" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Titillium+Web:400" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Titillium+Web:700" rel="stylesheet">
 	{block head}{/block}
 </head>
 
-<body>
-	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
 
-	{include content}
-
-	{block scripts}
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
+{block scripts}
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
+        <script src="{$basePath}/js/jquery-3.3.1.min.js"></script>        
+        <script src="{$basePath}/js/bootstrap.min.js"></script>
 	<script src="{$basePath}/js/Chart.js"></script>
-	<script src="{$basePath}/js/main.js"></script>
-	{/block}
+        <script src="{$basePath}/js/fontawesome/svg-with-js/js/fontawesome-all.js"></script>
+{/block}
+
+{block body_start}
+<body>
+<div class="row">
+    <div class="col-12 col-lg-2 col-sm-12  col-xs-12 text-center panel-left">
+        <h2 class="h1 mb-4 font-weight-semibold red">Vykazuj.cz</h2>
+        <img src="
+             {if (isset($userImage) && $userImage!='') }
+                 {$userImage}
+             {else}
+                {$basePath}/images/{if $lastName == 'Haase'}drhaase{elseif $lastName == 'Lamaj'}jamal{else}honza{/if}.jpg
+             {/if}
+                " class="rounded-circle" alt="Cinque Terre" width="150px">
+        <span class="full-name">{$firstName} {$lastName}</span>
+        <span class="job-title">{if $lastName == 'Haase' || $lastName == 'Lamaj'}Slave{else}Jednatel{/if}</span>
+        <div class="list-group">
+            <a n:href="Charge:default" class="list-group-item {if $activePage=='charge'}active{/if}"><i class="far fa-clock"></i>Timesheety</a>
+            <a n:href="Clients:default" class="list-group-item {if $activePage=='clients'}active{/if}"><i class="fas fa-users"></i>Klienti</a>
+            <a n:href="Statistics:default" class="list-group-item {if $activePage=='statistics'}active{/if}"><i class="fas fa-chart-line"></i>Statistiky</a>
+            <a n:href="Settings:default" class="list-group-item {if $activePage=='settings'}active{/if}"><i class="fas fa-cog"></i>Nastavení</a>
+        </div>
+    </div>
+        
+{/block}
+
+{block content}
+{/block}
+
+{block body_end}
+</div>
+</body>
+{/block}
+
+{block style}
+<style>
+    
+.small-screen { display:none;}
+        
+@media screen and (max-width: 992px) {
+        body{ font-size: 14px;}
+        .nav-pills > li { padding: 3px; font-size: 12px;}
+        .panel-left { height: 100%;}
+        .panel-left > h2.red{ font-size: 20px; display: none;}
+        .panel-left > span.full-name{ font-size: 16px; display: none;}
+        .panel-left > span.job-title{ font-size: 10px; display: none;}
+        .panel-left > img { display: none;}
+        .table-hover > tbody > tr > td:first-child { font-size: 16px;}
+        .table th, .table td {  padding-left: 0rem; vertical-align: middle;}
+        .list-group { margin-top: 0px; display: inline-flex; -ms-flex-direction: column; flex-direction: row;}
+        .list-group-item {  margin-bottom: 0px; padding: 0.5rem 0.5rem; }
+        input#client_name_label { font-size: 1.5rem; }
+        .timetable-blank { margin-top: 0px; }
+        .panel-mid { padding-top: 20px;}
+        .big-screen { display:none;}
+        .small-screen { display:block;}
+}
+<style>
+
+{/block}
+
+
+
+
 </body>
 </html>

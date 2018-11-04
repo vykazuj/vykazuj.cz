@@ -18,6 +18,7 @@ class ClientsPresenter extends BasePresenter
                 $this->template->firstName = $this->user->getIdentity()->first_name;
                 $this->template->lastName = $this->user->getIdentity()->last_name; 
                 $this->template->userImage = $this->user->getIdentity()->image; 
+                $this->template->activePage = 'clients'; 
 	}
         
         public function actionDefault(){
