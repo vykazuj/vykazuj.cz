@@ -3,7 +3,7 @@
 namespace App\Presenters;
 use Nette\Application\Responses\JsonResponse;
 
-class ChargePresenter extends BasePresenter
+class StatisticsPresenter extends BasePresenter
 {  
         private $database;
         
@@ -18,7 +18,7 @@ class ChargePresenter extends BasePresenter
                 $this->template->firstName = $this->user->getIdentity()->first_name;
                 $this->template->lastName = $this->user->getIdentity()->last_name; 
                 $this->template->userImage = $this->user->getIdentity()->image; 
-                $this->template->activePage = 'charge'; 
+                $this->template->activePage = 'statistics'; 
 	}
         
         public function actionDefault(){

@@ -1,30 +1,7 @@
-{layout "@login.latte"}
-
 {block content}
-<body>
-
-<div class="row">
-    <div class="col-3 col-lg-2 text-center panel-left">
-        <h2 class="h1 mb-4 font-weight-semibold red">Vykazuj.cz</h2>
-        <img src="
-             {if (isset($userImage) && $userImage!='') }
-                 {$userImage}
-             {else}
-                {$basePath}/images/{if $lastName == 'Haase'}drhaase{elseif $lastName == 'Lamaj'}jamal{else}honza{/if}.jpg
-             {/if}
-                " class="rounded-circle" alt="Cinque Terre" width="150px">
-        <span class="full-name">{$firstName} {$lastName}</span>
-        <span class="job-title">{if $lastName == 'Haase' || $lastName == 'Lamaj'}Slave{else}Jednatel{/if}</span>
-        <div class="list-group">
-            <a n:href="Charge:default" class="list-group-item active"><i class="far fa-clock"></i>Timesheety</a>
-            <a n:href="Clients:default" class="list-group-item"><i class="fas fa-users"></i>Klienti</a>
-            <a href="#" class="list-group-item"><i class="fas fa-chart-line"></i>Statistiky</a>
-            <a href="#" class="list-group-item"><i class="fas fa-cog"></i>Nastavení</a>
-        </div>
-    </div>
+       
         
-        
-    <div class="col-9 col-lg-8 text-center panel-mid">
+    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
             <li><a href="#" id="yearPick">2018</a></li>

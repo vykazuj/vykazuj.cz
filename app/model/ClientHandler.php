@@ -89,6 +89,14 @@ class ClientHandler {
         return $this->database->table('client')->insert($client);
     }
     
+    function createUserCompanyRel($userId, $companyId, $role){
+        return $this->database->query("insert into users_company_rel (id, user_id, company_id, role) valuse (null,?,?,?)",$userId, $companyId, $role);
+    }
+    
+    function createUserProjectRel($userId, $projectId, $mdRate){
+        return $this->database->query("insert into users_company_rel (id, user_id, project_id, rel, md_rate) valuse (null,?,?,?)",$userId, $projectId, 'user' ,$mdRate);
+    }
+    
     function createNewProject($userId, $clientId){
         $project["id"] = null;
         $project["client_id"] = $clientId;

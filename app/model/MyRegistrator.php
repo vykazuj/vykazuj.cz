@@ -87,9 +87,10 @@ class MyRegistrator
                 //$this->database->query('INSERT INTO users ?', $input);
                 $user = $this->database->table("users")->insert($user);
                 $company["owner_id"] = $user["id"];
-                $company = $this->database->table("company")->insert($company);
+                $companyId = $this->database->table("company")->insert($company);
                 $myClientHandler = new ClientHandler($this->database);
                 $myClientHandler->createNewClient($user["id"]);
+                $myClientHandler->createUserCompanyRel($user["id"], $companyId, 'owner');
             }
             catch(\PDOException $e)
             {
