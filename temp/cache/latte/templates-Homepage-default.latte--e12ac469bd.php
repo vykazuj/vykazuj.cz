@@ -21,8 +21,6 @@ class Templatee12ac469bd extends Latte\Runtime\Template
 		extract($this->params);
 ?>
 
-
-
 <?php
 		if ($this->getParentName()) return get_defined_vars();
 		$this->renderBlock('content', get_defined_vars());
@@ -34,7 +32,7 @@ class Templatee12ac469bd extends Latte\Runtime\Template
 	function prepare()
 	{
 		extract($this->params);
-		if (isset($this->params['flash'])) trigger_error('Variable $flash overwritten in foreach on line 21');
+		if (isset($this->params['flash'])) trigger_error('Variable $flash overwritten in foreach on line 19');
 		$this->parentName = "@login.latte";
 		Nette\Bridges\ApplicationLatte\UIRuntime::initialize($this, $this->parentName, $this->blocks);
 		
@@ -50,16 +48,16 @@ class Templatee12ac469bd extends Latte\Runtime\Template
         <div class="panel panel-body text-center">
 
             <?php
-		/* line 10 */
+		/* line 8 */
 		echo Nette\Bridges\FormsLatte\Runtime::renderFormBegin($form = $_form = $this->global->formsStack[] = $this->global->uiControl["loginForm"], []);
 ?>
 
-                <img src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 11 */ ?>/images/granton_logo.png">  
+                <img src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 9 */ ?>/images/granton_logo.png">  
                 <h1 class="h1 mb-4 font-weight-semibold">Vykazuj.cz</h1>
                 <label for="inputEmail" class="sr-only">Email address</label>
-                <?php echo end($this->global->formsStack)["name"]->getControl() /* line 14 */ ?>
+                <?php echo end($this->global->formsStack)["name"]->getControl() /* line 12 */ ?>
 
-                <?php echo end($this->global->formsStack)["password"]->getControl() /* line 15 */ ?>
+                <?php echo end($this->global->formsStack)["password"]->getControl() /* line 13 */ ?>
 
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Přihlásit se</button>
                 <br>
@@ -87,7 +85,7 @@ class Templatee12ac469bd extends Latte\Runtime\Template
 ?><i class="fas fa-check-circle awesomegreen"></i>
 <?php
 				}
-				?>                      <?php echo LR\Filters::escapeHtmlText($flash->message) /* line 27 */ ?>
+				?>                      <?php echo LR\Filters::escapeHtmlText($flash->message) /* line 25 */ ?>
 
                   </span>
               </div>
