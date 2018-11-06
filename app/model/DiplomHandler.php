@@ -91,8 +91,8 @@ class DiplomHandler {
         $myUserHandler = new MyRegistrator($this->database);
         $records = $myRecordHandler->getRecordsByMonthYearProjectUser($this->month, $this->year, $this->projectId, $this->userId);
         $company = $myClientHandler->getMyCompany($this->userId);
-        $clientId = $myRecordHandler->getProjectDetail($this->projectId)->client_id;
-        $client =  $myClientHandler->getMyClient($this->userId, $clientId);
+        //$clientId = $myRecordHandler->getProjectDetail($this->projectId)->client_id;
+        //$client =  $myClientHandler->getMyClient($this->userId, $clientId);
         $myDetails = $myUserHandler->getAttributes($this->userId);
         /*
         $rankings = $myGame->getRankings();

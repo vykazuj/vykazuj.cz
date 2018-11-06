@@ -495,8 +495,10 @@
                 
                 function projectCharged(){  // vytvorim si array a dam do ni projekty, ktere jsou na dane strance
                                             var selected=[];
+                                            let selectedId=[];
                                             $('.timetable .my-chargeable-projects-no-border option:selected').each(function(){
                                             selected[$(this).val()]=$(this).text();
+                                            selectedId[$(this).val()]=$(this).val();
                                             });
                                             console.log(selected);
                                             
@@ -512,7 +514,7 @@
                                                                                           <li>Hodiny: <a id ="totalHours"'+i+'>'+hoursSum(i)+' '+'h</a></li>\n\
                                                                                           <li>Přesčas: <a id ="totalHoursOver">'+hoursSumOver(i)+' '+'h</a></li>\n\
                                                                                           <li>Faktura celkem: 1 000 Kč</li>\n\
-                                                                                          <li><a href="#">Timesheet</a></li>\n\
+                                                                                          <li><a href="/vykazuj.cz/www/charge/create-timesheet?year=2018&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0" target="_blank">Timesheet</a></li>\n\
                                                                                           <li><a href="#">Odeslat fakturu</a></li>\n\
                                                                                       </ul> </br>');
                                                 }               
