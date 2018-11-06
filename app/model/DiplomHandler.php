@@ -91,6 +91,7 @@ class DiplomHandler {
         $myUserHandler = new MyRegistrator($this->database);
         $records = $myRecordHandler->getRecordsByMonthYearProjectUser($this->month, $this->year, $this->projectId, $this->userId);
         $company = $myClientHandler->getMyCompany($this->userId);
+        $project = $myRecordHandler->getProjectNameByProjectId($this->projectId);
         //$clientId = $myRecordHandler->getProjectDetail($this->projectId)->client_id;
         //$client =  $myClientHandler->getMyClient($this->userId, $clientId);
         $myDetails = $myUserHandler->getAttributes($this->userId);
@@ -199,7 +200,7 @@ class DiplomHandler {
             $tbl = '<table cellspacing="0" cellpadding="1" border="1">
                         <tr>
                             <td width="160" align="center">'.$record->day.'.'.$record->month.'.'.$record->year.'</td>
-                            <td width="335" align="center">asd</td>
+                            <td width="335" align="center">'.$project.'</td>
                             <td width="75" align="center">'.$record->hours.'</td>
                             <td width="85" align="center">'.$record->hours_over.'</td>
                         </tr>

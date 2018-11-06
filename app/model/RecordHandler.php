@@ -58,6 +58,11 @@ class RecordHandler {
         return $this->database->fetchField("select name from project p, record r where p.id = r.project_id and r.id = ?",$recordId);
     }
     
+    function getProjectNameByProjectId($projectId){
+        return $this->database->fetchField("select name from project where id = ?",$projectId);
+    }
+    
+
     function getMyChargeableProjects($userId){
         return $this->database->fetchAll('select p.* from project p, users_project_rel upr where p.id = upr.project_id and upr.user_id = ? and upr.rel = ?',$userId,'user');
     }
