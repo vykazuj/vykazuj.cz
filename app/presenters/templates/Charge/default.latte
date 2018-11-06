@@ -297,6 +297,8 @@
                                                 $("#"+recordId).after(createNewRowUnderDate(json.data));
                                                 setSVGActions(json.data.id);
                                                 setSelectOption(json.data.id, json.data.project_id);
+                                                $("#"+json.data.id).prev('.row').css( "border-bottom", "0px solid #dee2e6" );
+                                                $("#"+json.data.id).closest('.withL').css( "border-bottom", "1px solid #dee2e6" );
 
                                             }else{
                                                 alert(json.code);
@@ -422,8 +424,8 @@
                     '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName wide" recordId="'+-i+'"></div>'+
                     '</div></div>'+
                     '<div class="col-md-12 col-lg-4"><div class="row">'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+-i+'">'+0+'</div>'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+-i+'">'+0+'</div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+-i+'"></div>'+
+                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+-i+'"></div>'+
                     '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowShare tiny" recordId="'+-i+'"><i class="fas fa-share-alt"></i></div>'+
                     '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowSave tiny" recordId="'+-i+'"><i class="fas fa-save"></i></div>'+
                     '<div class="col-lg-2 col-md-2  col-2 text-mid font-weight-semibold rowTrash tiny" recordid="'+-i+'"><i class="fas fa-trash-alt deleteRecord"></i></div>'+
@@ -525,6 +527,8 @@
                                                     $("#my-charged-records-table").append(createNewRowUnderDate(json.data[hrouda]));
                                                     setSVGActions(json.data[hrouda].id);
                                                     setSelectOption(json.data[hrouda].id, json.data[hrouda].project_id); 
+                                                    $("#"+json.data[hrouda].id).prev('.row').css( "border-bottom", "0px solid #dee2e6" );
+                                                    $("#"+json.data[hrouda].id).css( "border-bottom", "1px solid #dee2e6" );
                                                     hrouda++;
                                                 }                                                                                      
                                             }
