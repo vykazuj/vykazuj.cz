@@ -456,44 +456,83 @@
                 }
                              
                 // Sum of totalHours
-                function hoursSum(){
-                  var totalSum = 0;                  
-                  $('.timetable .rowHours .value').each(function()
+                function hoursSum(projectId){
+                //function hoursSum(){
+                let myArray1=[];
+                    
+                  $('.my-chargeable-projects-no-border').each(function()
                   {
-                     var inputVal = $(this).val();
-                     if ($.isNumeric(inputVal))
-                     {
-                         totalSum += parseFloat(inputVal);
-                     }
+                      var thisProject = $(this).val();
+                      var recordId = $(this).attr("recordid");
+                      var hoursAdd = Number($("div.rowHours[recordid='"+recordId+"']").children("input").val());
+                      if(isNaN(hoursAdd)){ hoursAdd = 0;}  
+                      var hoursOld = Number(myArray1[thisProject]);
+                      if(isNaN(hoursOld)){ hoursOld = 0;}  
+                      if(typeof hoursOld === 'undefined'){ hoursOld = 0;}
+                      myArray1[thisProject] = Number(hoursOld + hoursAdd);
+                      //return myArray1[projectId];
                   });
-                  $('#totalHours').text(totalSum);
-                };
+                                    
+                  return (myArray1[projectId]);
+                  
+              }; 
+             // Sum of totalHoursOver 
+              function hoursSumOver(projectId){
+                //function hoursSum(){
+                let myArray1=[];
+                    
+                  $('.my-chargeable-projects-no-border').each(function()
+                  {
+                      var thisProject = $(this).val();
+                      var recordId = $(this).attr("recordid");
+                      var hoursAdd = Number($("div.rowHoursOver[recordid='"+recordId+"']").children("input").val());
+                      if(isNaN(hoursAdd)){ hoursAdd = 0;}  
+                      var hoursOld = Number(myArray1[thisProject]);
+                      if(isNaN(hoursOld)){ hoursOld = 0;}  
+                      if(typeof hoursOld === 'undefined'){ hoursOld = 0;}
+                      myArray1[thisProject] = Number(hoursOld + hoursAdd);
+                      //return myArray1[projectId];
+                  });                 
+                  
+                  return (myArray1[projectId]);
+                  
+              }; 
+              
                 
-                // Sum of totalHoursOver
-                function hoursOverSum(){
-                    var totalSum1 = 0;                  
-                    $('.timetable .rowHoursOver .value').each(function()
-                    {
-                       var inputVal = $(this).val();
-                       if ($.isNumeric(inputVal))
-                       {
-                           totalSum1 += parseFloat(inputVal);
-                       }
-                    });
-                    $('#totalHoursOver').text(totalSum1); 
-                }    
-                
-                // Sum of totalHours on input value
-                $('.timetable').on('input','.value', function()
-                {   
-                     hoursSum();
-                });   
-                
-                // Sum of totalHoursOver on input value
+                // Vypsani projektu a vypoctu na zmenu inputu hodin
                 $('.timetable').on('input','.value', function()
                 {
-                    hoursOverSum();
-                });                
+                    projectCharged();
+                }); 
+                
+                // vypsani projektu do praveho bloku
+                
+                function projectCharged(){  // vytvorim si array a dam do ni projekty, ktere jsou na dane strance
+                                            var selected=[];
+                                            $('.timetable .my-chargeable-projects-no-border option:selected').each(function(){
+                                            selected[$(this).val()]=$(this).text();
+                                            });
+                                            console.log(selected);
+                                            
+                                            // vyprazdnim si div, kam vypisuji projekty
+                                            $('#chargedProject').empty();
+                                            
+                                            // vypisu projekty na stranku, zbavim se prazdnych hodnot
+                                            for (var i = 0; i < selected.length; i++)
+                                            {
+                                                if (selected[i] !== undefined)
+                                                {                                                
+                                                $('#chargedProject').append('<ul class="right-block-li list-unstyled">'+selected[i]+'\n\
+                                                                                          <li>Hodiny: <a id ="totalHours"'+i+'>'+hoursSum(i)+' '+'h</a></li>\n\
+                                                                                          <li>Přesčas: <a id ="totalHoursOver">'+hoursSumOver(i)+' '+'h</a></li>\n\
+                                                                                          <li>Faktura celkem: 1 000 Kč</li>\n\
+                                                                                          <li><a href="#">Timesheet</a></li>\n\
+                                                                                          <li><a href="#">Odeslat fakturu</a></li>\n\
+                                                                                      </ul> </br>');
+                                                }               
+                                            }
+                                        };
+        
                 
         //Posrane je to posrane
         
