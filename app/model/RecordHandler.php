@@ -27,6 +27,13 @@ class RecordHandler {
         return $this->database->fetchAll('select r.*, p.name as projectName from record r, project p where p.id = r.project_id and r.user_id = ? and r.year = ? and r.month = ? ORDER by day ASC',$userId, $year, $month);
     }
     
+    function getEmployeeChargesOverview($month, $year, $companyId){
+        return $this->database->fetchAll(' select u.id, u.first_name as firstName, u.last_name as lastName, sum(hours) as hours, sum(hours_over) as hoursOver'
+                . ' from users u, record r, project p, client cl, company c '
+                . ' where u.id = r.user_id and p.id = r.project_id and p.client_id = cl.id and cl.company_id = c.id and c.id = ? and r.year = ? and r.month = ? '
+                . ' GROUP BY u.id, u.first_name, u.last_name ',$companyId, $year, $month);
+    }
+    
     function getRecordsByMonthYearProjectUser($month, $year, $project, $userId){
         return $this->database->fetchAll('select r.*, p.name as projectName from record r, project p where p.id = r.project_id and r.user_id = ? and r.year = ? and r.month = ? and r.project_id = ? ORDER by day ASC',$userId, $year, $month, $project);
     }
