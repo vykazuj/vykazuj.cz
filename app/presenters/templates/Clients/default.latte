@@ -304,6 +304,8 @@
                       cleanClientRows();
                       setUpMyClientDetails();
                       getMyClientProjects(id);
+                      $(".client-link[clientid='"+id+"']").addClass('active');
+                
                     }
                 }     
                 
@@ -344,6 +346,10 @@
         
         function setUpMyClientsLinks(){
             $("#my-clients-header").children(".client-link").click( function(){
+                
+                $('.client-link').removeClass('active');
+                $(this).addClass('active');
+                
                 var clientid = $(this).attr("clientid");
                 getMyClient(clientid);
             });
@@ -355,6 +361,12 @@
                 var value = $(this).val();
                 var clientId = $("#client_name_label").attr("clientid");
                 updateClientDetails(clientId, finder, value);
+            });
+            $(".client_labels_all[finder='name']").keyup( function(){
+                var value = $(this).val();
+                var clientId = $("#client_name_label").attr("clientid");
+                $('.client-link[clientid="'+clientId+'"').text(value);
+                
             });
         }
         

@@ -130,17 +130,7 @@ class Templatecc1467143b extends Latte\Runtime\Template
 <?php
 		}
 		else {
-			?>                <?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 40 */ ?>/images/<?php
-			if ($lastName == 'Haase') {
-				?>drhaase<?php
-			}
-			elseif ($lastName == 'Lamaj') {
-				?>jamal<?php
-			}
-			else {
-				?>honza<?php
-			}
-?>.jpg
+			?>                <?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 40 */ ?>/images/honza.jpg
 <?php
 		}
 ?>
@@ -176,6 +166,12 @@ class Templatecc1467143b extends Latte\Runtime\Template
 			?>active<?php
 		}
 		?>" href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link("Settings:default")) ?>"><i class="fas fa-cog"></i>Nastavení</a>
+            <a class="list-group-item <?php
+		if ($activePage=='will_never_happen') {
+			?>active<?php
+		}
+		?>" href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link("Homepage:logout")) ?>"><i class="fas fa-sign-out-alt"></i>Odhlásit</a>
+                        
         </div>
     </div>
         
@@ -215,6 +211,7 @@ class Templatecc1467143b extends Latte\Runtime\Template
         .panel-left > img { display: none;}
         .table-hover > tbody > tr > td:first-child { font-size: 16px;}
         .table th, .table td {  padding-left: 0rem; vertical-align: middle;}
+        
         .list-group { margin-top: 0px; display: inline-flex; -ms-flex-direction: column; flex-direction: row;}
         .list-group-item {  margin-bottom: 0px; padding: 0.5rem 0.5rem; }
         input#client_name_label { font-size: 1.5rem; }
@@ -223,7 +220,7 @@ class Templatecc1467143b extends Latte\Runtime\Template
         .big-screen { display:none;}
         .small-screen { display:block;}
 }
-<style>
+</style>
 
 <?php
 	}

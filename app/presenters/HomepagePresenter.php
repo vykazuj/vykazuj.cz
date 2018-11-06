@@ -56,6 +56,12 @@ class HomepagePresenter extends BasePresenter
         
         }        
         
+	public function actionLogout()
+	{
+            $this->session->destroy();
+            $this->getUser()->logout();
+            $this->redirect('Homepage:default');
+	}
         
         
 }

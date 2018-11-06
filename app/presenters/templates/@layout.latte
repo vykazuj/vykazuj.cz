@@ -37,7 +37,7 @@
              {if (isset($userImage) && $userImage!='') }
                  {$userImage}
              {else}
-                {$basePath}/images/{if $lastName == 'Haase'}drhaase{elseif $lastName == 'Lamaj'}jamal{else}honza{/if}.jpg
+                {$basePath}/images/honza.jpg
              {/if}
                 " class="rounded-circle" alt="Cinque Terre" width="150px">
         <span class="full-name">{$firstName} {$lastName}</span>
@@ -47,6 +47,8 @@
             <a n:href="Clients:default" class="list-group-item {if $activePage=='clients'}active{/if}"><i class="fas fa-users"></i>Klienti</a>
             <a n:href="Statistics:default" class="list-group-item {if $activePage=='statistics'}active{/if}"><i class="fas fa-chart-line"></i>Statistiky</a>
             <a n:href="Settings:default" class="list-group-item {if $activePage=='settings'}active{/if}"><i class="fas fa-cog"></i>Nastavení</a>
+            <a n:href="Homepage:logout" class="list-group-item {if $activePage=='will_never_happen'}active{/if}"><i class="fas fa-sign-out-alt"></i>Odhlásit</a>
+                        
         </div>
     </div>
         
@@ -75,6 +77,7 @@
         .panel-left > img { display: none;}
         .table-hover > tbody > tr > td:first-child { font-size: 16px;}
         .table th, .table td {  padding-left: 0rem; vertical-align: middle;}
+        
         .list-group { margin-top: 0px; display: inline-flex; -ms-flex-direction: column; flex-direction: row;}
         .list-group-item {  margin-bottom: 0px; padding: 0.5rem 0.5rem; }
         input#client_name_label { font-size: 1.5rem; }
@@ -83,7 +86,7 @@
         .big-screen { display:none;}
         .small-screen { display:block;}
 }
-<style>
+</style>
 
 {/block}
 

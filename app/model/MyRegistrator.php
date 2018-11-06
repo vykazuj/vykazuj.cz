@@ -22,9 +22,16 @@ class MyRegistrator
             $randstring = $randstring.$characters[rand(0, strlen($characters)-1)];
         }
         
+        $integrationId = '';
+        for ($i = 0; $i < 10; $i++) {
+            $integrationId = $integrationId.$characters[rand(0, strlen($characters)-1)];
+        }
+        
+        
         unset($input["password2"]);
         
-        //unset($input["agree_ladder"]);
+        //unset($input["agree_ladder"]);                
+        $input["integration_id"] = $integrationId;
         $input["status"] = 'registered';
         $input["source"] = 'vykazuj';
         $input["source_id"] = '';
@@ -65,6 +72,14 @@ class MyRegistrator
     function registerFromExternalSource($input, $source)
     {
         if($source==="google"){
+                
+            $characters = '123456789ABCDEFGHIJKLMNPQRSTUVWXYZ';
+            $integrationId = '';
+            for ($i = 0; $i < 10; $i++) {
+                $integrationId = $integrationId.$characters[rand(0, strlen($characters)-1)];
+            }
+            //unset($input["agree_ladder"]);                
+            $user["integration_id"] = $integrationId;
             $user["status"] = 'active';
             $user["first_name"] = $input->first_name;
             $user["username"] = $source.$input->id;

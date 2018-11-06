@@ -23,22 +23,25 @@ class ClientsPresenter extends BasePresenter
         
         public function actionDefault(){
             //$this->user->login(3);
-            /*
             $myRecordHandler = new \RecordHandler($this->database);
+            /*
             $this->template->myChargeableProjects = $myRecordHandler->getMyChargeableProjects($this->user->getId());
             $this->template->activeMonth = 1;
             $this->template->activeYear = 2018;
+            */
             $dateSessions = $this->getSession('Date'); 
             
             if(!isset($dateSessions->year))
                 {$dateSessions->year = $myRecordHandler->getMaxChargedYear($this->user->getId());}
+            if($dateSessions->year<2000 || $dateSessions->year>3000 || $dateSessions->year==""){ $dateSessions->year = date('o');}
+            
                 
             if(!isset($dateSessions->month))
                 {$dateSessions->month = $myRecordHandler->getMaxChargedMonthOfTheYear($this->user->getId(), $dateSessions->year);}
-                
+            if($dateSessions->month<1 || $dateSessions->month>12 || $dateSessions->month==""){ $dateSessions->month = date('n');}
+            
             $this->template->actualMonth = $dateSessions->month;  
-            $this->template->actualYear = $dateSessions->year;    
-             */
+            $this->template->actualYear = $dateSessions->year; 
             
         }       
         

@@ -42,8 +42,8 @@
                                  <span class="small-screen">Dov.</span>
                             </div>
                         </div>
-                    
-                        <div class="row" id="my-charged-records-table-neco">
+                    <!--
+                        <div class="row" class="my-charged-records-table-neco">
                             <div class="col-6 text-left">
                                  Jan Haase
                             </div>
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                     
-                        <div class="row" id="my-charged-records-table-neco">
+                        <div class="row" class="my-charged-records-table-neco">
                             <div class="col-6 text-left">
                                  Martin Sivok
                             </div>
@@ -73,7 +73,7 @@
                             </div>
                         </div>
                     
-                        <div class="row" id="my-charged-records-table-neco">
+                        <div class="row" class="my-charged-records-table-neco">
                             <div class="col-6 text-left">
                                  Jan Mahnel
                             </div>
@@ -87,6 +87,7 @@
                                  8
                             </div>
                         </div>
+                    -->
                 </div>
         
     </div>
@@ -127,7 +128,68 @@
      
     $(document).ready(function() 
     {          
-    }   
+        
+        var actualMonth = {$actualMonth};
+        var actualYear = {$actualYear};
+        var home_url = {$basePath};  
+        
+        function addRowEmployeeChargesOverview(input){
+        
+            var row ='<div class="row my-charged-records-table-neco"><div class="col-6 text-left">'
+                +input['firstName']+' '+input['lastName']+
+                '</div><div class="col-2">'
+                +input['hours']+
+                '</div><div class="col-2">'
+                +input['hoursOver']+
+                '</div><div class="col-2">'
+                +input['vacation']+'</div></div>';
+            $("#my-charged-records-table-first").after(row);
+                        
+    }
+        
+        function fillEmployeeChargesOverview(month, year){ 
+            $(".my-charged-records-table-neco").remove();
+            $.ajax(
+                    {
+                        type: 'GET',
+                        url: home_url+ '/statistics/get-employee-charges-overview?month='+month+'&year='+year,
+                        dataType: 'json',
+                        cache: false,
+                        success: function(data)
+                            { 
+                                var json = $.parseJSON(data);
+                                    if(json.result === 'OK')
+                                        {  
+                                            var raw_data = json.data;
+                                            for (i in raw_data)
+                                            {
+                                              //alert(raw_data[i]['firstName']+' '+raw_data[i]['lastName']+', '+raw_data[i]['hours']+'h + '+raw_data[i]['hoursOver']+'h');
+                                              raw_data[i]['vacation'] = 42;
+                                              addRowEmployeeChargesOverview(raw_data[i]);
+                                            }  
+                                        }
+                                    else{
+                                            alert(json.code);
+                                        }                                 
+                            }
+                    }
+                );
+        }     
+        fillEmployeeChargesOverview(actualMonth, actualYear);
+                
+        $("li.monthLink").click(function(){
+            var newMonth = $(this).attr('month');
+            $(".my-charged-records-table-neco").remove();
+            //loadCalendar(newMonth, 2018);
+            fillEmployeeChargesOverview(newMonth, 2018);
+            //loadActualRecords(newMonth, 2018);
+            $('li.active').removeClass('active');
+            $(this).addClass('active');
+            actualMonth = newMonth;
+        });
+        
+        
+    });   
 
     </script>
     
