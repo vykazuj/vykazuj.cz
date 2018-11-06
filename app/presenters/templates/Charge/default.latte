@@ -86,34 +86,22 @@
                   
                     {/ifset}
                 </span>
-                <span class="graph-title">
                 <br>
-                    Celkem   
-                </span>
-                <canvas id ="hours-chart" width="100">
-                </canvas>
-                <div class="graph-intitle" id="totalHours"><div class="graph-under-intitle">hodin</div></div>
-                
-                <br>
-                <span class="graph-title">
-                    Přesčas   
-                </span>
-                <canvas id ="hours-chart2" width="100">
-                </canvas>
-                <div class="graph-intitle" id="totalHoursOver"><div class="graph-under-intitle">hodin</div></div>
-                
-                
-                <br>
-                <span class="graph-title">
-                    Víkend   
-                </span>
-                <canvas id ="hours-chart3" width="100">
-                </canvas>
-                <div class="graph-intitle">100<div class="graph-under-intitle">hodin</div></div>
-                <br>
-                <br>
-                <br>
+                <div class ="graph-title">
+                    
+                    <div>
+                      <p class = "right-block-p">  Souhrnný výkaz </p> 
+                    </div>                    
+                    
+                        <div id = "chargedProject">
+                            
+                        </div>
+                    </br>   
+                                        
+
                 </div>
+                
+                
             </li>
             </ul>
         </div>
@@ -253,6 +241,7 @@
                                         }else{
                                             alert(json.code);
                                         }
+                                        projectCharged();
                                     }
                             });
                         });
@@ -573,8 +562,9 @@
                                                     hrouda++;
                                                 }                                                                                      
                                             }
-                                            hoursSum();
-                                            hoursOverSum();
+                                            projectCharged();                                     
+                                            
+                                            
                                                                                     }
                                     else {
                                             alert(json.code);
@@ -622,7 +612,7 @@
        // addChargedRow('St', '12','8','0','asd')   ;
        
                                 
-                     new Chart(
+               /*      new Chart(
                 document.getElementById("hours-chart"),
                 {   "type":"doughnut",
                     "data":
@@ -683,7 +673,7 @@
                     }
                 }
             );
-           
+           */
               function progress()
         {
             
