@@ -81,9 +81,7 @@
                        
                     </select>   
                     <br>
-                        
-                  
-                  
+                                        
                     {/ifset}
                 </span>
                 <br>
@@ -96,9 +94,7 @@
                         <div id = "chargedProject">
                             
                         </div>
-                    </br>   
-                                        
-
+                                                            
                 </div>
                 
                 
@@ -489,11 +485,12 @@
               
                 
                 // Vypsani projektu a vypoctu na zmenu inputu hodin
-                $('.timetable').on('input','.value', function()
+                
+                $('.timetable').on('input', function()
                 {
                     projectCharged();
-                }); 
-                
+                });  
+                            
                 // vypsani projektu do praveho bloku
                 
                 function projectCharged(){  // vytvorim si array a dam do ni projekty, ktere jsou na dane strance
