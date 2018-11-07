@@ -3,6 +3,13 @@
         
         
     <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">
+        
+        <div class="container timetable-blank text-right">
+            Aktivní firma: 
+          <select id = "company-select" class="client_not_name_label">
+          </select>
+        </div>
+        
         <div class="container timetable-blank">
           <ul class="nav nav-pills" id="my-clients-header">
             <li class="client-link" clientid="1">Moje nastavení</li>
@@ -290,23 +297,27 @@
     $(document).ready(function() 
     {          
         var home_url = {$basePath};  
+        initSharedFunctions(home_url);
+
         
             function createNewRequestRow(data){
                 var translate = [];
                 translate['sent'] = 'Odesláno';
                 translate['cancelled'] = 'Zrušeno';
                 translate['accepted'] = 'Přijato';
+                translate['denied'] = 'Odmítnuto';
                 var arrow = '';
                 var check = '';
                 if(data['direction']==='outgoing'){
                     arrow = '<i class="fas fa-long-arrow-alt-right"></i>';
-                    check = '<i class="fas fa-times-circle cancelRequest" alt="Zrušit žádost" requestid ="'+data['requestId']+'"></i>';
+                    check = '<span class="cancelRequest" requestid="'+data['requestId']+'"><i class="fas fa-times-circle" alt="Zrušit žádost" requestid ="'+data['requestId']+'"></i></span>';
                 }else{
                     arrow = '<i class="fas fa-long-arrow-alt-left"></i>';
-                    check = '<span class="acceptRequest" requestid="'+data['requestId']+'"><i class="fas fa-check-circle""></i></span><i class="fas fa-times-circle denyRequest" alt="Odmítnout žádost" requestid ="'+data['requestId']+'"></i>';
+                    check = '<span class="acceptRequest" requestid="'+data['requestId']+'"><i class="fas fa-check-circle"></i></span>'
+                           +'<span class="denyRequest"   requestid="'+data['requestId']+'"><i class="fas fa-times-circle"></i></span>';
                 }
                        
-                if(data['status'] !== 'cancelled' && data['status'] !== 'accepted'){
+                if(data['status'] !== 'cancelled' && data['status'] !== 'accepted' && data['status'] !== 'denied'){
                     var target = "#unresolved-requests";
                 }else{
                     var target = "#resolved-requests";
@@ -342,6 +353,44 @@
                         }
                 });
             }
+            
+            function denyRequest(requestId){      
+                $.ajax(
+                {
+                   type: 'GET',
+                   url: home_url+'/settings/deny-request?requestId='+requestId,
+                   dataType: 'json',
+                   cache: false,
+                   success: function(data)
+                        { var json = $.parseJSON(data); 
+                            if(json.result==='OK'){
+                                loadAllRequests();
+                            }else{
+                                if(json.code==='405'){ alert('Požadavek je již vyřízený.');}
+                            }
+                        }
+                });
+            }
+            
+            function cancelRequest(requestId){      
+                $.ajax(
+                {
+                   type: 'GET',
+                   url: home_url+'/settings/cancel-request?requestId='+requestId,
+                   dataType: 'json',
+                   cache: false,
+                   success: function(data)
+                        { var json = $.parseJSON(data); 
+                            if(json.result==='OK'){
+                                loadAllRequests();
+                            }else{
+                                if(json.code==='405'){ alert('Požadavek je již vyřízený.');}
+                            }
+                        }
+                });
+            }
+                        
+            
             function addEmployeeToCompany(userIntegrationId){      
                 $.ajax(
                 {
@@ -367,6 +416,20 @@
                     acceptRequest(requestId);
                 });
             }
+        
+            function addDenyActions(){
+                $('.denyRequest').click(function (){
+                    var requestId = $(this).attr('requestid');
+                    denyRequest(requestId);
+                });
+            }
+        
+            function addCancelActions(){
+                $('.cancelRequest').click(function (){
+                    var requestId = $(this).attr('requestid');
+                    cancelRequest(requestId);
+                });
+            }
             
             function loadAllRequests(){     
                 $('.requests').remove();
@@ -385,14 +448,15 @@
                                     createNewRequestRow(raw_data[i]);
                                 }
                                 addRequestActions();
+                                addDenyActions();
+                                addCancelActions();
                             }else{
                                 alert(json.code);
                             }
                         }      
                 });
             }
-    
-            loadAllRequests();
+            loadAllRequests();          
             
             $("#add-employee-to-company").click(function(){
                 var userIntegrationId = $("#add_employee_input_label").val(); 
@@ -402,8 +466,6 @@
             $('#add_employee_input_label').click(function(){
                 $('#add_employee_input_label').val('');
             });
-            
-            
     });
 
   </script>
@@ -513,7 +575,6 @@ input#client_name_label:hover{
     float: none;
     padding-left: 15px;
     padding-right: 15px;
-    padding-top: 40px;
 }
 .panel-mid > div.container {
     max-width: 2000px;

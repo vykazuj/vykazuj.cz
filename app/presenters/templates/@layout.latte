@@ -26,6 +26,8 @@
         <script src="{$basePath}/js/bootstrap.min.js"></script>
 	<script src="{$basePath}/js/Chart.js"></script>
         <script src="{$basePath}/js/fontawesome/svg-with-js/js/fontawesome-all.js"></script>
+        <script src="{$basePath}/js/init_scripts.js"></script>
+
 {/block}
 
 {block body_start}
@@ -62,11 +64,22 @@
 </body>
 {/block}
 
+        
 {block style}
 <style>
     
 .small-screen { display:none;}
         
+
+select.client_not_name_label{
+    font-weight: 600 !important;
+    text-align: left !important;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding-left: 10px;
+}
+
 @media screen and (max-width: 992px) {
         body{ font-size: 14px;}
         .nav-pills > li { padding: 3px; font-size: 12px;}

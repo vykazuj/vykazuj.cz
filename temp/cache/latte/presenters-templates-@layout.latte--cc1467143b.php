@@ -72,6 +72,7 @@ class Templatecc1467143b extends Latte\Runtime\Template
 		$this->renderBlock('body_end', get_defined_vars());
 ?>
 
+        
 <?php
 		$this->renderBlock('style', get_defined_vars());
 ?>
@@ -110,6 +111,8 @@ class Templatecc1467143b extends Latte\Runtime\Template
         <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 26 */ ?>/js/bootstrap.min.js"></script>
 	<script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 27 */ ?>/js/Chart.js"></script>
         <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 28 */ ?>/js/fontawesome/svg-with-js/js/fontawesome-all.js"></script>
+        <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 29 */ ?>/js/init_scripts.js"></script>
+
 <?php
 	}
 
@@ -125,18 +128,18 @@ class Templatecc1467143b extends Latte\Runtime\Template
         <img src="
 <?php
 		if ((isset($userImage) && $userImage!='')) {
-			?>                 <?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($userImage)) /* line 38 */ ?>
+			?>                 <?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($userImage)) /* line 40 */ ?>
 
 <?php
 		}
 		else {
-			?>                <?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 40 */ ?>/images/honza.jpg
+			?>                <?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 42 */ ?>/images/honza.jpg
 <?php
 		}
 ?>
                 " class="rounded-circle" alt="Cinque Terre" width="150px">
-        <span class="full-name"><?php echo LR\Filters::escapeHtmlText($firstName) /* line 43 */ ?> <?php
-		echo LR\Filters::escapeHtmlText($lastName) /* line 43 */ ?></span>
+        <span class="full-name"><?php echo LR\Filters::escapeHtmlText($firstName) /* line 45 */ ?> <?php
+		echo LR\Filters::escapeHtmlText($lastName) /* line 45 */ ?></span>
         <span class="job-title"><?php
 		if ($lastName == 'Haase' || $lastName == 'Lamaj') {
 			?>Slave<?php
@@ -201,6 +204,16 @@ class Templatecc1467143b extends Latte\Runtime\Template
     
 .small-screen { display:none;}
         
+
+select.client_not_name_label{
+    font-weight: 600 !important;
+    text-align: left !important;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding-left: 10px;
+}
+
 @media screen and (max-width: 992px) {
         body{ font-size: 14px;}
         .nav-pills > li { padding: 3px; font-size: 12px;}

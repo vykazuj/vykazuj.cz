@@ -64,6 +64,38 @@ class SettingsPresenter extends BasePresenter
              
         }  
         
+        public function actionGetMyChargableCompanies(){
+            $myClientHandler = new \ClientHandler($this->database);
+
+            $myObj['data']  = $myClientHandler->getMyCompanies($this->user->getId());
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));        
+        }
+        
+        public function actionChangeActiveCompany($companyId){
+            $myClientHandler = new \ClientHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            if($myClientHandler->isMyCompany($this->user->getId(),$companyId)){
+                $myClientHandler->setPrefCompany($this->user->getId(), $companyId);
+                $companySessions->id = $companyId;
+                $myObj = null;
+                $myObj['result'] = 'OK';
+                $myObj['code'] = '0';
+                
+            }else{
+                $myObj = null;
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '405';
+            }
+            
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));        
+        }
         
         public function actionLoadAllRequests(){
             $myClientHandler = new \ClientHandler($this->database);
@@ -87,8 +119,40 @@ class SettingsPresenter extends BasePresenter
                 $myObj['result'] = 'NOT OK';
                 $myObj['code'] = '405';
             }else{
-                $companyId = $myClientHandler->getRequestParamValue($requestId, 'comapanyId');
+                $companyId = $myClientHandler->getRequestParamValue($requestId, 'companyId');
                 $myClientHandler->createUserCompanyRel($this->user->getId(), $companyId, 'user');
+            }
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));        
+        }
+        
+        public function actionCancelRequest($requestId){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $myObj['data'] = null;
+            $numRow = $myClientHandler->cancelRequest($requestId, $this->user->getId());
+            if($numRow < 1){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '405';
+            }else{
+            }
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));        
+        }
+        
+        public function actionDenyRequest($requestId){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $myObj['data'] = null;
+            $numRow = $myClientHandler->denyRequest($requestId, $this->user->getId());
+            if($numRow < 1){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '405';
+            }else{
             }
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));        
