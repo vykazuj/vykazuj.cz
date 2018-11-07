@@ -93,41 +93,20 @@
                     <div class="col-xl-6 col-lg-6 col-sm-12 col-xs-12 text-left">
                         <div class="row">
                             
-                            <div class="col-12 text-left font-weight-semibold">
+                            <div class="col-12 text-left font-weight-semibold" id="unresolved-requests">
                                 Nevyřízené:
-                            </div>
-                            
-                            <div class="col-6 text-left">
-                                <i class="fas fa-long-arrow-alt-right"></i>
-                                Martin Sivok
-                            </div>
-                            <div class="col-6 text-right">
-                                Odesláno
-                                <i class="fas fa-check-circle"></i>
-                                <i class="fas fa-times-circle"></i>
                             </div>
                         </div>
                     </div>   
-                    
+                
                     <div class="col-xl-6 col-lg-6 col-sm-12 col-xs-12 text-left">
-                                              <div class="row">
+                        <div class="row">
                             
-                            <div class="col-12 text-left font-weight-semibold">
-                                Nevyřízené:
-                            </div>
-                            
-                            <div class="col-6 text-left">
-                                <i class="fas fa-long-arrow-alt-right"></i>
-                                Martin Sivok
-                            </div>
-
-                            <div class="col-6 text-left">
-                                Odesláno
-                                <i class="fas fa-check-circle"></i>
-                                <i class="fas fa-times-circle"></i>
+                            <div class="col-12 text-left font-weight-semibold" id="resolved-requests">
+                                Vyřízené:
                             </div>
                         </div>
-                    </div>
+                    </div>   
                 
                 </div>
                 
@@ -312,31 +291,116 @@
     {          
         var home_url = {$basePath};  
         
-            function addEmployeeToCompany(userIntegrationId){      
-
-            $.ajax(
-            {
-               type: 'GET',
-               url: home_url+'/settings/add-employee-to-company?userIntegrationId='+userIntegrationId,
-               dataType: 'json',
-               cache: false,
-               success: function(data)
-                    { var json = $.parseJSON(data); 
-                        if(json.result==='OK'){
-                            alert('OK - '+json.code);
-                        }else{
-                            if(json.code==='404'){ alert('Zadaný kód nenáleží žádnému zákazníkovi.');}
-                            if(json.code==='405'){ alert('Požadavek stále čeká na vyřízení od příjemce.');}
+            function createNewRequestRow(data){
+                var translate = [];
+                translate['sent'] = 'Odesláno';
+                translate['cancelled'] = 'Zrušeno';
+                translate['accepted'] = 'Přijato';
+                var arrow = '';
+                var check = '';
+                if(data['direction']==='outgoing'){
+                    arrow = '<i class="fas fa-long-arrow-alt-right"></i>';
+                    check = '<i class="fas fa-times-circle cancelRequest" alt="Zrušit žádost" requestid ="'+data['requestId']+'"></i>';
+                }else{
+                    arrow = '<i class="fas fa-long-arrow-alt-left"></i>';
+                    check = '<span class="acceptRequest" requestid="'+data['requestId']+'"><i class="fas fa-check-circle""></i></span><i class="fas fa-times-circle denyRequest" alt="Odmítnout žádost" requestid ="'+data['requestId']+'"></i>';
+                }
+                
+                var html = "";
+                html = '<div class="col-6 text-left requests">'+arrow+' '
+                       +data['firstName']+' '+data['lastName']+
+                       '</div><div class="col-3 text-right requests">'
+                       +translate[data['status']]+
+                       '</div><div class="col-3 text-left requests">'
+                       +check+
+                       '</div>';
+                if(data['status'] !== 'cancelled' && data['status'] !== 'accepted'){
+                    $("#unresolved-requests").after(html);
+                }else{
+                    $("#resolved-requests").after(html);
+                }            
+            }
+        
+        
+            function acceptRequest(requestId){      
+                $.ajax(
+                {
+                   type: 'GET',
+                   url: home_url+'/settings/accept-request?requestId='+requestId,
+                   dataType: 'json',
+                   cache: false,
+                   success: function(data)
+                        { var json = $.parseJSON(data); 
+                            if(json.result==='OK'){
+                                loadAllRequests();
+                            }else{
+                                if(json.code==='405'){ alert('Požadavek je již vyřízený.');}
+                            }
                         }
-                    }
-            });
-
-        }
+                });
+            }
+            function addEmployeeToCompany(userIntegrationId){      
+                $.ajax(
+                {
+                   type: 'GET',
+                   url: home_url+'/settings/add-employee-to-company?userIntegrationId='+userIntegrationId,
+                   dataType: 'json',
+                   cache: false,
+                   success: function(data)
+                        { var json = $.parseJSON(data); 
+                            if(json.result==='OK'){
+                                loadAllRequests();
+                            }else{
+                                if(json.code==='404'){ alert('Zadaný kód nenáleží žádnému zákazníkovi.');}
+                                if(json.code==='405'){ alert('Požadavek stále čeká na vyřízení od příjemce.');}
+                            }
+                        }
+                });
+            }
+        
+            function addRequestActions(){
+                $('.acceptRequest').click(function (){
+                    var requestId = $(this).attr('requestid');
+                    acceptRequest(requestId);
+                });
+            }
+            
+            function loadAllRequests(){     
+                $('.requests').remove();
+                $.ajax(
+                {
+                   type: 'GET',
+                   url: home_url+'/settings/load-all-requests',
+                   dataType: 'json',
+                   cache: false,
+                   success: function(data)
+                        {
+                            var json = $.parseJSON(data); 
+                            var raw_data = json.data;
+                            if(json.result==='OK'){
+                                for(i in raw_data){ 
+                                    createNewRequestRow(raw_data[i]);
+                                }
+                                addRequestActions();
+                            }else{
+                                alert(json.code);
+                            }
+                        }      
+                });
+            }
     
-        $("#add-employee-to-company").click(function(){
-            var userIntegrationId = $("#add_employee_input_label").val(); 
-            addEmployeeToCompany(userIntegrationId);
-        });
+            loadAllRequests();
+            
+            $("#add-employee-to-company").click(function(){
+                var userIntegrationId = $("#add_employee_input_label").val(); 
+                addEmployeeToCompany(userIntegrationId);
+            });
+            
+            $('#add_employee_input_label').click(function(){
+                $('#add_employee_input_label').val('');
+            });
+            
+            
     });
 
   </script>

@@ -51,5 +51,28 @@ class SettingsPresenter extends BasePresenter
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));
              
+        }  
+        
+        
+        public function actionLoadAllRequests(){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $myObj['data'] = $myClientHandler->loadAllRequests($this->user->getId());
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));        
+        }
+        
+        public function actionAcceptRequest($requestId){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $myObj['data'] = null; //$myClientHandler->loadAllRequests($this->user->getId());
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));        
         }
 }

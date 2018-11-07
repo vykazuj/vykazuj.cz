@@ -66,6 +66,13 @@ class ClientHandler {
         return $this->database->table('request_param')->insert($data);
     }
     
+    function loadAllRequests($userId){
+        return $this->database->fetchAll("select 'outgoing' as direction, u.first_name as firstName, u.last_name as lastName, r.status as status, r.type as type, r.id as requestId from users u, request r where r.sender_id = u.id and r.acceptor_id = ? "
+                . "UNION ALL "
+                . " select 'incoming' as direction, u.first_name as firstName, u.last_name as lastName, r.status as status, r.type as type, r.id as requestId from users u, request r where r.acceptor_id = u.id and r.sender_id = ? ",$userId,$userId);
+
+    }
+    
     function isRequestAlreadySent($senderId, $acceptorId, $type){
         $rowCount = $this->database->query("select * from request where sender_id = ? and acceptor_id = ? and type = ? and status not in ('denied','accepted')",$senderId, $acceptorId, $type)->getRowCount();
         if($rowCount==0){return false;}else{return true;}
