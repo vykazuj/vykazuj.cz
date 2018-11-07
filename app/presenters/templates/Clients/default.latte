@@ -1,6 +1,12 @@
 {block content}
         
-    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">
+    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">        
+        <div class="container timetable-blank text-right">
+            Aktivní firma: 
+          <select id = "company-select" class="client_not_name_label">
+          </select>
+        </div>
+        
         <div class="container timetable-blank">
           <ul class="nav nav-pills" id="my-clients-header">
             <li class="nav-pills-red" id="add-new-client"><i class="fas fa-plus-circle"></i>Nový klient</li>
@@ -140,6 +146,7 @@
   <script>
 
         var home_url = {$basePath};  
+        initSharedFunctions(home_url);
                
         function updateClientDetails(clientId, finder, value){
             $("#save-client").text("Ukládám...");
@@ -491,7 +498,6 @@ input#client_name_label:hover{
     float: none;
     padding-left: 15px;
     padding-right: 15px;
-    padding-top: 40px;
 }
 .panel-mid > div.container {
     max-width: 2000px;

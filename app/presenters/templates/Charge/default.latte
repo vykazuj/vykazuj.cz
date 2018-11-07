@@ -1,7 +1,13 @@
 {block content}
        
         
-    <div class="col-12 col-lg-8 col-sm-12 col-xs-12 text-center panel-mid">
+    <div class="col-12 col-lg-8 col-sm-12 col-xs-12 text-center panel-mid">        
+        <div class="container timetable-blank text-right">
+            Aktivní firma: 
+          <select id = "company-select" class="client_not_name_label">
+          </select>
+        </div>
+        
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
             <li><a href="#" id="yearPick">2018</a></li>
@@ -139,6 +145,9 @@
      
     $(document).ready(function() 
     {          
+        var home_url = {$basePath};  
+        initSharedFunctions(home_url);
+        
         function daysInMonth (month, year) {
             return new Date(year, month, 0).getDate();
         }        
@@ -792,7 +801,6 @@
     float: none;
     padding-left: 15px;
     padding-right: 15px;
-    padding-top: 40px;
 }
 .panel-mid > div.container {
     max-width: 2000px;
