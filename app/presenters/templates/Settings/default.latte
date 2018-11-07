@@ -6,6 +6,7 @@
         <div class="container timetable-blank">
           <ul class="nav nav-pills" id="my-clients-header">
             <li class="client-link" clientid="1">Moje nastavení</li>
+            <li class="client-link" clientid="1">Žádosti</li>
             <li class="client-link" clientid="1">Výkazy</li>
             <li class="client-link" clientid="1">Správa zaměstnanců</li>
             <li class="client-link" clientid="1">Správa projektů</li>
@@ -24,14 +25,14 @@
                         Jméno:<br>
                     </div>
                     <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                        <input type="text" value="Martin" id="name_label" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="text" value="Martin" id="name_label1" class="client_not_name_label" finder="my_settings"><br>
                     </div>
                             
                     <div class="col-lg-2 col-3 text-left">
                         Příjmení:<br>
                     </div>
                     <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                        <input type="text" value="Sivok" id="name_label" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="text" value="Sivok" id="name_label2" class="client_not_name_label" finder="my_settings"><br>
                     </div>
                     
                     <div class="col-12">
@@ -41,14 +42,14 @@
                         Nové Heslo:<br>
                     </div>
                     <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                        <input type="password" value="" id="name_label" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="password" value="" id="name_label3" class="client_not_name_label" finder="my_settings"><br>
                     </div>
                     
                     <div class="col-lg-2 col-3 text-left">
                         Heslo znovu:<br>
                     </div>
                     <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                        <input type="passwords" value="" id="name_label" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="passwords" value="" id="name_label4" class="client_not_name_label" finder="my_settings"><br>
                     </div>
                     
                     <div class="col-12">
@@ -58,7 +59,7 @@
                         Telefon:<br>
                     </div>
                     <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                        <input type="text" value="+420 702 177 599" id="name_label" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="text" value="+420 702 177 599" id="name_label5" class="client_not_name_label" finder="my_settings"><br>
                     </div>
                     
                     <div class="col-12">
@@ -68,7 +69,7 @@
                         E-mail:<br>
                     </div>
                     <div class="col-lg-10 col-9 text-left font-weight-semibold" >
-                        <input type="text" value="usata.veverka@centrum.cz" id="name_label" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="text" value="usata.veverka@centrum.cz" id="name_label6" class="client_not_name_label" finder="my_settings"><br>
                     </div>
                     
 
@@ -86,6 +87,54 @@
                 
                 <hr class="gray">
                 
+                <h1 class="text-left font-weight-semibold">Žádosti</h1>
+                <div class="row clients-row-head" id="requests-head">
+                
+                    <div class="col-xl-6 col-lg-6 col-sm-12 col-xs-12 text-left">
+                        <div class="row">
+                            
+                            <div class="col-12 text-left font-weight-semibold">
+                                Nevyřízené:
+                            </div>
+                            
+                            <div class="col-6 text-left">
+                                <i class="fas fa-long-arrow-alt-right"></i>
+                                Martin Sivok
+                            </div>
+                            <div class="col-6 text-right">
+                                Odesláno
+                                <i class="fas fa-check-circle"></i>
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                        </div>
+                    </div>   
+                    
+                    <div class="col-xl-6 col-lg-6 col-sm-12 col-xs-12 text-left">
+                                              <div class="row">
+                            
+                            <div class="col-12 text-left font-weight-semibold">
+                                Nevyřízené:
+                            </div>
+                            
+                            <div class="col-6 text-left">
+                                <i class="fas fa-long-arrow-alt-right"></i>
+                                Martin Sivok
+                            </div>
+
+                            <div class="col-6 text-left">
+                                Odesláno
+                                <i class="fas fa-check-circle"></i>
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                
+                <br>
+                
+                <hr class="gray">
+                
                 <h1 class="text-left font-weight-semibold">Správa zaměstnanců</h1>
                 
                 <div class="row clients-row-head" id ="clients-row-head">
@@ -94,11 +143,11 @@
                     </div>
                     
                     <div class="col-9 text-right">
-                        <input type="text" value="EF84PJ51" id="name_label" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="text" value="např. EFJ4DE56AS" id="add_employee_input_label" class="client_not_name_label"><br>
                     </div>
                                     
                     <div class="col-3 text-right">
-                        <span class="nav-pills-red" id="new-project">Přidat</span>
+                        <span class="nav-pills-red" id="add-employee-to-company">Odeslat žádost</span>
                     </div>
                 </div>
                 
@@ -119,7 +168,7 @@
                     </div>   
                     
                     <div class="col-6 text-right">
-                        <input type="text" value="110000" id="name_label" class="earning" finder="my_settings"> Kč
+                        <input type="text" value="110000" id="name_label7" class="earning" finder="my_settings"> Kč
                     </div>   
 
                     <div class="col-6 text-left">
@@ -127,7 +176,7 @@
                     </div>   
                     
                     <div class="col-6 text-right">
-                        <input type="text" value="10000" id="name_label" class="earning" finder="my_settings"> Kč
+                        <input type="text" value="10000" id="name_label8" class="earning" finder="my_settings"> Kč
                     </div>   
 
                     <div class="col-6 text-left">
@@ -135,7 +184,7 @@
                     </div>   
                     
                     <div class="col-6 text-right">
-                        <input type="text" value="12000" id="name_label" class="earning" finder="my_settings"> Kč
+                        <input type="text" value="12000" id="name_label9" class="earning" finder="my_settings"> Kč
                     </div>   
                     
                     
@@ -159,7 +208,7 @@
                     </div>   
                     
                     <div class="col-6 text-right">
-                        <input type="text" value="110000" id="name_label" class="earning" finder="my_settings"> Kč
+                        <input type="text" value="110000" id="name_label10" class="earning" finder="my_settings"> Kč
                     </div>   
 
                     <div class="col-6 text-left">
@@ -167,7 +216,7 @@
                     </div>   
                     
                     <div class="col-6 text-right">
-                        <input type="text" value="10000" id="name_label" class="earning" finder="my_settings"> Kč
+                        <input type="text" value="10000" id="name_label11" class="earning" finder="my_settings"> Kč
                     </div>   
 
                     <div class="col-6 text-left">
@@ -175,7 +224,7 @@
                     </div>   
                     
                     <div class="col-6 text-right">
-                        <input type="text" value="12000" id="name_label" class="earning" finder="my_settings"> Kč
+                        <input type="text" value="12000" id="name_label12" class="earning" finder="my_settings"> Kč
                     </div>   
                     
                     
@@ -199,7 +248,7 @@
                     </div>   
                     
                     <div class="col-6 text-right">
-                        <input type="text" value="110000" id="name_label" class="earning" finder="my_settings"> Kč
+                        <input type="text" value="110000" id="name_label13" class="earning" finder="my_settings"> Kč
                     </div>   
 
                     <div class="col-6 text-left">
@@ -207,7 +256,7 @@
                     </div>   
                     
                     <div class="col-6 text-right">
-                        <input type="text" value="10000" id="name_label" class="earning" finder="my_settings"> Kč
+                        <input type="text" value="10000" id="name_label14" class="earning" finder="my_settings"> Kč
                     </div>   
 
                     <div class="col-6 text-left">
@@ -215,7 +264,7 @@
                     </div>   
                     
                     <div class="col-6 text-right">
-                        <input type="text" value="12000" id="name_label" class="earning" finder="my_settings"> Kč
+                        <input type="text" value="12000" id="name_label15" class="earning" finder="my_settings"> Kč
                     </div>   
                     
                     
@@ -258,8 +307,37 @@
         -->
 
   <script>
-
+    
+    $(document).ready(function() 
+    {          
         var home_url = {$basePath};  
+        
+            function addEmployeeToCompany(userIntegrationId){      
+
+            $.ajax(
+            {
+               type: 'GET',
+               url: home_url+'/settings/add-employee-to-company?userIntegrationId='+userIntegrationId,
+               dataType: 'json',
+               cache: false,
+               success: function(data)
+                    { var json = $.parseJSON(data); 
+                        if(json.result==='OK'){
+                            alert('OK - '+json.code);
+                        }else{
+                            if(json.code==='404'){ alert('Zadaný kód nenáleží žádnému zákazníkovi.');}
+                            if(json.code==='405'){ alert('Požadavek stále čeká na vyřízení od příjemce.');}
+                        }
+                    }
+            });
+
+        }
+    
+        $("#add-employee-to-company").click(function(){
+            var userIntegrationId = $("#add_employee_input_label").val(); 
+            addEmployeeToCompany(userIntegrationId);
+        });
+    });
 
   </script>
     
@@ -395,7 +473,7 @@ input#client_name_label:hover{
     font-weight: 600 !important;
 }
 
-#new-project{
+.nav-pills-red{
     background-color: #E52428;
     color: #FFFFFF;
     text-align: center;
@@ -531,9 +609,12 @@ select.my-chargeable-projects-no-border {
     visibility: visible;
 }
 
-svg{
+a.list-group-item > svg{
     margin-left: 10px;
     margin-right: 10px;
+}
+
+svg{
     cursor: pointer;
 }
 

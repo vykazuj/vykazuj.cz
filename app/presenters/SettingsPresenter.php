@@ -25,6 +25,31 @@ class SettingsPresenter extends BasePresenter
             
         }       
         
-
         
+        public function actionAddEmployeeToCompany($userIntegrationId){
+            $myClientHandler = new \ClientHandler($this->database);
+            $userId = $myClientHandler->getUserIdByIntegrationId($userIntegrationId);
+            if($userId == null){
+                $myObj = null;
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '404';
+            }else{
+                /* Existuje už request? */
+                if($myClientHandler->isRequestAlreadySent($this->user->getId(), $userId, 'addEmployeeToCompany')){
+                    $myObj = null;
+                    $myObj['result'] = 'NOT OK';
+                    $myObj['code'] = '405';
+                }else{
+                    $newRequest = $myClientHandler->addRequest($this->user->getId(), $userId, 'addEmployeeToCompany');
+                    $newRequestParametr = $myClientHandler->addRequestParam($newRequest["id"], "parametr", "jeho hodnota");
+                    $myObj = null;
+                    $myObj['result'] = 'OK';
+                    $myObj['code'] = '0';   
+                }
+            }
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));
+             
+        }
 }

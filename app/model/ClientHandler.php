@@ -47,6 +47,30 @@ class ClientHandler {
             {return false;}
     }
     
+    function getUserIdByIntegrationId($integrationId){
+        return $this->database->fetchField("select id  from users where integration_id = ? ",$integrationId);
+    }
+    
+    function addRequest($senderId, $acceptorId, $type){
+        $data['sender_id']=$senderId;
+        $data['acceptor_id']=$acceptorId;
+        $data['type']=$type;
+        $data['status']='sent';
+        return $this->database->table('request')->insert($data);
+    }
+    
+    function addRequestParam($requestId, $param, $value){
+        $data['request_id']=$requestId;
+        $data['param']=$param;
+        $data['value']=$value;
+        return $this->database->table('request_param')->insert($data);
+    }
+    
+    function isRequestAlreadySent($senderId, $acceptorId, $type){
+        $rowCount = $this->database->query("select * from request where sender_id = ? and acceptor_id = ? and type = ? and status not in ('denied','accepted')",$senderId, $acceptorId, $type)->getRowCount();
+        if($rowCount==0){return false;}else{return true;}
+    }
+    
     function updateClient($clientId, $param, $value){
         $os = array("company_id", "name", "ico","contact", "phone", "email","address");
         if (in_array($param, $os)) {
