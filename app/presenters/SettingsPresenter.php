@@ -23,10 +23,21 @@ class SettingsPresenter extends BasePresenter
         
         public function actionDefault(){
             
+            $myClientHandler = new \ClientHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            $company = $myClientHandler->getMyCompany($this->user->getId());
+            $companyId = $company["id"];
+            if(isset($companySessions->id))
+                { $companyId = $companySessions->id; }
+            $companySessions->id = $companyId;
+            
         }       
         
         
-        public function actionAddEmployeeToCompany($userIntegrationId){
+        public function actionAddEmployeeToCompany($userIntegrationId, $companyId){
+            $companySessions = $this->getSession('Company');
+            $companyId = $companySessions["id"];
+            
             $myClientHandler = new \ClientHandler($this->database);
             $userId = $myClientHandler->getUserIdByIntegrationId($userIntegrationId);
             if($userId == null){
@@ -41,7 +52,7 @@ class SettingsPresenter extends BasePresenter
                     $myObj['code'] = '405';
                 }else{
                     $newRequest = $myClientHandler->addRequest($this->user->getId(), $userId, 'addEmployeeToCompany');
-                    $newRequestParametr = $myClientHandler->addRequestParam($newRequest["id"], "parametr", "jeho hodnota");
+                    $myClientHandler->addRequestParam($newRequest["id"], "companyId", $companyId);
                     $myObj = null;
                     $myObj['result'] = 'OK';
                     $myObj['code'] = '0';   
@@ -70,8 +81,15 @@ class SettingsPresenter extends BasePresenter
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
-            $myObj['data'] = null; //$myClientHandler->loadAllRequests($this->user->getId());
-            
+            $myObj['data'] = null;
+            $numRow = $myClientHandler->acceptRequest($requestId, $this->user->getId());
+            if($numRow < 1){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '405';
+            }else{
+                $companyId = $myClientHandler->getRequestParamValue($requestId, 'comapanyId');
+                $myClientHandler->createUserCompanyRel($this->user->getId(), $companyId, 'user');
+            }
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));        
         }

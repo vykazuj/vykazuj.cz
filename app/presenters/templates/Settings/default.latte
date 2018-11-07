@@ -305,6 +305,13 @@
                     arrow = '<i class="fas fa-long-arrow-alt-left"></i>';
                     check = '<span class="acceptRequest" requestid="'+data['requestId']+'"><i class="fas fa-check-circle""></i></span><i class="fas fa-times-circle denyRequest" alt="Odmítnout žádost" requestid ="'+data['requestId']+'"></i>';
                 }
+                       
+                if(data['status'] !== 'cancelled' && data['status'] !== 'accepted'){
+                    var target = "#unresolved-requests";
+                }else{
+                    var target = "#resolved-requests";
+                    check = "";
+                }          
                 
                 var html = "";
                 html = '<div class="col-6 text-left requests">'+arrow+' '
@@ -314,11 +321,7 @@
                        '</div><div class="col-3 text-left requests">'
                        +check+
                        '</div>';
-                if(data['status'] !== 'cancelled' && data['status'] !== 'accepted'){
-                    $("#unresolved-requests").after(html);
-                }else{
-                    $("#resolved-requests").after(html);
-                }            
+                $(target).after(html);
             }
         
         

@@ -67,10 +67,17 @@ class ClientHandler {
     }
     
     function loadAllRequests($userId){
-        return $this->database->fetchAll("select 'outgoing' as direction, u.first_name as firstName, u.last_name as lastName, r.status as status, r.type as type, r.id as requestId from users u, request r where r.sender_id = u.id and r.acceptor_id = ? "
+        return $this->database->fetchAll("select 'incoming' as direction, u.first_name as firstName, u.last_name as lastName, r.status as status, r.type as type, r.id as requestId from users u, request r where r.sender_id = u.id and r.acceptor_id = ? "
                 . "UNION ALL "
-                . " select 'incoming' as direction, u.first_name as firstName, u.last_name as lastName, r.status as status, r.type as type, r.id as requestId from users u, request r where r.acceptor_id = u.id and r.sender_id = ? ",$userId,$userId);
+                . " select 'outgoing' as direction, u.first_name as firstName, u.last_name as lastName, r.status as status, r.type as type, r.id as requestId from users u, request r where r.acceptor_id = u.id and r.sender_id = ? ",$userId,$userId);
 
+    }
+    
+    function getRequestParamValue($requestId, $param){
+        return $this->database->fetchField("select value from request_param where request_id = ? and param = ? ",$requestId, $param);
+    }
+    function acceptRequest($requestId, $userId){
+        return $this->database->query('update request set status = ? where acceptor_id = ? and id = ? and status = ? ',"accepted",$userId, $requestId, "sent")->getRowCount();
     }
     
     function isRequestAlreadySent($senderId, $acceptorId, $type){
@@ -121,7 +128,7 @@ class ClientHandler {
     }
     
     function createUserCompanyRel($userId, $companyId, $role){
-        return $this->database->query("insert into users_company_rel (id, user_id, company_id, role) valuse (null,?,?,?)",$userId, $companyId, $role);
+        return $this->database->query("insert into users_company_rel (id, user_id, company_id, role) values (null,?,?,?)",$userId, $companyId, $role);
     }
     
     function createUserProjectRel($userId, $projectId, $mdRate){
