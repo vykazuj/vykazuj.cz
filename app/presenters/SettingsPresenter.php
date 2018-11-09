@@ -157,4 +157,26 @@ class SettingsPresenter extends BasePresenter
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));        
         }
-}
+
+        public function actionGetMySettings(){
+            
+            $mySettingsHandler = new \SettingsHandler($this->database);
+            $myObj = null;
+                try
+                    { 
+                    $row = $mySettingsHandler->getMe($this->user->getIdentity()->id);
+                    $myObj['result'] = 'OK';
+                    $myObj['code'] = '0';
+                    $myObj['data'] = $row;
+                    }
+                catch (\Nette\Neon\Exception $e) {
+                    $myObj['result'] = 'NOK';
+                    $myObj['code'] = $e->getMessage();
+                }  
+
+           
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));
+             
+            }
+        }
