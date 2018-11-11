@@ -9,6 +9,8 @@
     ],
     "require": 
         {
-            "michalsvec/nette-opauth": "*"
+            "michalsvec/nette-opauth": "*",
+        "swiftmailer/swiftmailer": "dev-master",
+        "nette/mail": "v2.4.4"
         }
 }
