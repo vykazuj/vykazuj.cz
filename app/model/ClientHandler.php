@@ -97,6 +97,11 @@ class ClientHandler {
         return $this->database->fetchField("select id  from users where integration_id = ? ",$integrationId);
     }
     
+    function getUserDetails($userId){
+        $row =  $this->database->fetchAll("select *  from users where id = ? ",$userId);
+        return $row[0];
+    }
+    
     function addRequest($senderId, $acceptorId, $type){
         $data['sender_id']=$senderId;
         $data['acceptor_id']=$acceptorId;

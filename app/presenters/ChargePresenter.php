@@ -315,16 +315,18 @@ class ChargePresenter extends BasePresenter
                  //odeslání emailu
 
                 $to = $myClientHandler->getProjectParam($projectId, 'email');
+                $userDetails = $myClientHandler->getUserDetails($this->user->getId());
+                $from = $userDetails["first_name"]." ".$userDetails["last_name"]." <".$userDetails['email'].">";
                 $subject = "Faktura za aktuální období";
 
                 $message = "
                 <html>
                 <head>
-                <title>Faktura za aktuální období</title>
+                <title>Faktura za ".$month."/".$year."</title>
                 </head>
                 <body>
                 <p>Dobrý den,</p>
-                <p>v příloze Vám zasílám fakturu za aktuální období</p>
+                <p>v příloze Vám zasílám fakturu za aktuální období.</p>
                 <br>
                 <p>Díky, Martin</p>
                 </body>
@@ -338,11 +340,11 @@ class ChargePresenter extends BasePresenter
                 // More headers
                 $headers .= 'From: <info@vykazuj.cz>' . "\r\n";
                 $mail = new Message;
-                $mail->setFrom('usata.veverka@smtp-200863.m63.wedos.net')
-                    ->addTo('martin.sivok@centrum.cz')
-                    ->setSubject('Potvrzení objednávky')
-                    ->setBody("Dobrý den,\nvaše objednávka byla přijata.")
-                    ->addAttachment('timesheet.pdf',$timesheet, 'application/pdf');
+                $mail->setFrom($from)
+                    ->addTo($to)
+                    ->setSubject($subject)
+                    ->setHtmlBody($message)
+                    ->addAttachment('Timesheet_'.$year.'_'.$month.'_'.$userDetails["last_name"].'.pdf',$timesheet, 'application/pdf');
                 //mail($to,$subject,$message,$headers);
                 
                 $mailer = new SendmailMailer();
