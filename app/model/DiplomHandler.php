@@ -47,7 +47,7 @@ class DiplomHandler {
         $this->user = $user;
     }
     
-    function createDiplom()
+    function createDiplom($emailAttachment)
     {
          //require_once(dirname(__FILE__).'\TCPDF\examples\lang\ces.php');
          //require_once(dirname(__FILE__).'\TCPDF\examples\lang\eng.php');
@@ -236,6 +236,9 @@ class DiplomHandler {
         $pdf->writeHTML($tbl, true, false, false, false, '');
 
         $pdf->lastPage();
+        if($emailAttachment){
+            return $pdf->Output('diplom.pdf', 'S');
+        }
         $pdf->Output('diplom.pdf', 'I');
      }   
 }

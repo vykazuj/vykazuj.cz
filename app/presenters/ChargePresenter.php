@@ -2,6 +2,8 @@
 
 namespace App\Presenters;
 use Nette\Application\Responses\JsonResponse;
+use Nette\Mail\Message;
+use Nette\Mail\SmtpMailer;
 
 class ChargePresenter extends BasePresenter
 {  
@@ -285,7 +287,7 @@ class ChargePresenter extends BasePresenter
             $myTimeSheet->setUser($this->user);
             $myTimeSheet->setProjectId($projectId);
             
-            $myTimeSheet->createDiplom();
+            $myTimeSheet->createDiplom(false);
             $this->redirect('Charge:default');
             
             /*
@@ -293,5 +295,63 @@ class ChargePresenter extends BasePresenter
             $myDiplom = new \DiplomHandler($this->database, $myGame);
             return $myDiplom->createDiplom();
             */
+	}  
+        
+
+	public function actionSendTimesheet($year, $month, $projectId, $withPrices){            
+
+            $myClientHandler = new \ClientHandler($this->database);
+            
+            if($myClientHandler->isMyProject($this->user->getId(), $projectId))
+            {
+                $myTimeSheet = new \DiplomHandler($this->database);
+                $myTimeSheet->setMonth($month);
+                $myTimeSheet->setYear($year);
+                $myTimeSheet->setUserId($this->user->getId());
+                $myTimeSheet->setUser($this->user);
+                $myTimeSheet->setProjectId($projectId);
+                $timesheet = $myTimeSheet->createDiplom(true);            
+
+                 //odeslání emailu
+
+                $to = $myClientHandler->getProjectParam($projectId, 'email');
+                $subject = "Faktura za aktuální období";
+
+                $message = "
+                <html>
+                <head>
+                <title>Faktura za aktuální období</title>
+                </head>
+                <body>
+                <p>Dobrý den,</p>
+                <p>v příloze Vám zasílám fakturu za aktuální období</p>
+                <br>
+                <p>Díky, Martin</p>
+                </body>
+                </html>
+                ";
+
+                // Always set content-type when sending HTML email
+                $headers = "MIME-Version: 1.0" . "\r\n";
+                $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+                // More headers
+                $headers .= 'From: <info@vykazuj.cz>' . "\r\n";
+                $mail = new Message;
+                $mail->setFrom('usata.veverka@vykazuj.cz')
+                    ->addTo('martin.sivok@centrum.cz')
+                    ->setSubject('Potvrzení objednávky')
+                    ->setBody("Dobrý den,\nvaše objednávka byla přijata.")
+                    ->addAttachment($timesheet, null, '');
+
+                //mail($to,$subject,$message,$headers);
+                $mailer = new SmtpMailer([
+                    'host' => 'smtp-200863.m63.wedos.net'
+                ]);
+
+                $mailer->send($mail);
+
+            }
+            $this->redirect('Charge:default');
 	}  
 }

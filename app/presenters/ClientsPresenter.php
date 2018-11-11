@@ -75,8 +75,8 @@ class ClientsPresenter extends BasePresenter
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
-            $myObj['data'] = $myClientHandler->getMyClientProjects($this->user->getId(), $clientId);
-            
+            //$myObj['data'] = $myClientHandler->getMyClientProjects($this->user->getId(), $clientId);
+            $myObj['data'] = $myClientHandler->getMyClientProjectsWithParameters($this->user->getId(), $clientId);
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
         }
@@ -95,7 +95,12 @@ class ClientsPresenter extends BasePresenter
             $myObj['code'] = '0';
             
             if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
-                $myObj['data'] = $myClientHandler->createNewProject($this->user->getId(), $clientId);
+                $project = $myClientHandler->createNewProject($this->user->getId(), $clientId);
+                $client = $myClientHandler->getClient($clientId);
+                $myClientHandler->addParamToProject($project["id"], 'status','Status','active');
+                $myClientHandler->addParamToProject($project["id"], 'contact','Fakturační kontakt',$client[0]["contact"]);
+                $myClientHandler->addParamToProject($project["id"], 'email','Fakturační email',$client[0]["email"]);
+                $myObj['data'] = $myClientHandler->getProject($project["id"]);
             }else{
                 $myObj['result'] = 'NOT OK';
                 $myObj['code'] = 'Nemáte právo na přidání';

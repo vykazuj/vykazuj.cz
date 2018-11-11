@@ -27,8 +27,24 @@ class ClientHandler {
         return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
     }
     
+    function getClient($clientId){
+        return $this->database->fetchAll('select cl.* from client cl where cl.id = ?', $clientId);
+    }
+    
     function getMyClientProjects($userId, $clientId){
         return $this->database->fetchAll('select pr.* from client cl, company co, project pr where pr.client_id = cl.id and cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
+    }
+    
+    function getMyClientProjectsWithParameters($userId, $clientId){
+        return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id from client cl, company co, project pr, project_param pp where pp.project_id = pr.id and pr.client_id = cl.id and cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
+    }
+ 
+    function getProject($projectId){
+        return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id from project pr, project_param pp where pp.project_id = pr.id and pr.id = ?',$projectId);  
+    }
+ 
+    function getProjectParam($projectId, $paramId){
+        return $this->database->fetchField('select pp.value as value from project pr, project_param pp where pp.project_id = pr.id and pr.id = ? and pp.param_id = ? ',$projectId, $paramId);  
     }
     
     function isMyClient($userId, $clientId){
@@ -189,6 +205,18 @@ class ClientHandler {
         $userProjectRel["rel"] = 'user';
         $row2 = $this->database->table('users_project_rel')->insert($userProjectRel);
         
+        return $row->toArray();
+    }
+    
+    function addParamToProject($projectId, $param_id, $param, $value){
+        $newParam = null;
+        $newParam["id"] = null;
+        $newParam["project_id"] = $projectId;
+        $newParam["param_id"] = $param_id;
+        $newParam["param"] = $param;
+        $newParam["value"] = $value;
+        $row = $this->database->table('project_param')->insert($newParam);
+                
         return $row->toArray();
     }
     
