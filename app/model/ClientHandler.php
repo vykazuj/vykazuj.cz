@@ -215,9 +215,7 @@ class ClientHandler {
         $newParam["param_id"] = $param_id;
         $newParam["param"] = $param;
         $newParam["value"] = $value;
-        $row = $this->database->table('project_param')->insert($newParam);
-                
-        return $row->toArray();
+        return $this->database->table('project_param')->insert($newParam);
     }
     
 }
