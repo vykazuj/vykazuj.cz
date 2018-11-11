@@ -3,7 +3,7 @@
 namespace App\Presenters;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Mail\Message;
-use Nette\Mail\SmtpMailer;
+use Nette\Mail\SendmailMailer;
 
 class ChargePresenter extends BasePresenter
 {  
@@ -338,17 +338,14 @@ class ChargePresenter extends BasePresenter
                 // More headers
                 $headers .= 'From: <info@vykazuj.cz>' . "\r\n";
                 $mail = new Message;
-                $mail->setFrom('usata.veverka@vykazuj.cz')
+                $mail->setFrom('usata.veverka@smtp-200863.m63.wedos.net')
                     ->addTo('martin.sivok@centrum.cz')
                     ->setSubject('Potvrzení objednávky')
                     ->setBody("Dobrý den,\nvaše objednávka byla přijata.")
-                    ->addAttachment($timesheet, null, '');
-
+                    ->addAttachment('timesheet.pdf',$timesheet, 'application/pdf');
                 //mail($to,$subject,$message,$headers);
-                $mailer = new SmtpMailer([
-                    'host' => 'smtp-200863.m63.wedos.net'
-                ]);
-
+                
+                $mailer = new SendmailMailer();
                 $mailer->send($mail);
 
             }
