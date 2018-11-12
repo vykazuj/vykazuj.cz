@@ -233,7 +233,8 @@
                         +'</div>';     
             
             $("#clients-row-head").after(row);          
-            var len = (1+11*data["name"].length)+'px';
+            //var len = (1+11*data["name"].length)+'px';
+            var len = '50px';
             $("input.project_labels_all[projectid='"+data["id"]+"']").css("width",len);
         }    
                
