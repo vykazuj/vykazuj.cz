@@ -24,4 +24,13 @@ class SettingsHandler {
     function getMe($userId){
         return $this->database->fetchAll('select * from users where id = ?',$userId);
     }
+
+    function updateMyDetails($userId, $name, $surname, $phone, $email){
+        return $this->database->query('update users set first_name= ?, last_name= ?, phone= ?, email=?  where id = ?',$name, $surname, $phone, $email, $userId);
+    }
+
+    function updateMyPassword($userId, $password){
+        $pw = Passwords::hash($password);
+        return $this->database->query('update users set password= ? where id = ?',$pw, $userId);
+    }
 }
