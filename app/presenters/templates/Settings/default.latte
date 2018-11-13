@@ -23,7 +23,15 @@
         
         <div class="container timetable-blank">
             <div class="container-inner timetable">
-                <br>
+                <div class="row">
+                    <div class="col-lg-10 col-10 text-right font-weight-semibold">ID:</div>
+                    <div class="col-lg-1 col-1">
+                        <p type="text" class="text-left font-weight-semibold" id="mojeID"></p>
+                    </div>
+                </div>
+                
+
+
                 <h1 class="text-left font-weight-semibold">Změna osobních údajů</h1>
                                 
                 <div class="row">
@@ -32,14 +40,14 @@
                         Jméno:<br>
                     </div>
                     <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                        <input type="text" value="Martin" id="name_label1" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="text" id="name_label1" class="client_not_name_label" finder="name"><br>
                     </div>
                             
                     <div class="col-lg-2 col-3 text-left">
                         Příjmení:<br>
                     </div>
                     <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                        <input type="text" value="Sivok" id="name_label2" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="text" id="name_label2" class="client_not_name_label" finder="surname"><br>
                     </div>
                     
                     <div class="col-12">
@@ -49,14 +57,14 @@
                         Nové Heslo:<br>
                     </div>
                     <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                        <input type="password" value="" id="name_label3" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="password" value="" id="name_label3" class="client_not_name_label" finder="password"><br>
                     </div>
                     
                     <div class="col-lg-2 col-3 text-left">
                         Heslo znovu:<br>
                     </div>
                     <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                        <input type="passwords" value="" id="name_label4" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="password" value="" id="name_label4" class="client_not_name_label" finder="password2"><br>
                     </div>
                     
                     <div class="col-12">
@@ -66,7 +74,7 @@
                         Telefon:<br>
                     </div>
                     <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                        <input type="text" value="+420 702 177 599" id="name_label5" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="text" value="" id="name_label5" class="client_not_name_label" finder="phone"><br>
                     </div>
                     
                     <div class="col-12">
@@ -76,19 +84,20 @@
                         E-mail:<br>
                     </div>
                     <div class="col-lg-10 col-9 text-left font-weight-semibold" >
-                        <input type="text" value="usata.veverka@centrum.cz" id="name_label6" class="client_not_name_label" finder="my_settings"><br>
+                        <input type="text" value="" id="name_label6" class="client_not_name_label" finder="email"><br>
                     </div>
                     
 
                 </div>
-                
-                
-                
+                <br>
                 <div class="row">
                     
-                    <div class="col-lg-1 col-3 text-left">
+                    <div class="col-lg-6 col-6 text-left">
                         <span class="nav-pills-red" id="save-client">Uložit</span><br>
-                    </div>                    
+                    </div> 
+                    <div class="col-lg-6 col-6 text-right">
+                        <span class="nav-pills-red" id="updateMyDetails">Aktualizovat údaje</span>
+                    </div>               
                 </div>
                 
                 
@@ -319,12 +328,56 @@
                       $("#name_label1").val(raw_data[i]['first_name']);  
                       $("#name_label2").val(raw_data[i]['last_name']);    
                       $("#name_label5").val(raw_data[i]['phone']);   
-                      $("#name_label6").val(raw_data[i]['email']);   
-                
+                      $("#name_label6").val(raw_data[i]['email']); 
+                      $("#mojeID").html(raw_data[i]['integration_id']);  
                     }
                 }                     
               }
             });  
+        }
+
+        function updateMyDetails(name, surname, phone, email){
+            $("#save-client").text("Ukládám...");
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/settings/update-my-details?&name='+name+'&surname='+surname+'&phone='+phone+'&email='+email,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                    $("#save-client").text('Chyba');
+                }else{
+                    $("#save-client").text('Uloženo');
+                }     
+                
+              }
+            });     
+        }
+        
+        function updateMyPassword(password){
+            $("#save-client").text("Ukládám...");
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/settings/update-my-password?&password='+password,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                    $("#save-client").text('Chyba');
+                }else{
+                    $("#save-client").text('Uloženo');
+                }     
+                
+              }
+            });     
         }
         
             function createNewRequestRow(data){
@@ -351,9 +404,6 @@
                     check = "";
                 }          
                 
-              }
-            });  
-        }
                 var html = "";
                 html = '<div class="col-6 text-left requests">'+arrow+' '
                        +data['firstName']+' '+data['lastName']+
@@ -495,6 +545,31 @@
             
             $('#add_employee_input_label').click(function(){
                 $('#add_employee_input_label').val('');
+            });
+
+            $("#updateMyDetails").click(function(){
+                let password = $("#name_label3").val();
+                let password2 = $("#name_label4").val();
+                let name = $("#name_label1").val();
+                let surname = $("#name_label2").val();
+                let phone = $("#name_label5").val();
+                let email = $("#name_label6").val();
+                updateMyDetails(name, surname, phone, email);
+                
+                if(password !== "" ||  password2 !== ""){
+                    if(password===password2){
+                        if(password.length >= 6 ){
+                            updateMyPassword(password);
+                        }else{
+                            alert("Počet znaků hesla je menší než 6");
+                        }
+                    }else{
+                        alert("Hesla se neshodují");
+                    }
+                }
+               
+                getMe();
+              
             });
     });
 
