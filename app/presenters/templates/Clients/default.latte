@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 
-                <div class="row orders-row orders-first-row">
+                <div class="row orders-row" id="orders-first-row">
                     <div class="col-12 text-left font-weight-semibold">
                         Objedánka č.102541 (T-Mobile)
                     </div>
@@ -144,6 +144,18 @@
                     <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details">10 000 Kč<i class="fas fa-times-circle orders-svg"></i></div>
                     <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details"> Jan Mahnel</div>
                         
+                    <div class="col-12 text-left font-weight-semibold">
+                        Objedánka č.102541 (T-Mobile)
+                    </div>
+
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details"> Martin Sivok</div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details">10 000 Kč<i class="fas fa-times-circle orders-svg"></i></div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details"> Tomás Mahnel</div>       
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details">10 000 Kč<i class="fas fa-times-circle orders-svg"></i></div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details"> Jan Skácel</div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details">10 000 Kč<i class="fas fa-times-circle orders-svg"></i></div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details"> Martin Vozihnojová</div>      
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details">10 000 Kč<i class="fas fa-times-circle orders-svg"></i></div>
                 </div>
                 
                 <br>
@@ -253,6 +265,21 @@
             $(".clients-row").remove();
         }
         
+        function cleanOrderRows(){
+            $(".orders-first-row").html('');
+        }
+        
+        function addOrderFirstRow(data){
+            var row = '<div class="col-12 text-left font-weight-semibold">'+data["name"]+'</div>';
+            $("#orders-first-row").append(row);    
+        }
+        
+        function addOrderRow(data){
+            var row = '<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details">'+data['firstName']+' '+data['lastName']+'</div>';
+            row = row + '<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details">'+data['mdRate']+' Kč<i class="fas fa-times-circle orders-svg"></i></div>';
+            $("#orders-first-row").append(row);  
+        }
+        
         function addClientFirstRow(data)   {
             var row = '<div class="row clients-row project-first-row" projectid="'+data["id"]+'">'
                             +'<div class="col-12 text-left">'
@@ -323,6 +350,37 @@
                 });      
         }      
         
+        function getMyClientOrders(id){
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/get-my-client-orders?clientId='+id,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                var lastProjectID = -1;
+                if(json.result!=='OK'){
+                    alert(json.code);
+                }else{
+                    var raw_data = json.data;
+                    for (i in raw_data)
+                    {
+                        if(raw_data[i]['id'] !== lastProjectID){
+                            lastProjectID = raw_data[i]['id'];
+                            addOrderFirstRow(raw_data[i]);
+                        }
+                       addOrderRow(raw_data[i]);
+                      //setSelectAction(raw_data[i].id);
+                    }
+                      //setUpMyProjectsDetails();
+                }     
+                
+              }
+            });  
+        }
+        
         function getMyClientProjects(id){
             $.ajax(
             {
@@ -385,7 +443,9 @@
                       //setSelectAction(raw_data[i].id);
                       cleanClientRows();
                       setUpMyClientDetails();
+                      cleanOrderRows();
                       getMyClientProjects(id);
+                      getMyClientOrders(id);
                       $(".client-link[clientid='"+id+"']").addClass('active');
                 
                     }

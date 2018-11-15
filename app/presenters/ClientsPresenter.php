@@ -56,6 +56,7 @@ class ClientsPresenter extends BasePresenter
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
         }
+
         
         public function actionGetMyClient($clientId){
             $myClientHandler = new \ClientHandler($this->database);
@@ -77,6 +78,22 @@ class ClientsPresenter extends BasePresenter
             $myObj['code'] = '0';
             //$myObj['data'] = $myClientHandler->getMyClientProjects($this->user->getId(), $clientId);
             $myObj['data'] = $myClientHandler->getMyClientProjectsWithParameters($this->user->getId(), $clientId);
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
+        public function actionGetMyClientOrders($clientId){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
+                $myObj['data'] = $myClientHandler->getMyClientOrdersWithParameters($clientId);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '404';
+            }
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
         }

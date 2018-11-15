@@ -23,6 +23,10 @@ class ClientHandler {
         return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ?',$userId);
     }
     
+    function getMyClientOrders($userId){
+        return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ?',$userId);
+    }
+    
     function getMyClient($userId, $clientId){
         return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
     }
@@ -37,6 +41,10 @@ class ClientHandler {
     
     function getMyClientProjectsWithParameters($userId, $clientId){
         return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id from client cl, company co, project pr, project_param pp where pp.project_id = pr.id and pr.client_id = cl.id and cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
+    }
+    
+    function getMyClientOrdersWithParameters($clientId){
+        return $this->database->fetchAll('select u.first_name as firstName, u.last_name as lastName, uwor.md_rate as mdRate, wo.name as name, wo.id as id, uwor.id as uworId from work_order wo, user_work_order_rel uwor, users u, client cl where cl.id = wo.client_id and uwor.work_order_id = wo.id and uwor.user_id = u.id and cl.id = ?', $clientId);
     }
  
     function getProject($projectId){
