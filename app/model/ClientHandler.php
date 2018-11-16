@@ -23,6 +23,10 @@ class ClientHandler {
         return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ?',$userId);
     }
     
+    function getMyClientOrders($userId){
+        return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ?',$userId);
+    }
+    
     function getMyClient($userId, $clientId){
         return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
     }
@@ -38,6 +42,10 @@ class ClientHandler {
     function getMyClientProjectsWithParameters($userId, $clientId){
         return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id from client cl, company co, project pr, project_param pp where pp.project_id = pr.id and pr.client_id = cl.id and cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
     }
+    
+    function getMyClientOrdersWithParameters($clientId){
+        return $this->database->fetchAll('select wo.status as status, wo.amount as amount, u.first_name as firstName, u.last_name as lastName, uwor.md_rate as mdRate, wo.name as name, wo.id as id, uwor.id as uworId from work_order wo, users_work_order_rel uwor, users u, client cl where cl.id = wo.client_id and uwor.work_order_id = wo.id and uwor.user_id = u.id and cl.id = ?', $clientId);
+    }
  
     function getProject($projectId){
         return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id from project pr, project_param pp where pp.project_id = pr.id and pr.id = ?',$projectId);  
@@ -48,11 +56,20 @@ class ClientHandler {
     }
     
     function isMyClient($userId, $clientId){
-        $rowNum = $this->database->query('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId)->getRowCount();
+        //$rowNum = $this->database->query('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId)->getRowCount();
+        $rowNum = $this->database->query('select cl.* from client cl, company co, users_company_rel ucr where cl.company_id = co.id and co.id = ucr.company_id and ucr.user_id = ? and cl.id = ? and ucr.role in (?,?,?) ',$userId, $clientId,'owner','owner','accountant')->getRowCount();
         if($rowNum>0)
             {return true;}
         else
             {return false;}
+    }
+    
+    function getClientOfWorkOrder($workOrderId){
+        return $this->database->fetch("select * from work_order where id = ?",$workOrderId);
+    }
+    
+    function getWorkOrderOfUwor($uworId){
+        return $this->database->fetch("select * from users_work_order_rel where id = ?",$uworId);
     }
     
     function isMyProject($userId, $projectId){
@@ -148,6 +165,24 @@ class ClientHandler {
         $os = array("company_id", "name", "ico","contact", "phone", "email","address");
         if (in_array($param, $os)) {
             return $this->database->query("update client set ".$param." = ? where id = ?", $value, $clientId);
+        }else{
+            return false;
+        }
+    }
+    
+    function updateWorkOrder($workOrderId, $finder, $value){
+        $os = array("amount", "name", "status");
+        if (in_array($finder, $os)) {
+            return $this->database->query("update work_order set ".$finder." = ? where id = ?", $value, $workOrderId);
+        }else{
+            return false;
+        }
+    }
+    
+    function updateUwor($uworId, $finder, $value){
+        $os = array("status", "md_rate");
+        if (in_array($finder, $os)) {
+            return $this->database->query("update users_work_order_rel set ".$finder." = ? where id = ?", $value, $uworId);
         }else{
             return false;
         }

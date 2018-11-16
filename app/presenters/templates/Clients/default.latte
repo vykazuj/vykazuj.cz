@@ -77,42 +77,28 @@
                         <h1 class="text-left font-weight-semibold">Projekty</h1> 
                     </div>
                     <div class="col-xl-10 col-md-9 col-6 text-left font-weight-semibold">
-                        <span class="nav-pills-red" id="new-project">Nový</span>
+                        <span class="nav-pills-red" id="new-project">Přidat další</span>
                     </div>
                     <div class="col-xl-2 col-md-3 col-6 text-right font-weight-semibold">
                     </div>
                 </div>
-                <div class="row clients-row">
-                    <div class="col-xl-9 col-md-8 col-sm-12 col-12 text-left">
-                        NgCRM - Migrace:
+
+                
+                <hr class="gray">
+                
+                <div class="row orders-row-head" id ="orders-row-head">
+                    <div class="col-xl-12 col-md-12 col-12 text-left font-weight-semibold">
+                        <h1 class="text-left font-weight-semibold">Objednávky</h1> 
                     </div>
-                    <div class="col-xl-3 col-md-4 col-sm-12 col-12 text-right">
-                        10 000 Kč<small><i class="fas fa-pencil-alt fa-1x clients-svg"></i><i class="fas fa-trash-alt fa-1x clients-svg"></i></small>
+                    <div class="col-xl-10 col-md-9 col-6 text-left font-weight-semibold">
+                        <span class="nav-pills-red" id="new-work-order">Přidat další</span>
                     </div>
-                </div>
-                <div class="row clients-row">
-                    <div class="col-xl-9 col-md-8 col-sm-12 col-12 text-left">
-                        NgCRM - Integrace:
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-12 col-12 text-right">
-                        11 000 Kč<small><i class="fas fa-pencil-alt fa-1x clients-svg"></i><i class="fas fa-trash-alt fa-1x clients-svg"></i></small>
+                    <div class="col-xl-2 col-md-3 col-6 text-right font-weight-semibold">
                     </div>
                 </div>
-                <div class="row clients-row">
-                    <div class="col-xl-9 col-md-8 col-sm-12 col-12 text-left">
-                        CR 331 - Small Enhancements
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-12 col-12 text-right">
-                        12 000 Kč<small><i class="fas fa-pencil-alt fa-1x clients-svg"></i><i class="fas fa-trash-alt fa-1x clients-svg"></i></small>
-                    </div>
-                </div>
-                <div class="row clients-row">
-                    <div class="col-xl-9 col-md-8 col-sm-12 col-12 text-left">
-                        CR - RTago - Veselé vánoce a šťastný nový rok
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-12 col-12 text-right">
-                        13 000 Kč<small><i class="fas fa-pencil-alt fa-1x clients-svg"></i><i class="fas fa-trash-alt fa-1x clients-svg"></i></small>
-                    </div>
+                
+                <div class="row orders-row" id="orders-first-row">
+
                 </div>
                 
                 <br>
@@ -173,6 +159,50 @@
             
         }
                 
+        function updateWorkOrderDetails(workorderid, finder, value){
+            $("#new-work-order").text("Ukládám...");
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/update-work-order-details?workOrderId='+workorderid+'&finder='+finder+'&value='+value,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                    $("#new-work-order").text('Chyba');
+                }else{
+                    $("#new-work-order").text('Přidat další');
+                }     
+                
+              }
+            });  
+        }
+                
+        function updateUworDetails(uworId, finder, value){
+            $("#new-work-order").text("Ukládám...");
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/update-uwor-details?uworId='+uworId+'&finder='+finder+'&value='+value,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                    $("#new-work-order").text('Chyba');
+                }else{
+                    $("#new-work-order").text('Přidat další');
+                }     
+                
+              }
+            }); 
+        }
+                
         function updateProjectDetails(projectId, value){
             $("#new-project").text("Ukládám...");
             $.ajax(
@@ -220,6 +250,29 @@
         
         function cleanClientRows(){
             $(".clients-row").remove();
+        }
+        
+        function cleanOrderRows(){
+            $(".orders-first-row").html('');
+        }
+        
+        function addOrderFirstRow(data){
+            var row = '<div class="col-12 text-left font-weight-semibold">'+data["name"]+'</div>';
+            row = row
+                    +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-6  text-left  order-details nopadding">Status:</div>'
+                    +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-6  text-right  order-details nopadding"><select class="work-order-status-select client_not_name_label client_labels_all" workorderid="'+data["id"]+'" finder="status"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select><span class="invisible"> Kč</span></div>'
+                    +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-6  text-left  order-details nopadding">Částka k čerpání:</div>'
+                    +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-6 text-right  order-details nopadding"><input type="text"  class="work-order-amount-input client_not_name_label client_labels_all clients_labels_kc" value ="'+data["amount"]+'"  finder="amount" workorderid="'+data["id"]+'"><span class="clients_labels_kc"> Kč</span></div>'
+                    +'<div class="col-xl-4 col-lg-4 col-md-0 col-sm-0 col-0 text-left  order-details"></div>';
+            $("#orders-first-row").append(row);    
+            $(".work-order-status-select[workorderid='"+data["id"]+"']").val(data["status"]);
+        }
+        
+        function addOrderRow(data){
+            var row = '<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-6  text-left  order-details nopadding project_labels_all"><span class="uwor-status-clicker" finder="status" value="inactive" uworid="'+data["uworId"]+'"><i class="fas fa-times-circle orders-svg"></i></span> '+data['firstName']+' '+data['lastName']+'</div>'
+                     +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-6  text-right  order-details nopadding"><input type="text" class="uwor-mdrate-input client_not_name_label client_labels_all clients_labels_kc" value ="'+data["mdRate"]+'" finder="md_rate" uworid="'+data["uworId"]+'"><span class="clients_labels_kc"> Kč</span></div>';
+            
+            $("#orders-first-row").append(row);  
         }
         
         function addClientFirstRow(data)   {
@@ -293,6 +346,38 @@
                 });      
         }      
         
+        function getMyClientOrders(id){
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/get-my-client-orders?clientId='+id,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                var lastProjectID = -1;
+                if(json.result!=='OK'){
+                    alert(json.code);
+                }else{
+                    var raw_data = json.data;
+                    for (i in raw_data)
+                    {
+                        if(raw_data[i]['id'] !== lastProjectID){
+                            lastProjectID = raw_data[i]['id'];
+                            addOrderFirstRow(raw_data[i]);
+                            
+                        }
+                       addOrderRow(raw_data[i]);
+                      //setSelectAction(raw_data[i].id);
+                    }
+                    setUpMyClientOrders();
+                }     
+                
+              }
+            });  
+        }
+        
         function getMyClientProjects(id){
             $.ajax(
             {
@@ -355,7 +440,9 @@
                       //setSelectAction(raw_data[i].id);
                       cleanClientRows();
                       setUpMyClientDetails();
+                      cleanOrderRows();
                       getMyClientProjects(id);
+                      getMyClientOrders(id);
                       $(".client-link[clientid='"+id+"']").addClass('active');
                 
                     }
@@ -436,6 +523,38 @@
             
         }
         
+        function setUpMyClientOrders(){
+            $(".work-order-status-select").change( function(){
+                var workorderid = $(this).attr("workorderid");
+                var finder = $(this).attr("finder");
+                var value = $(this).val();
+                updateWorkOrderDetails(workorderid, finder, value);
+            });
+            
+            $(".work-order-amount-input").focusout( function(){
+                var workorderid = $(this).attr("workorderid");
+                var finder = $(this).attr("finder");
+                var value = $(this).val();
+                updateWorkOrderDetails(workorderid, finder, value);
+            });
+            
+            $(".uwor-mdrate-input").focusout( function(){
+                var uworId = $(this).attr("uworid");
+                var finder = $(this).attr("finder");
+                var value = $(this).val();
+                updateUworDetails(uworId, finder, value);
+            });
+            
+            $(".uwor-status-clicker").click( function(){
+                var uworId = $(this).attr("uworid");
+                var finder = $(this).attr("finder");
+                var value = $(this).attr("value");
+                updateUworDetails(uworId, finder, value);
+            });
+            
+        }
+        
+        
     $(document).ready(function() 
     {   
         getMyClients();        
@@ -485,8 +604,11 @@ input.project_labels_all{
     padding-left: 10px;
     width: auto;
 }
-}
 
+.work-order-amount-input, .work-order-status-select, .uwor-mdrate-input{
+    max-width: 120px;
+    height: 28px;
+}
 
 input.client_not_name_label{
     font-weight: 600 !important;
@@ -499,7 +621,7 @@ input.client_not_name_label{
 }
 
 input.client_not_name_label:hover{
-    background-color: #f7f7f7;
+    background-color: rgba(248,248,248,0.5);
 }
 
 input#client_name_label{
@@ -570,7 +692,7 @@ input#client_name_label:hover{
     font-weight: 600 !important;
 }
 
-#new-project{
+#new-project, #new-work-order{
     background-color: #E52428;
     color: #FFFFFF;
     text-align: center;
@@ -584,6 +706,10 @@ input#client_name_label:hover{
 .project-details{
     font-size: 90%;
     padding-left: 30px;
+}
+
+.order-details{
+    font-size: 90%;
 }
 
 .panel-right > ul > li > span.graph-title{
@@ -727,6 +853,16 @@ svg.clients-svg:hover {
     color:#212529;
 }
 
+svg.orders-svg {
+    margin-left: 2px;
+    margin-right: 0px;
+    cursor: pointer;
+    color:gray;
+}
+svg.orders-svg:hover {
+    color:#212529;
+}
+
 div.clients-row{
     border-radius: 5px;
     padding-bottom: 3px;
@@ -737,7 +873,17 @@ div.clients-row:hover{
     background-color: #EDEDED;
 }
 
-
+input.clients_labels_kc {
+    background: 0 0;
+    position: relative;
+    padding-right: 28px;
+    z-index: 999;
+}
+span.clients_labels_kc{
+    right: 30px;
+    position: relative;
+    z-index: 1;
+}
 @media screen and (max-width: 992px) {
         body{ font-size: 14px;}
         .nav-pills > li { padding: 3px; font-size: 12px;}
