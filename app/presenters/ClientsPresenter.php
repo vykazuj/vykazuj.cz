@@ -165,6 +165,31 @@ class ClientsPresenter extends BasePresenter
             
         } 
         
+        public function actionUpdateUworDetails($uworId, $finder, $value){
+            $myClientHandler = new \ClientHandler($this->database);
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            $wordOrder = $myClientHandler->getWorkOrderOfUwor($uworId);
+            $workOrderId = $wordOrder["work_order_id"];
+            
+            $client = $myClientHandler->getClientOfWorkOrder($workOrderId);
+            $clientId = $client["client_id"];
+                    
+            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
+                $myClientHandler->updateUwor($uworId, $finder, $value);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'Nemáte právo na úpravu';
+            }
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+            
+        } 
+        
         public function actionUpdateProjectDetails($projectId, $value){
             $myClientHandler = new \ClientHandler($this->database);
             
