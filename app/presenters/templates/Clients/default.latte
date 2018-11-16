@@ -91,7 +91,7 @@
                         <h1 class="text-left font-weight-semibold">Objednávky</h1> 
                     </div>
                     <div class="col-xl-10 col-md-9 col-6 text-left font-weight-semibold">
-                        <span class="nav-pills-red" id="new-project">Nová</span>
+                        <span class="nav-pills-red" id="new-work-order">Nová</span>
                     </div>
                     <div class="col-xl-2 col-md-3 col-6 text-right font-weight-semibold">
                     </div>
@@ -102,6 +102,12 @@
                         Objedánka č.102541 (T-Mobile)
                     </div>
 
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details">Status:</div>
+                    <div class="col-xl-10 col-lg-10 col-md-9 col-sm-6 col-xs-6 col-5  text-left  order-details">Aktivní</div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details">Částka:</div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-left  order-details">10 000 000 Kč</div>
+                    
+                    
                     <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details"> Martin Sivok</div>
                     <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details">10 000 Kč<i class="fas fa-times-circle orders-svg"></i></div>
                     <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details"> Tomás Mahnel</div>       
@@ -216,6 +222,29 @@
             
         }
                 
+        function updateWorkOrderDetails(workorderid, finder, value){
+            $("#new-work-order").text("Ukládám...");
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/update-work-order-details?workOrderId='+workorderid+'&finder='+finder+'&value='+value,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                    $("#new-work-order").text('Chyba');
+                }else{
+                    $("#new-work-order").text('Přidat další');
+                }     
+                
+              }
+            });  
+        
+    }
+                
         function updateProjectDetails(projectId, value){
             $("#new-project").text("Ukládám...");
             $.ajax(
@@ -271,12 +300,21 @@
         
         function addOrderFirstRow(data){
             var row = '<div class="col-12 text-left font-weight-semibold">'+data["name"]+'</div>';
+            row = row
+                    +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details">Status:</div>'
+                    +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details"><select class="work-order-status-select client_not_name_label client_labels_all" workorderid="'+data["id"]+'" finder="status"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select><span class="invisible"> Kč</span></div>'
+                    +'<div class="col-xl-8 col-lg-8 col-md-0 col-sm-0 col-0 text-left  order-details"></div>'
+                    +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details">Částka k čerpání:</div>'
+                    +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details"><input type="text"  class="work-order-amount-input client_not_name_label client_labels_all" value ="'+data["amount"]+'"  workorderid="'+data["id"]+'"> Kč</div>'
+                    +'<div class="col-xl-8 col-lg-8 col-md-0 col-sm-0 col-0 text-left  order-details"></div>';
             $("#orders-first-row").append(row);    
+            $(".work-order-status-select[workorderid='"+data["id"]+"']").val(data["status"]);
         }
         
         function addOrderRow(data){
-            var row = '<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details">'+data['firstName']+' '+data['lastName']+'</div>';
-            row = row + '<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details">'+data['mdRate']+' Kč<i class="fas fa-times-circle orders-svg"></i></div>';
+            var row = '<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-7  text-left  order-details input.project_labels_all">'+data['firstName']+' '+data['lastName']+' <i class="fas fa-times-circle orders-svg"></i> </div>'
+                     +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-5  text-right  order-details"><input type="text"  class="work-order-amount-input client_not_name_label client_labels_all" value ="'+data["mdRate"]+'"  uwor="'+data["uwor_id"]+'"> Kč</div>';
+            
             $("#orders-first-row").append(row);  
         }
         
@@ -370,11 +408,12 @@
                         if(raw_data[i]['id'] !== lastProjectID){
                             lastProjectID = raw_data[i]['id'];
                             addOrderFirstRow(raw_data[i]);
+                            
                         }
                        addOrderRow(raw_data[i]);
                       //setSelectAction(raw_data[i].id);
                     }
-                      //setUpMyProjectsDetails();
+                    setUpMyClientOrders();
                 }     
                 
               }
@@ -526,6 +565,16 @@
             
         }
         
+        function setUpMyClientOrders(){
+            $(".work-order-status-select").change( function(){
+                var workorderid = $(this).attr("workorderid");
+                var finder = $(this).attr("finder");
+                var value = $(this).val();
+                updateWorkOrderDetails(workorderid, finder, value);
+            });
+        }
+        
+        
     $(document).ready(function() 
     {   
         getMyClients();        
@@ -575,8 +624,11 @@ input.project_labels_all{
     padding-left: 10px;
     width: auto;
 }
-}
 
+.work-order-amount-input, .work-order-status-select{
+    max-width: 120px;
+    height: 28px;
+}
 
 input.client_not_name_label{
     font-weight: 600 !important;
@@ -660,7 +712,7 @@ input#client_name_label:hover{
     font-weight: 600 !important;
 }
 
-#new-project{
+#new-project, #new-work-order{
     background-color: #E52428;
     color: #FFFFFF;
     text-align: center;

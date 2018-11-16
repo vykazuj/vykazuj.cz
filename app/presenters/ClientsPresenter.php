@@ -144,6 +144,27 @@ class ClientsPresenter extends BasePresenter
             $this->sendResponse(new JsonResponse($myJSON)); 
         }
         
+        public function actionUpdateWorkOrderDetails($workOrderId, $finder, $value){
+            $myClientHandler = new \ClientHandler($this->database);
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $client = $myClientHandler->getClientOfWorkOrder($workOrderId);
+            $clientId = $client["client_id"];
+                    
+            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
+                $myClientHandler->updateWorkOrder($workOrderId, $finder, $value);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'Nemáte právo na úpravu';
+            }
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+            
+        } 
+        
         public function actionUpdateProjectDetails($projectId, $value){
             $myClientHandler = new \ClientHandler($this->database);
             

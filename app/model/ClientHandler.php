@@ -44,7 +44,7 @@ class ClientHandler {
     }
     
     function getMyClientOrdersWithParameters($clientId){
-        return $this->database->fetchAll('select u.first_name as firstName, u.last_name as lastName, uwor.md_rate as mdRate, wo.name as name, wo.id as id, uwor.id as uworId from work_order wo, user_work_order_rel uwor, users u, client cl where cl.id = wo.client_id and uwor.work_order_id = wo.id and uwor.user_id = u.id and cl.id = ?', $clientId);
+        return $this->database->fetchAll('select wo.status as status, wo.amount as amount, u.first_name as firstName, u.last_name as lastName, uwor.md_rate as mdRate, wo.name as name, wo.id as id, uwor.id as uworId from work_order wo, user_work_order_rel uwor, users u, client cl where cl.id = wo.client_id and uwor.work_order_id = wo.id and uwor.user_id = u.id and cl.id = ?', $clientId);
     }
  
     function getProject($projectId){
@@ -61,6 +61,10 @@ class ClientHandler {
             {return true;}
         else
             {return false;}
+    }
+    
+    function getClientOfWorkOrder($workOrderId){
+        return $this->database->fetch("select * from work_order where id = ?",$workOrderId);
     }
     
     function isMyProject($userId, $projectId){
@@ -156,6 +160,15 @@ class ClientHandler {
         $os = array("company_id", "name", "ico","contact", "phone", "email","address");
         if (in_array($param, $os)) {
             return $this->database->query("update client set ".$param." = ? where id = ?", $value, $clientId);
+        }else{
+            return false;
+        }
+    }
+    
+    function updateWorkOrder($workOrderId, $finder, $value){
+        $os = array("amount", "name", "status");
+        if (in_array($finder, $os)) {
+            return $this->database->query("update work_order set ".$finder." = ? where id = ?", $value, $workOrderId);
         }else{
             return false;
         }
