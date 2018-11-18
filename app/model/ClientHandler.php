@@ -44,14 +44,32 @@ class ClientHandler {
     }
     
     function getMyClientOrdersWithParameters($clientId){
-        return $this->database->fetchAll('select wo.status as status, wo.amount as amount, u.first_name as firstName, u.last_name as lastName, uwor.md_rate as mdRate, wo.name as name, wo.id as id, uwor.id as uworId from '
+        return $this->database->fetchAll('select wo.status as status, wo.amount as amount, u.id as userId, u.first_name as firstName, u.last_name as lastName, uwor.md_rate as mdRate, uwor.status as uworStatus, wo.name as name, wo.id as id, uwor.id as uworId from '
                 . ' client cl '
                 . ' left join work_order wo on cl.id = wo.client_id '
                 . ' left join users_work_order_rel uwor on uwor.work_order_id = wo.id '
                 . ' left join users u on uwor.user_id = u.id '
-                . 'where cl.id = ?', $clientId);
+                . 'where cl.id = ? order by cl.id', $clientId);
     }
  
+    function getUsersNotLinkedToClientOrders($clientId){
+        return $this->database->fetchAll('select wo.status as status, wo.amount as amount, u.id as userId, u.first_name as firstName, u.last_name as lastName, 0 as mdRate, "new" as uworStatus, wo.name as name, wo.id as id, -1 as uworId from '
+                . ' client cl '
+                . ' join company com '
+                . '     on com.id = cl.company_id '
+                . ' join work_order wo '
+                . '     on cl.id = wo.client_id '
+                . ' join users_company_rel ucr '
+                . '     on ucr.company_id=com.id '
+                . ' left join users u '
+                . '     on ucr.user_id = u.id '
+                . ' left join users_work_order_rel uwor '
+                . '     on uwor.work_order_id = wo.id '
+                . '     and uwor.user_id = u.id '
+                . 'where uwor.id is null and cl.id = ? order by cl.id', $clientId);
+
+    }
+    
     function getProject($projectId){
         return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id from project pr, project_param pp where pp.project_id = pr.id and pr.id = ?',$projectId);  
     }
@@ -191,6 +209,15 @@ class ClientHandler {
         }else{
             return false;
         }
+    }
+    
+    function createUwor($userId, $workOrderId){
+        $input["id"] = null;
+        $input["user_id"] = $userId;
+        $input["work_order_id"] = $workOrderId;
+        $input["md_rate"] = 0;
+        $input["status"] = 'active';
+        return $this->database->table("users_work_order_rel")->insert($input);
     }
     
     function updateProject($projectId, $param, $value){
