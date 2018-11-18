@@ -257,7 +257,8 @@
         }
         
         function addOrderFirstRow(data){
-            var row = '<div class="col-12 text-left font-weight-semibold">'+data["name"]+'</div>';
+            var row = '<div class="col-12 text-left font-weight-semibold"><hr></div>';
+            row = row + '<div class="col-12 text-left font-weight-semibold">'+data["name"]+'</div>';
             row = row
                     +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-6  text-left  order-details nopadding">Status:</div>'
                     +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-6  text-right  order-details nopadding"><select class="work-order-status-select client_not_name_label client_labels_all" workorderid="'+data["id"]+'" finder="status"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select><span class="invisible"> Kč</span></div>'
@@ -272,7 +273,9 @@
             var row = '<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-6  text-left  order-details nopadding project_labels_all"><span class="uwor-status-clicker" finder="status" value="inactive" uworid="'+data["uworId"]+'"><i class="fas fa-times-circle orders-svg"></i></span> '+data['firstName']+' '+data['lastName']+'</div>'
                      +'<div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6 col-6  text-right  order-details nopadding"><input type="text" class="uwor-mdrate-input client_not_name_label client_labels_all clients_labels_kc" value ="'+data["mdRate"]+'" finder="md_rate" uworid="'+data["uworId"]+'"><span class="clients_labels_kc"> Kč</span></div>';
             
-            $("#orders-first-row").append(row);  
+            if(data["uworId"] !== null){
+                $("#orders-first-row").append(row);  
+            }
         }
         
         function addClientFirstRow(data)   {
@@ -300,6 +303,29 @@
             var len = (1+11*data["name"].length)+'px';
             $("input.project_labels_all[projectid='"+data["id"]+"']").css("width",len);
         }
+        
+        function createNewWorkOrder(){
+            var clientId = $("#client_name_label").attr("clientid");
+            alert(clientId);
+            $("#new-work-order").text("Přidávám...");
+            $.ajax(
+                {
+                  type: 'GET',
+                  url: home_url+'/clients/create-new-work-order?clientId='+clientId,
+                  dataType: 'json',
+                  cache: false,
+                  success: function(data)
+                  { 
+                    var json = $.parseJSON(data);
+                    if(json.result!=='OK'){
+                        alert(json.code);
+                        $("#new-work-order").text('Chyba');
+                    }else{
+                        getMyClientOrders(clientId);
+                    }
+                  }
+                });      
+        }      
         
         function createNewProject(){
             var clientId = $("#client_name_label").attr("clientid");
@@ -346,6 +372,7 @@
         }      
         
         function getMyClientOrders(id){
+            $("#orders-first-row").html('');
             $.ajax(
             {
               type: 'GET',
@@ -563,6 +590,10 @@
         
         $("#new-project").click( function(){
             createNewProject();
+        });
+        
+        $("#new-work-order").click( function(){
+            createNewWorkOrder();
         });
                          
     });

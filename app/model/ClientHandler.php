@@ -44,7 +44,12 @@ class ClientHandler {
     }
     
     function getMyClientOrdersWithParameters($clientId){
-        return $this->database->fetchAll('select wo.status as status, wo.amount as amount, u.first_name as firstName, u.last_name as lastName, uwor.md_rate as mdRate, wo.name as name, wo.id as id, uwor.id as uworId from work_order wo, users_work_order_rel uwor, users u, client cl where cl.id = wo.client_id and uwor.work_order_id = wo.id and uwor.user_id = u.id and cl.id = ?', $clientId);
+        return $this->database->fetchAll('select wo.status as status, wo.amount as amount, u.first_name as firstName, u.last_name as lastName, uwor.md_rate as mdRate, wo.name as name, wo.id as id, uwor.id as uworId from '
+                . ' client cl '
+                . ' left join work_order wo on cl.id = wo.client_id '
+                . ' left join users_work_order_rel uwor on uwor.work_order_id = wo.id '
+                . ' left join users u on uwor.user_id = u.id '
+                . 'where cl.id = ?', $clientId);
     }
  
     function getProject($projectId){
@@ -245,6 +250,17 @@ class ClientHandler {
         $userProjectRel["rel"] = 'user';
         $row2 = $this->database->table('users_project_rel')->insert($userProjectRel);
         
+        return $row->toArray();
+    }
+    
+    function createNewWorkOrder($clientId){
+        $project["id"] = null;
+        $project["client_id"] = $clientId;
+        $project["name"] = 'Nová objednávka';
+        $project["status"] = 'active';
+        $project["amount"] = 0;
+        $row = $this->database->table('work_order')->insert($project);
+                
         return $row->toArray();
     }
     

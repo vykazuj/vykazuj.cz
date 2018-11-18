@@ -105,6 +105,22 @@ class ClientsPresenter extends BasePresenter
             $this->redirect("Clients:default");
         }
         
+        public function actionCreateNewWorkOrder($clientId){
+            $myClientHandler = new \ClientHandler($this->database);            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
+                $myClientHandler->createNewWorkOrder($clientId);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'Nemáte právo na přidání';
+            }
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
         public function actionCreateNewProject($clientId){
             $myClientHandler = new \ClientHandler($this->database);            
             $myObj = null;
