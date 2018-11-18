@@ -98,11 +98,43 @@ class ClientsPresenter extends BasePresenter
             $this->sendResponse(new JsonResponse($myJSON)); 
         }
         
+        public function actionGetUsersNotLinkedToClientOrders($clientId){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
+                $myObj['data'] = $myClientHandler->getUsersNotLinkedToClientOrders($clientId);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '404';
+            }
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
         public function actionCreateNewClient(){
             $myClientHandler = new \ClientHandler($this->database);
             $myClientHandler->createNewClient($this->user->getId());
             
             $this->redirect("Clients:default");
+        }
+        
+        public function actionCreateNewWorkOrder($clientId){
+            $myClientHandler = new \ClientHandler($this->database);            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
+                $myClientHandler->createNewWorkOrder($clientId);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'Nemáte právo na přidání';
+            }
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
         }
         
         public function actionCreateNewProject($clientId){
@@ -165,25 +197,31 @@ class ClientsPresenter extends BasePresenter
             
         } 
         
-        public function actionUpdateUworDetails($uworId, $finder, $value){
+        public function actionUpdateUworDetails($uworId, $finder, $value, $userId, $workOrderId){
             $myClientHandler = new \ClientHandler($this->database);
             
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
             
+            /*
             $wordOrder = $myClientHandler->getWorkOrderOfUwor($uworId);
             $workOrderId = $wordOrder["work_order_id"];
+            */
             
             $client = $myClientHandler->getClientOfWorkOrder($workOrderId);
             $clientId = $client["client_id"];
-                    
-            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
-                $myClientHandler->updateUwor($uworId, $finder, $value);
-            }else{
-                $myObj['result'] = 'NOT OK';
-                $myObj['code'] = 'Nemáte právo na úpravu';
-            }
+            
+                if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
+                    if($uworId==-1){
+                        $myClientHandler->createUwor($userId, $workOrderId);
+                    }else{
+                        $myClientHandler->updateUwor($uworId, $finder, $value);
+                    }
+                }else{
+                    $myObj['result'] = 'NOT OK';
+                    $myObj['code'] = 'Nemáte právo na úpravu tohoto záznamu (error 9857)';
+                }
             
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
