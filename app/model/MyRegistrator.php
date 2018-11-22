@@ -106,7 +106,11 @@ class MyRegistrator
                 $myClientHandler = new ClientHandler($this->database);
                 $newClient = $myClientHandler->createNewClient($user["id"]);
                 $myClientHandler->createUserCompanyRel($user["id"], $companyId, 'owner');
-                $myClientHandler->createNewProject($user["id"], $newClient["id"]);
+                $newProject = $myClientHandler->createNewProject($user["id"], $newClient["id"]);
+                $myClientHandler->addParamToProject($newProject["id"], 'status','Status','active');
+                $myClientHandler->addParamToProject($newProject["id"], 'contact','Fakturační kontakt',$newClient["contact"]);
+                $myClientHandler->addParamToProject($newProject["id"], 'email','Fakturační email',$newClient["email"]);
+                //$myClientHandler->createUserProjectRel($user["id"], $newProject["id"], 0);
             }
             catch(\PDOException $e)
             {

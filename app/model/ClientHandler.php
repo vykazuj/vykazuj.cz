@@ -269,7 +269,12 @@ class ClientHandler {
     }
     
     function createUserProjectRel($userId, $projectId, $mdRate){
-        return $this->database->query("insert into users_company_rel (id, user_id, project_id, rel, md_rate) valuse (null,?,?,?)",$userId, $projectId, 'user' ,$mdRate);
+        $input["user_id"] = $userId;
+        $input["project_id"] = $projectId;
+        $input["rel"] = 'user';
+        $input["md_rate"] = $mdRate;
+        //return $this->database->query("insert into users_company_rel (id, user_id, project_id, rel, md_rate) values (null,?,?,?)",$userId, $projectId, 'user' ,$mdRate);
+        return $this->database->table('users_company_rel')->insert($input);
     }
     
     function createNewProject($userId, $clientId){
