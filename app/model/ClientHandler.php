@@ -258,9 +258,13 @@ class ClientHandler {
     }
     
     function createUserCompanyRel($userId, $companyId, $role){
+        $input["user_id"] = $userId;
+        $input["company_id"] = $companyId;
+        $input["role"] = $role;
         $rownum = $this->database->query("select * from users_company_rel where user_id = ? and company_id = ? and role = ?",$userId, $companyId, $role)->getRowCount();
         if($rownum>0){return true;}else{
-            return $this->database->query("insert into users_company_rel (id, user_id, company_id, role) values (null,?,?,?)",$userId, $companyId, $role);   
+            return $this->database->table("users_company_rel")->insert($input);
+            //return $this->database->query("insert into users_company_rel (id, user_id, company_id, role) values (null,?,?,?)",$userId, $companyId, $role);   
         }
     }
     

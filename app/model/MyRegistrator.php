@@ -78,7 +78,7 @@ class MyRegistrator
             for ($i = 0; $i < 10; $i++) {
                 $integrationId = $integrationId.$characters[rand(0, strlen($characters)-1)];
             }
-            //unset($input["agree_ladder"]);                
+            //unset($input["agree_ladder"]);     
             $user["integration_id"] = $integrationId;
             $user["status"] = 'active';
             $user["first_name"] = $input->first_name;
