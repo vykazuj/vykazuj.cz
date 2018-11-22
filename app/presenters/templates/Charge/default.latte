@@ -2,10 +2,14 @@
        
         
     <div class="col-12 col-lg-8 col-sm-12 col-xs-12 text-center panel-mid">        
-        <div class="container timetable-blank text-right">
+        <div class="container timetable-blank text-left">
             Aktivní firma: 
           <select id = "company-select" class="client_not_name_label">
-          </select>
+          </select> <br class="active-project-separator" /> Aktivní projekt:  
+          <select class="client_not_name_label" id="my-chargeable-projects">
+              <br class="active-project-separator"/>
+          </select>   
+                    
         </div>
         
         <div class="container timetable-blank">
@@ -64,7 +68,7 @@
                     </div>
             </div>
         
-        <div class="col-0 col-lg-2 d-none d-lg-block text-left panel-right">
+        <div class="col-12 col-lg-2 d-block d-lg-block text-left panel-right">
             <ul class="nav nav-pills">
                 
 
@@ -79,16 +83,6 @@
             <br>
                 <a n:href="createTimesheet 2018, 12, 4, 0" target="_blank">Timesheet<i class="fas fa-download"></i></a>
                     <br>
-                    <span class="graph-title">
-                        Vyber projekt:<br>
-                        {ifset $myChargeableProjects}
-                    </span>    
-                    <select class="my-chargeable-projects" id="my-chargeable-projects">
-                       
-                    </select>   
-                    <br>
-                                        
-                    {/ifset}
                 </span>
                 <br>
                 <div class ="graph-title">
@@ -155,7 +149,6 @@
     
         function createNewRow(obj){
             var selectHTML = $("#my-chargeable-projects").html(); 
-            alert(selectHTML);
             var abc='<tr id="'+obj["id"]+'">'+
                     '<td class="tiny rowPlus addRecord" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></td>'+
                     '<td class="tiny rowDay">'+obj["day"]+'</td>'+
@@ -348,8 +341,10 @@
                     let option_array = [];
                    for(i in json.data){
                        option_array.push(new Option(json.data[i].name,json.data[i].id));
-                       $("#my-chargeable-projects").append(new Option(json.data[i].name,json.data[i].id));
-                       $("#my-chargeable-projects-bulk").append(new Option(json.data[i].name,json.data[i].id));
+                       var name = json.data[i].name;
+                       if(name.length >=30){ name = name.substring(0,29)+'...';}
+                       $("#my-chargeable-projects").append(new Option(name,json.data[i].id));
+                       $("#my-chargeable-projects-bulk").append(new Option(name,json.data[i].id));
                    } 
                    //var abc = option_array;
                    //$("#my-chargeable-projects-bulk").html($("#my-chargeable-projects").html());
@@ -393,18 +388,18 @@
         function createChargedRow(obj, day, dayName){
             let selectHTML = $("#my-chargeable-projects").html();
 
-            let row='<div class="row rows-intable withL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold  rowPlus tiny" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+obj["id"]+'">'+day+'</div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+obj["id"]+'"">'+dayName+'</div>'+
-                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName wide" recordId="'+obj["id"]+'"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
+            let row='<div class="nopadding row rows-intable withL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-left font-weight-semibold  rowPlus tiny" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+obj["id"]+'">'+day+'</div>'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+obj["id"]+'"">'+dayName+'</div>'+
+                    '<div class="nopadding col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName wide" recordId="'+obj["id"]+'"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
                     '</div></div>'+
-                    '<div class="col-md-12 col-lg-4"><div class="row">'+
-                    '<div class="col-lg-4 col-md-4  col-4 text-mid font-weight-semibold rowShare tiny" recordId="'+obj["id"]+'"></div>'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+obj["id"]+'"><input type="number" class="input text-center" min=0 max=24 step=0.5 value="'+obj["hours"]+'" class="value"></input></div>'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+obj["id"]+'"><input type="number" class="input text-center" min=0 max=16 step=0.5 value="'+obj["hours_over"]+'" class="value"></input></div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowSave tiny" recordId="'+obj["id"]+'"><i class="fas fa-save"></i></div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowTrash tiny" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></div>'+
+                    '<div class="nopadding col-md-12 col-lg-4"><div class="row">'+
+                    '<div class="nopadding col-lg-4 col-md-4  col-4 text-mid font-weight-semibold rowShare tiny" recordId="'+obj["id"]+'"></div>'+
+                    '<div class="nopadding col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+obj["id"]+'"><input type="number" class="input text-center" min=0 max=24 step=0.5 value="'+obj["hours"]+'" class="value"></input></div>'+
+                    '<div class="nopadding col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+obj["id"]+'"><input type="number" class="input text-center" min=0 max=16 step=0.5 value="'+obj["hours_over"]+'" class="value"></input></div>'+
+                    //'<div class="nopadding col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowSave tiny" recordId="'+obj["id"]+'"><i class="fas fa-save"></i></div>'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowTrash tiny" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></div>'+
                     '</div></div></div>';
 
                     return row;
@@ -413,18 +408,18 @@
 
           function createChargedRowBlank(i, day, dayName){
             let selectHTML = $("#my-chargeable-projects").html();
-            let row='<div class="row rows-intable withL" id="'+-i+'"><div class="col-md-12 col-lg-8"><div class="row">'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowPlus tiny" recordId="'+-i+'"><i class="fas fa-plus-circle"></i></div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+-i+'">'+day+'</div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+-i+'">'+dayName+'</div>'+
-                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName wide" recordId="'+-i+'"></div>'+
+            let row='<div class="nopadding row rows-intable withL" id="'+-i+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowPlus tiny" recordId="'+-i+'"><i class="fas fa-plus-circle"></i></div>'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+-i+'">'+day+'</div>'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+-i+'">'+dayName+'</div>'+
+                    '<div class="nopadding col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName wide" recordId="'+-i+'"></div>'+
                     '</div></div>'+
-                    '<div class="col-md-12 col-lg-4"><div class="row">'+
-                    '<div class="col-lg-4 col-md-4  col-4 text-mid font-weight-semibold rowShare tiny" recordId="'+-i+'"></div>'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+-i+'"></div>'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+-i+'"></div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowSave tiny" recordId="'+-i+'"><i class="fas fa-save"></i></div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowTrash tiny" recordid="'+-i+'"><i class="fas fa-trash-alt deleteRecord"></i></div>'+
+                    '<div class="nopadding col-md-12 col-lg-4"><div class="row">'+
+                    '<div class="nopadding col-lg-4 col-md-4  col-4 text-mid font-weight-semibold rowShare tiny" recordId="'+-i+'"></div>'+
+                    '<div class="nopadding col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+-i+'"></div>'+
+                    '<div class="nopadding col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+-i+'"></div>'+
+                    //'<div class="nopadding col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowSave tiny" recordId="'+-i+'"><i class="fas fa-save"></i></div>'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowTrash tiny" recordid="'+-i+'"><i class="fas fa-trash-alt deleteRecord"></i></div>'+
                     '</div></div></div>';
             //$("#my-charged-records-table").append(row); 
             return row;                          
@@ -432,18 +427,18 @@
 
             function createNewRowUnderDate(obj){
                 let selectHTML = $("#my-chargeable-projects").html();
-                let row='<div class="row rows-intable withoutL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowPlus tiny" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+obj["id"]+'"></div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+obj["id"]+'"></div>'+
-                    '<div class="col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName wide" recordId="'+obj["id"]+'"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
+                let row='<div class="nopadding row rows-intable withoutL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowPlus tiny" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></div>'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-right font-weight-semibold rowDay tiny" recordId="'+obj["id"]+'"></div>'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-left font-weight-semibold rowDayOfWeek tiny" recordId="'+obj["id"]+'"></div>'+
+                    '<div class="nopadding col-lg-9 col-md-9  col-9 text-mid font-weight-semibold rowProjectName wide" recordId="'+obj["id"]+'"><select class="my-chargeable-projects-no-border" recordId="'+obj["id"]+'">'+selectHTML+'</select></div>'+
                     '</div></div>'+
-                    '<div class="col-md-12 col-lg-4"><div class="row">'+
-                    '<div class="col-lg-4 col-md-4  col-4 text-mid font-weight-semibold rowShare tiny" recordId="'+obj["id"]+'"></div>'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+obj["id"]+'"><input type="number" class="input text-center" min=0 max=24 step=0.5 value="'+obj["hours"]+'" class="value"></input></div>'+
-                    '<div class="col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+obj["id"]+'"><input type="number" class="input text-center" min=0 max=16 step=0.5 value="'+obj["hours_over"]+'" class="value"></input></div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowSave tiny" recordId="'+obj["id"]+'"><i class="fas fa-save"></i></div>'+
-                    '<div class="col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowTrash tiny" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></div>'+
+                    '<div class="nopadding col-md-12 col-lg-4"><div class="row">'+
+                    '<div class="nopadding col-lg-4 col-md-4  col-4 text-mid font-weight-semibold rowShare tiny" recordId="'+obj["id"]+'"></div>'+
+                    '<div class="nopadding col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHours tiny" recordId="'+obj["id"]+'"><input type="number" class="input text-center" min=0 max=24 step=0.5 value="'+obj["hours"]+'" class="value"></input></div>'+
+                    '<div class="nopadding col-lg-3 col-md-3  col-3 text-mid font-weight-semibold rowHoursOver tiny" recordId="'+obj["id"]+'"><input type="number" class="input text-center" min=0 max=16 step=0.5 value="'+obj["hours_over"]+'" class="value"></input></div>'+
+                    //'<div class="nopadding col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowSave tiny" recordId="'+obj["id"]+'"><i class="fas fa-save"></i></div>'+
+                    '<div class="nopadding col-lg-1 col-md-1  col-1 text-mid font-weight-semibold rowTrash tiny" recordid="'+obj["id"]+'"><i class="fas fa-trash-alt deleteRecord"></i></div>'+
                     '</div></div></div>';
 
                 return row; 
@@ -811,7 +806,7 @@
     float: none;
     padding-left: 0px;
     padding-right: 0px;
-    padding-top: 60px;
+    padding-top: 75px;
     background: #f8f9fa;
 
 }
@@ -903,7 +898,7 @@
   cursor: pointer;
 }  
 
-select#my-chargeable-projects, select#my-chargeable-projects-bulk, input#my-hours, input#my-hours-bulk {
+select#my-chargeable-projects-bulk, input#my-hours, input#my-hours-bulk {
     padding: 1px 1px 1px 5px;
     color: #333333;
     border-radius: 5px 5px 5px 5px;
@@ -913,6 +908,10 @@ select#my-chargeable-projects, select#my-chargeable-projects-bulk, input#my-hour
     font-size: 16px;
     position:relative;
     width:90%;
+} 
+
+select#my-chargeable-projects {
+
 }
 
 input.my-hours-no-border{
@@ -990,6 +989,9 @@ svg {
     background-color: #D3155B;
 }
 
+.active-project-separator{
+    display:none;
+}
 @media screen and (max-width: 1000px) {
         body{ font-size: 14px;}
         .nav-pills > li { padding: 3px; font-size: 12px;}
@@ -999,6 +1001,7 @@ svg {
         .table-hover > tbody > tr > td:first-child { font-size: 16px;}
         .table th, .table td {  padding-left: 0rem; vertical-align: middle;}
         select.my-chargeable-projects-no-border, select.my-chargeable-projects-bulk-no-border, input.my-hours-no-border { font-size: 12px;}
+        .active-project-separator{ display:block ;}
 }
 
 @media screen and (max-width: 1250px) {
@@ -1011,6 +1014,8 @@ svg {
         .graph-intitle{ font-size: 36px;}
         .graph-under-intitle{ font-size: 14px;}
         select.my-chargeable-projects-no-border, select.my-chargeable-projects-bulk-no-border, input.my-hours-no-border { font-size: 14px;}
+        .nav-pills > li:first-child { margin-right: 15px; margin-left: 15px; border-radius: 5px; }
+        .panel-right { display: table-cell; float: none; padding-left: 0px; padding-right: 0px; padding-top: 10px; background: #f8f9fa;}
 }
 
 @media screen and (max-width: 1600px) {
