@@ -205,13 +205,35 @@
               }
             }); 
         }
+            
                 
-        function updateProjectDetails(projectId, value){
+        function updateProjectParam(projectId, projectParamId, value){
             $("#new-project").text("Ukládám...");
             $.ajax(
             {
               type: 'GET',
-              url: home_url+'/clients/update-project-details?projectId='+projectId+'&value='+value,
+              url: home_url+'/clients/update-project-param?projectId='+projectId+'&value='+value+'&projectParamId='+projectParamId,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert(json.code);
+                    $("#new-project").text('Chyba');
+                }else{
+                    $("#new-project").text('Přidat další');
+                }     
+                
+              }
+            });  
+        }                
+        function updateProjectDetails(projectId, finder, value){
+            $("#new-project").text("Ukládám...");
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/update-project-details?projectId='+projectId+'&value='+value+'&finder='+finder,
               dataType: 'json',
               cache: false,
               success: function(data)
@@ -302,10 +324,10 @@
             var row = '<div class="row clients-row project-first-row" projectid="'+data["id"]+'">'
                             +'<div class="col-12 text-left">'
                                 +'<small>'
-                                    +'<span class="add_project" projectid="'+data["id"]+'"><i class="fas fa-plus-circle fa-1x clients-svg"></i></span> '
+                                    //+'<span class="add_project" projectid="'+data["id"]+'"><i class="fas fa-plus-circle fa-1x clients-svg"></i></span> '
                                     +'<span class="delete_project" projectid="'+data["id"]+'"><i class="fas fa-trash-alt fa-1x clients-svg"></i></span> '
                                 +'</small>'                        
-                                +'<input type="text" value="'+data["name"]+'" projectid="'+data["id"]+'" class="project_labels_all font-weight-semibold">'
+                                +'<input type="text" value="'+data["name"]+'" projectid="'+data["id"]+'" finder="name" class="project_labels_all font-weight-semibold">'
                         +'</div>';     
             
             $("#clients-row-head").after(row);          
@@ -315,14 +337,23 @@
         }    
                
         function addClientRow(data){
-            var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details">'+data['param']+'</div>'
-                        +'<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details">'+data['value']+'</div>'
-                      +''; 
+            var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">'+data['param']+'</div>'
+                        +'<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">';
+            var element = '';    
+            if (data['param_lic'] !== 'status'){
+                    element = '<input type="text" value="'+data["value"]+'" projectid="'+data["id"]+'" projectparamid="'+data['param_id']+'" class="project_param_labels_all font-weight-semibold">';
+                }else{
+                    element = '<select class="project_param_labels_all project_param_select_labels_all" projectparamid="'+data['param_id']+'" projectid="'+data["id"]+'"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select>';
+                }
+            
+                row = row + element + '</div>';
+            
             
             //$("#clients-row-head").after(row);          
             $("div.project-first-row[projectid='"+data["id"]+"']").append(row); 
             var len = (1+11*data["name"].length)+'px';
             $("input.project_labels_all[projectid='"+data["id"]+"']").css("width",len);
+            $(".project_param_select_labels_all[projectparamid='"+data["param_id"]+"']").val(data["value"]);
         }
         
         function createNewWorkOrder(){
@@ -594,10 +625,25 @@
         function setUpMyProjectsDetails(){
             $(".project_labels_all").focusout( function(){
                 var projectId = $(this).attr("projectid");
+                var finder = $(this).attr("finder");
                 var value = $(this).val();
-                updateProjectDetails(projectId, value);
+                updateProjectDetails(projectId, finder, value);
             });
             
+            $(".project_param_labels_all").focusout( function(){
+                var projectId = $(this).attr("projectid");
+                var projectParamId = $(this).attr("projectparamid");
+                var value = $(this).val();
+                updateProjectParam(projectId, projectParamId, value);
+            });
+            
+            $(".project_param_select_labels_all").change( function(){
+                var projectId = $(this).attr("projectid");
+                var projectParamId = $(this).attr("projectparamid");
+                var value = $(this).val();
+                updateProjectParam(projectId, projectParamId, value);
+            });
+                        
             $(".delete_project").click( function(){
                 var projectId = $(this).attr("projectid");
                 deleteProject(projectId);
@@ -709,13 +755,17 @@
     font-size:20px;
 }
 
-input.project_labels_all, input.client_labels_all{
+input.project_labels_all, input.client_labels_all, .project_param_labels_all{
     text-align: left !important;
     background-color: #ffffff;
     border-radius: 5px;
     border: 0px solid white;
     padding-left: 10px;
     width: auto;
+}
+
+.project_param_labels_all{
+    width: 90%
 }
 
 .work-order-amount-input, .work-order-status-select, .uwor-mdrate-input {

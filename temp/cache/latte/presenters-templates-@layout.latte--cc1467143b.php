@@ -214,8 +214,13 @@ select.client_not_name_label{
     padding-left: 10px;
 }
 
+.lowhipadding2px{
+   padding-top: 2px !important;
+   padding-bottom: 2px !important;
+}
 .nopadding {
-   padding: 0 !important;
+   padding-left: 0 !important;
+   padding-right: 0 !important;
    margin: 0 !important;
 }
 
