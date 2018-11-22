@@ -40,7 +40,7 @@ class ClientHandler {
     }
     
     function getMyClientProjectsWithParameters($userId, $clientId){
-        return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id from client cl, company co, project pr, project_param pp where pp.project_id = pr.id and pr.client_id = cl.id and cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
+        return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from client cl, company co, project pr, project_param pp where pp.project_id = pr.id and pr.client_id = cl.id and cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
     }
     
     function getMyClientOrdersWithParameters($clientId){
@@ -220,13 +220,17 @@ class ClientHandler {
         return $this->database->table("users_work_order_rel")->insert($input);
     }
     
-    function updateProject($projectId, $param, $value){
+    function updateProject($projectId, $finder, $value){
         $os = array("name");
-        if (in_array($param, $os)) {
-            return $this->database->query("update project set ".$param." = ? where id = ?", $value, $projectId);
+        if (in_array($finder, $os)) {
+            return $this->database->query("update project set ".$finder." = ? where id = ?", $value, $projectId);
         }else{
             return false;
         }
+    }
+    
+    function updateProjectParam($projectParamId, $value){
+        return $this->database->query("update project_param set value = ? where id = ?", $value, $projectParamId);
     }
     
     function deleteProject($projectId){

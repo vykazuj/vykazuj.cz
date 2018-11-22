@@ -228,7 +228,7 @@ class ClientsPresenter extends BasePresenter
             
         } 
         
-        public function actionUpdateProjectDetails($projectId, $value){
+        public function actionUpdateProjectDetails($projectId, $finder, $value){
             $myClientHandler = new \ClientHandler($this->database);
             
             $myObj = null;
@@ -236,7 +236,25 @@ class ClientsPresenter extends BasePresenter
             $myObj['code'] = '0';
             
             if($myClientHandler->isMyProject($this->user->getId(), $projectId)){
-                $myClientHandler->updateProject($projectId, 'name', $value);
+                $myClientHandler->updateProject($projectId, $finder, $value);
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'Nemáte právo na úpravu';
+            }
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
+        public function actionUpdateProjectParam($projectId, $projectParamId, $value){
+            $myClientHandler = new \ClientHandler($this->database);
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if($myClientHandler->isMyProject($this->user->getId(), $projectId)){
+                $myClientHandler->updateProjectParam($projectParamId, $value);
             }else{
                 $myObj['result'] = 'NOT OK';
                 $myObj['code'] = 'Nemáte právo na úpravu';
