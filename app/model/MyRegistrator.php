@@ -104,8 +104,9 @@ class MyRegistrator
                 $company["owner_id"] = $user["id"];
                 $companyId = $this->database->table("company")->insert($company);
                 $myClientHandler = new ClientHandler($this->database);
-                $myClientHandler->createNewClient($user["id"]);
+                $newClient = $myClientHandler->createNewClient($user["id"]);
                 $myClientHandler->createUserCompanyRel($user["id"], $companyId, 'owner');
+                $myClientHandler->createNewProject($user["id"], $newClient["id"]);
             }
             catch(\PDOException $e)
             {

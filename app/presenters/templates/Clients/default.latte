@@ -282,6 +282,7 @@
         }
         
         function addOrderFirstRow(data){
+            if(data["id"] === null){ return true;}
             var row = '<div class="col-12 text-left font-weight-semibold"><hr></div>';
             row = row + '<div class="col-12 text-left font-weight-semibold"><input type="text"  class="work-order-name-input client_labels_all font-weight-semibold" value ="'+data["name"]+'"  finder="name" workorderid="'+data["id"]+'"></div>';
             row = row
@@ -303,6 +304,7 @@
         }
         
         function addOrderRow(data){
+            if(data["id"] === null){ return true;}
             var svg = '<span class="uwor-status-clicker" finder="status" value="active" firstname="'+data['firstName']+'" lastname="'+data['lastName']+'" workorderid="'+data["id"]+'" userid = "'+data["userId"]+'" uworid="'+data["uworId"]+'"><i class="fas fa-plus-circle orders-svg"></i></span>';
             if(data["uworStatus"]==='active'){ 
                 svg = '<span class="uwor-status-clicker" finder="status" value="inactive"  firstname="'+data['firstName']+'" lastname="'+data['lastName']+'"  workorderid="'+data["id"]+'" uworid="'+data["uworId"]+'"><i class="fas fa-minus-circle orders-svg"></i></span>';
