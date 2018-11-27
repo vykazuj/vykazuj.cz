@@ -258,14 +258,23 @@ class ClientHandler {
     }
     
     function createUserCompanyRel($userId, $companyId, $role){
+        $input["user_id"] = $userId;
+        $input["company_id"] = $companyId;
+        $input["role"] = $role;
         $rownum = $this->database->query("select * from users_company_rel where user_id = ? and company_id = ? and role = ?",$userId, $companyId, $role)->getRowCount();
         if($rownum>0){return true;}else{
-            return $this->database->query("insert into users_company_rel (id, user_id, company_id, role) values (null,?,?,?)",$userId, $companyId, $role);   
+            return $this->database->table("users_company_rel")->insert($input);
+            //return $this->database->query("insert into users_company_rel (id, user_id, company_id, role) values (null,?,?,?)",$userId, $companyId, $role);   
         }
     }
     
     function createUserProjectRel($userId, $projectId, $mdRate){
-        return $this->database->query("insert into users_company_rel (id, user_id, project_id, rel, md_rate) valuse (null,?,?,?)",$userId, $projectId, 'user' ,$mdRate);
+        $input["user_id"] = $userId;
+        $input["project_id"] = $projectId;
+        $input["rel"] = 'user';
+        $input["md_rate"] = $mdRate;
+        //return $this->database->query("insert into users_company_rel (id, user_id, project_id, rel, md_rate) values (null,?,?,?)",$userId, $projectId, 'user' ,$mdRate);
+        return $this->database->table('users_company_rel')->insert($input);
     }
     
     function createNewProject($userId, $clientId){

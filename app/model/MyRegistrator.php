@@ -78,7 +78,7 @@ class MyRegistrator
             for ($i = 0; $i < 10; $i++) {
                 $integrationId = $integrationId.$characters[rand(0, strlen($characters)-1)];
             }
-            //unset($input["agree_ladder"]);                
+            //unset($input["agree_ladder"]);     
             $user["integration_id"] = $integrationId;
             $user["status"] = 'active';
             $user["first_name"] = $input->first_name;
@@ -104,8 +104,13 @@ class MyRegistrator
                 $company["owner_id"] = $user["id"];
                 $companyId = $this->database->table("company")->insert($company);
                 $myClientHandler = new ClientHandler($this->database);
-                $myClientHandler->createNewClient($user["id"]);
+                $newClient = $myClientHandler->createNewClient($user["id"]);
                 $myClientHandler->createUserCompanyRel($user["id"], $companyId, 'owner');
+                $newProject = $myClientHandler->createNewProject($user["id"], $newClient["id"]);
+                $myClientHandler->addParamToProject($newProject["id"], 'status','Status','active');
+                $myClientHandler->addParamToProject($newProject["id"], 'contact','Fakturační kontakt',$newClient["contact"]);
+                $myClientHandler->addParamToProject($newProject["id"], 'email','Fakturační email',$newClient["email"]);
+                //$myClientHandler->createUserProjectRel($user["id"], $newProject["id"], 0);
             }
             catch(\PDOException $e)
             {

@@ -91,9 +91,11 @@ class DiplomHandler {
         $myUserHandler = new MyRegistrator($this->database);
         $records = $myRecordHandler->getRecordsByMonthYearProjectUser($this->month, $this->year, $this->projectId, $this->userId);
         $company = $myClientHandler->getMyCompany($this->userId);
-        $project = $myRecordHandler->getProjectNameByProjectId($this->projectId);
-        //$clientId = $myRecordHandler->getProjectDetail($this->projectId)->client_id;
-        //$client =  $myClientHandler->getMyClient($this->userId, $clientId);
+        $projectName = $myRecordHandler->getProjectNameByProjectId($this->projectId);
+        $projectDetails = $myRecordHandler->getProjectDetails($this->projectId);
+        $projectContact = $myRecordHandler->getProjectParam($this->projectId, 'contact');
+        $clientId = $projectDetails->client_id;
+        $client =  $myClientHandler->getClient($clientId)[0];
         $myDetails = $myUserHandler->getAttributes($this->userId);
         /*
         $rankings = $myGame->getRankings();
@@ -131,7 +133,7 @@ class DiplomHandler {
         $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
         
         $pdf->SetXY(100, 30);
-        $txt = 'Name:';
+        $txt = 'Name: '.$projectContact;
         $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
         
         $pdf->SetXY(100, 35);
@@ -200,7 +202,7 @@ class DiplomHandler {
             $tbl = '<table cellspacing="0" cellpadding="1" border="1">
                         <tr>
                             <td width="160" align="center">'.$record->day.'.'.$record->month.'.'.$record->year.'</td>
-                            <td width="335" align="center">'.$project.'</td>
+                            <td width="335" align="center">'.$projectName.'</td>
                             <td width="75" align="center">'.$record->hours.'</td>
                             <td width="85" align="center">'.$record->hours_over.'</td>
                         </tr>
