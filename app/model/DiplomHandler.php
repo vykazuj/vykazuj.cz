@@ -94,6 +94,8 @@ class DiplomHandler {
         $projectName = $myRecordHandler->getProjectNameByProjectId($this->projectId);
         $projectDetails = $myRecordHandler->getProjectDetails($this->projectId);
         $projectContact = $myRecordHandler->getProjectParam($this->projectId, 'contact');
+        $projectContactRole = $myRecordHandler->getProjectParam($this->projectId, 'contactRole');
+        $projectRole = $myRecordHandler->getProjectParam($this->projectId, 'projectRole');
         $clientId = $projectDetails->client_id;
         $client =  $myClientHandler->getClient($clientId)[0];
         $myDetails = $myUserHandler->getAttributes($this->userId);
@@ -129,7 +131,7 @@ class DiplomHandler {
         $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
         
         $pdf->SetXY(15, 35);
-        $txt = 'Role:';
+        $txt = 'Role:   '.$projectRole;
         $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
         
         $pdf->SetXY(100, 30);
@@ -137,7 +139,7 @@ class DiplomHandler {
         $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
         
         $pdf->SetXY(100, 35);
-        $txt = 'Role:';
+        $txt = 'Role:   '.$projectContactRole;
         $pdf->MultiCell(155, 0, $txt, 0, 'L', 1, 0, '', '', true);
         
         $pdf->SetLineWidth(2.5);
