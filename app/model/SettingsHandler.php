@@ -26,7 +26,15 @@ class SettingsHandler {
     }
 
     function updateMyDetails($userId, $name, $surname, $phone, $email){
-        return $this->database->query('update users set first_name= ?, last_name= ?, phone= ?, email=?  where id = ?',$name, $surname, $phone, $email, $userId);
+        return $this->database->query('UPDATE users set ', [
+            'first_name' => $name,
+            'last_name' => $surname,
+            'phone' => $phone,
+            'email' => $email,]
+            , 'WHERE id = ?', $userId
+        );
+        
+        //return $this->database->query('update users set first_name= ?, last_name= ?, phone= ?, email=?  where id = ?',$name, $surname, $phone, $email, $userId);
     }
 
     function updateMyPassword($userId, $password){
