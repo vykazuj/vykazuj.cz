@@ -184,6 +184,12 @@ class ClientHandler {
         if($rowCount==0){return false;}else{return true;}
     }
     
+    function isAlreadyEmployee($userId, $companyId){
+        $rowCount = $this->database->query("select * from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId)->getRowCount();
+        if($rowCount==0){return false;}else{return true;}
+    }
+    
+    
     function updateClient($clientId, $param, $value){
         $os = array("company_id", "name", "ico","contact", "phone", "email","address");
         if (in_array($param, $os)) {

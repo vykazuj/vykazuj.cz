@@ -92,7 +92,8 @@ class MyRegistrator
             $user["created"]= $objDateTime->format('c');
 
             $company["id"] = null;
-            $company["name"] = $input->first_name.' '.$input->last_name;
+            //$company["name"] = $input->first_name.' '.$input->last_name;
+            $company["name"] = "Moje společnost";
             $company["ico"] = 'ičo';
             $company["address"] = 'adresa';
             
@@ -104,6 +105,7 @@ class MyRegistrator
                 $company["owner_id"] = $user["id"];
                 $companyId = $this->database->table("company")->insert($company);
                 $myClientHandler = new ClientHandler($this->database);
+                $myClientHandler->setPrefCompany($user["id"], $companyId);
                 $newClient = $myClientHandler->createNewClient($user["id"]);
                 $myClientHandler->createUserCompanyRel($user["id"], $companyId, 'owner');
                 $newProject = $myClientHandler->createNewProject($user["id"], $newClient["id"]);

@@ -46,7 +46,11 @@ class SettingsPresenter extends BasePresenter
                 $myObj['code'] = '404';
             }else{
                 /* Existuje už request? */
-                if($myClientHandler->isRequestAlreadySent($this->user->getId(), $userId, 'addEmployeeToCompany')){
+                if($myClientHandler->isAlreadyEmployee($userId, $companyId)){
+                    $myObj = null;
+                    $myObj['result'] = 'NOT OK';
+                    $myObj['code'] = '403';
+                }elseif($myClientHandler->isRequestAlreadySent($this->user->getId(), $userId, 'addEmployeeToCompany')){
                     $myObj = null;
                     $myObj['result'] = 'NOT OK';
                     $myObj['code'] = '405';
@@ -182,7 +186,6 @@ class SettingsPresenter extends BasePresenter
 
             public function actionUpdateMyDetails($name, $surname, $phone, $email){
                 $mySettingsHandler = new \SettingsHandler($this->database);
-                
                 $myObj = null;
                 try
                     { 
