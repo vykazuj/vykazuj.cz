@@ -148,7 +148,9 @@ class ClientsPresenter extends BasePresenter
                 $client = $myClientHandler->getClient($clientId);
                 $myClientHandler->addParamToProject($project["id"], 'status','Status','active');
                 $myClientHandler->addParamToProject($project["id"], 'contact','Fakturační kontakt',$client[0]["contact"]);
+                $myClientHandler->addParamToProject($project["id"], 'contactRole','Role fakturačního kontaktu','stavby vedoucí');
                 $myClientHandler->addParamToProject($project["id"], 'email','Fakturační email',$client[0]["email"]);
+                $myClientHandler->addParamToProject($project["id"], 'projectRole','Moje projektová role','dělník');
                 $myObj['data'] = $myClientHandler->getProject($project["id"]);
             }else{
                 $myObj['result'] = 'NOT OK';
