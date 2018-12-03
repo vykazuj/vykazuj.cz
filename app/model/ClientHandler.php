@@ -43,6 +43,10 @@ class ClientHandler {
         return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from client cl, company co, project pr, project_param pp where pp.project_id = pr.id and pr.client_id = cl.id and cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
     }
     
+    function getProjectWithParameters($projectId){
+        return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from project pr, project_param pp where pp.project_id = pr.id and pr.id = ?',$projectId);
+    }
+    
     function getMyClientOrdersWithParameters($clientId){
         return $this->database->fetchAll('select wo.status as status, wo.amount as amount, u.id as userId, u.first_name as firstName, u.last_name as lastName, uwor.md_rate as mdRate, uwor.status as uworStatus, wo.name as name, wo.id as id, uwor.id as uworId from '
                 . ' client cl '
