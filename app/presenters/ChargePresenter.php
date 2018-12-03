@@ -116,11 +116,18 @@ class ChargePresenter extends BasePresenter
             $myObj2['result'] = 'OK';
             $myObj2['code'] = '0';
             $days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+                            
+            $reg_holidays = array('1.1','1.5','8.5','5.7','6.7','28.9','28.10','17.11','24.12','25.12','26.12');
+            $easter_holidays =  array('19.4.2019','22.4.2019','19.4.2018','19.4.2018');            
+
+        
             for($i=1; $i<=$days; $i++){
                 try
                         { 
                             $dayOfWeek = date("l", mktime(0,0,0,$month,$i,$year));
-                            if($dayOfWeek != "Sunday" && $dayOfWeek != "Saturday"){
+                            $reg_holiday = $i.".".$month;
+                            $easter_holiday = $i.".".$month.".".$year;
+                            if($dayOfWeek != "Sunday" && $dayOfWeek != "Saturday" && !in_array($reg_holiday, $reg_holidays) && !in_array($easter_holiday, $easter_holidays)){
                                 $myObj['day'] = $i;
                                 $myRecordHandler->insertNewRecord($myObj); 
                             }
