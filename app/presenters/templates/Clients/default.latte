@@ -325,16 +325,16 @@
         function addClientFirstRow(data)   {
             var row = '<div class="row clients-row project-first-row" projectid="'+data["id"]+'">'
                             +'<div class="col-12 text-left">'
-                                +'<small>'
-                                    //+'<span class="add_project" projectid="'+data["id"]+'"><i class="fas fa-plus-circle fa-1x clients-svg"></i></span> '
-                                    +'<span class="delete_project" projectid="'+data["id"]+'"><i class="fas fa-trash-alt fa-1x clients-svg"></i></span> '
-                                +'</small>'                        
+                                //+'<small>'
+                                //+'<span class="add_project" projectid="'+data["id"]+'"><i class="fas fa-plus-circle fa-1x clients-svg"></i></span> '
+                                //+'<span class="delete_project" projectid="'+data["id"]+'"><i class="fas fa-trash-alt fa-1x clients-svg"></i></span> '
+                                //+'</small>'                        
                                 +'<input type="text" value="'+data["name"]+'" projectid="'+data["id"]+'" finder="name" class="project_labels_all font-weight-semibold">'
                         +'</div>';     
             
             $("#clients-row-head").after(row);          
-            var len = (1+11*data["name"].length)+'px';
-            $("input.project_labels_all[projectid='"+data["id"]+"']").css("width",len);
+            //var len = (1+11*data["name"].length)+'px';
+            //$("input.project_labels_all[projectid='"+data["id"]+"']").css("width",len);
         }    
                
         function addClientRow(data){
@@ -353,8 +353,8 @@
             //$("#clients-row-head").after(row);          
             $("div.project-first-row[projectid='"+data["id"]+"']").append(row); 
             var len = (1+11*data["name"].length)+'px';
-            $("input.project_labels_all[projectid='"+data["id"]+"']").css("width",len);
-            $(".project_param_select_labels_all[projectparamid='"+data["param_id"]+"']").val(data["value"]);
+            //$("input.project_labels_all[projectid='"+data["id"]+"']").css("width",len);
+            //$(".project_param_select_labels_all[projectparamid='"+data["param_id"]+"']").val(data["value"]);
         }
         
         function createNewWorkOrder(){
@@ -762,7 +762,7 @@ input.project_labels_all, input.client_labels_all, .project_param_labels_all{
     border-radius: 5px;
     border: 0px solid white;
     padding-left: 10px;
-    width: auto;
+    width: 100%;
 }
 
 .project_param_labels_all{
