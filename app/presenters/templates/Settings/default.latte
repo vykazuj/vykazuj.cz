@@ -321,6 +321,11 @@
         var home_url = {$basePath};  
         initSharedFunctions(home_url);
         getMe();
+        
+        function validateMail(email){
+            var re = /\S+@\S+[.]\S+/;
+            return re.test(email);
+        }
 
         function getMe(){
                  $.ajax(
@@ -348,7 +353,7 @@
               }
             });  
         }
-
+        
         function updateMyDetails(name, surname, phone, email){
             $("#save-client").text("Ukládám...");
             
@@ -580,6 +585,7 @@
                 let surname = $("#name_label2").val();
                 let phone = ''+$("#name_label5").val();
                 let email = $("#name_label6").val();
+                if(validateMail(email)){}else{ alert("Zadaný email je neplatný."); return false; }
                 updateMyDetails(name, surname, phone, email);
                 
                 if(password !== "" ||  password2 !== ""){
