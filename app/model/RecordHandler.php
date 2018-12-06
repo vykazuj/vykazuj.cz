@@ -71,8 +71,8 @@ class RecordHandler {
         return $this->database->fetchField("select value from project_param where project_id = ? and param_id = ? ",$projectId,$param);
     }
     
-    function getMyChargeableProjects($userId){
-        return $this->database->fetchAll('select p.* from project p, users_project_rel upr, project_param pp where p.id = upr.project_id and p.id = pp.project_id and pp.param_id = ? and pp.value = ? and upr.user_id = ? and upr.rel = ?','status','active',$userId,'user');
+    function getMyChargeableProjects($userId, $companyId){
+        return $this->database->fetchAll('select p.* from project p, users_project_rel upr, project_param pp, client cl, company co where co.id = cl.company_id and cl.id = p.client_id and p.id = upr.project_id and p.id = pp.project_id and pp.param_id = ? and pp.value = ? and upr.user_id = ? and upr.rel = ? and co.id= ? ','status','active',$userId,'user',$companyId);
     }
     
     function isMyChargeableProject($projectId, $userId){

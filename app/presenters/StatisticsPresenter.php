@@ -25,7 +25,7 @@ class StatisticsPresenter extends BasePresenter
             //$this->user->login(3);
             $myRecordHandler = new \RecordHandler($this->database);
             $myClientHandler = new \ClientHandler($this->database);
-            $this->template->myChargeableProjects = $myRecordHandler->getMyChargeableProjects($this->user->getId());
+                       
             /*
             $this->template->activeMonth = 1;
             $this->template->activeYear = 2018;
@@ -37,6 +37,8 @@ class StatisticsPresenter extends BasePresenter
             if(isset($companySessions->id))
                 { $companyId = $companySessions->id; }
             $companySessions->id = $companyId;
+            
+            $this->template->myChargeableProjects = $myRecordHandler->getMyChargeableProjects($this->user->getId(), $companyId);
             
             if(!isset($dateSessions->year))
                 {$dateSessions->year = $myRecordHandler->getMaxChargedYear($this->user->getId());}

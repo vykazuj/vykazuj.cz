@@ -124,7 +124,14 @@ class SettingsPresenter extends BasePresenter
                 $myObj['code'] = '405';
             }else{
                 $companyId = $myClientHandler->getRequestParamValue($requestId, 'companyId');
+                
                 $myClientHandler->createUserCompanyRel($this->user->getId(), $companyId, 'user');
+                
+                $vacationProjectId = $myClientHandler->getCompanySpecialProjectId($companyId, 'vacation');
+                $myClientHandler->createUserProjectRel($this->user->getId(), $vacationProjectId, 0);
+                
+                $sickProjectId = $myClientHandler->getCompanySpecialProjectId($companyId, 'sick');
+                $myClientHandler->createUserProjectRel($this->user->getId(), $sickProjectId, 0);
             }
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));        

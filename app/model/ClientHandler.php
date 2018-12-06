@@ -264,15 +264,37 @@ class ClientHandler {
         $client["email"] = 'Zadejte email';
         $client["contact"] = 'Zadejte kontaktní osobu';
         $client["address"] = 'Zadejte adresa';
+        $client["special_flag"] = '';
         return $this->database->table('client')->insert($client);
+    }
+    
+    function createNewDummyClient($userId){
+        $company = $this->getMyCompany($userId);
+        $companyId = $company["id"];
+        $client["id"] = null;
+        $client["company_id"] = $companyId;
+        $client["name"] = 'Dovolená a Sickdays';
+        $client["ico"] = '';
+        $client["phone"] = '';
+        $client["email"] = '';
+        $client["contact"] = '';
+        $client["address"] = '';
+        $client["special_flag"] = 'vacation';
+        return $this->database->table('client')->insert($client);
+    }
+    
+    function getCompanySpecialProjectId($companyId, $specialFlag){
+        return $this->database->fetchField("select p.id from project p, client cl where p.client_id = cl.id and p.special_flag = ? and cl.company_id = ? ",$specialFlag, $companyId);
     }
     
     function createUserCompanyRel($userId, $companyId, $role){
         $input["user_id"] = $userId;
         $input["company_id"] = $companyId;
         $input["role"] = $role;
-        $rownum = $this->database->query("select * from users_company_rel where user_id = ? and company_id = ? and role = ?",$userId, $companyId, $role)->getRowCount();
-        if($rownum>0){return true;}else{
+        $rownum = $this->database->query("select * from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId)->getRowCount();
+        if($rownum>0){
+            return $this->database->query("UPDATE users_company_rel set role = ? where user_id = ? and company_id = ? ", $role, $userId, $companyId);
+        }else{
             return $this->database->table("users_company_rel")->insert($input);
             //return $this->database->query("insert into users_company_rel (id, user_id, company_id, role) values (null,?,?,?)",$userId, $companyId, $role);   
         }
@@ -284,7 +306,24 @@ class ClientHandler {
         $input["rel"] = 'user';
         $input["md_rate"] = $mdRate;
         //return $this->database->query("insert into users_company_rel (id, user_id, project_id, rel, md_rate) values (null,?,?,?)",$userId, $projectId, 'user' ,$mdRate);
-        return $this->database->table('users_company_rel')->insert($input);
+        return $this->database->table('users_project_rel')->insert($input);
+    }
+    
+    function createNewProjectSpecial($userId, $clientId,$name,$flag){
+        $project["id"] = null;
+        $project["client_id"] = $clientId;
+        $project["name"] = $name;
+        $project["note"] = $name;
+        $project["special_flag"] = $flag;
+        $row = $this->database->table('project')->insert($project);
+        
+        $userProjectRel["id"] = null;
+        $userProjectRel["user_id"] = $userId;
+        $userProjectRel["project_id"] = $row["id"];
+        $userProjectRel["rel"] = 'user';
+        $row2 = $this->database->table('users_project_rel')->insert($userProjectRel);
+        
+        return $row->toArray();
     }
     
     function createNewProject($userId, $clientId){
