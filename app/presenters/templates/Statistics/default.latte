@@ -31,19 +31,23 @@
                 
                 <div class="container container-inner timetable" id="my-charged-records-table">
                         <div class="row" id="my-charged-records-table-first">
-                            <div class="col-6 font-weight-semibold text-left">
+                            <div class="col-4 font-weight-semibold text-left nopadding">
                                  <span class="big-screen">Jméno:</span>
                                  <span class="small-screen">Jméno:</span>
                             </div>
-                            <div class="col-2 font-weight-semibold">
+                            <div class="col-2 font-weight-semibold nopadding">
                                  <span class="big-screen">Hodiny:</span>
                                  <span class="small-screen">Hod.</span>
                             </div>
-                            <div class="col-2 font-weight-semibold">
+                            <div class="col-2 font-weight-semibold nopadding">
                                  <span class="big-screen">Přesčas:</span>
                                  <span class="small-screen">Přes.</span>
                             </div>
-                            <div class="col-2 font-weight-semibold">
+                            <div class="col-2 font-weight-semibold nopadding">
+                                 <span class="big-screen">Sick day.:</span>
+                                 <span class="small-screen">Sick.</span>
+                            </div>
+                            <div class="col-2 font-weight-semibold nopadding">
                                  <span class="big-screen">Dovolená:</span>
                                  <span class="small-screen">Dov.</span>
                             </div>
@@ -136,19 +140,25 @@
     {          
         
         var actualMonth = {$actualMonth};
-        var actualYear = {$actualYear};
+        var actualYear = {$actualYear};     
         var home_url = {$basePath};  
-        initSharedFunctions(home_url);
+        var active_page = {$activePage};
+        $.getScript(home_url+'/js/init_scripts.js', function()
+        {
+            initSharedFunctions(home_url, active_page);
+        });
         
         function addRowEmployeeChargesOverview(input){
         
-            var row ='<div class="row my-charged-records-table-neco"><div class="col-6 text-left">'
+            var row ='<div class="row my-charged-records-table-neco"><div class="col-4 text-left nopadding">'
                 +input['firstName']+' '+input['lastName']+
-                '</div><div class="col-2">'
+                '</div><div class="col-2 nopadding">'
                 +input['hours']+
-                '</div><div class="col-2">'
+                '</div><div class="col-2 nopadding">'
                 +input['hoursOver']+
-                '</div><div class="col-2">'
+                '</div><div class="col-2 nopadding">'
+                +input['sick']+
+                '</div><div class="col-2 nopadding">'
                 +input['vacation']+'</div></div>';
             $("#my-charged-records-table-first").after(row);
                         
@@ -171,7 +181,7 @@
                                             for (i in raw_data)
                                             {
                                               //alert(raw_data[i]['firstName']+' '+raw_data[i]['lastName']+', '+raw_data[i]['hours']+'h + '+raw_data[i]['hoursOver']+'h');
-                                              raw_data[i]['vacation'] = 42;
+                                              //raw_data[i]['vacation'] = 42;
                                               addRowEmployeeChargesOverview(raw_data[i]);
                                             }  
                                         }

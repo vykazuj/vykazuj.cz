@@ -12,7 +12,7 @@
         
         <div class="container timetable-blank">
           <ul class="nav nav-pills" id="my-clients-header">
-            <li class="client-link" clientid="1" finder="my_settings">Moje nastavení</li>
+            <li class="client-link active" clientid="1" finder="my_settings">Moje nastavení</li>
             <li class="client-link" clientid="1" finder="requests">Žádosti</li>
             <li class="client-link" clientid="1" finder="charges">Výkazy</li>
             <li class="client-link" clientid="1" finder="employees">Správa zaměstnanců</li>
@@ -317,9 +317,14 @@
   <script>
     
     $(document).ready(function() 
-    {          
+    {               
         var home_url = {$basePath};  
-        initSharedFunctions(home_url);
+        var active_page = {$activePage};
+        $.getScript(home_url+'/js/init_scripts.js', function()
+        {
+            initSharedFunctions(home_url, active_page);
+        });
+        
         getMe();
         
         function validateMail(email){
@@ -612,8 +617,12 @@
                     $(this).css("display","none");
                   });
                $(".settings-tabs[finder='"+finder+"']").css("display","block");
+            $('.client-link').removeClass('active');
+            $(this).addClass('active');
               
             });
+            
+        
             
             $(".settings-tabs[finder='my_settings']").css("display","block");
             

@@ -228,7 +228,11 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
     $(document).ready(function() 
     {          
         var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 143 */ ?>;  
-        initSharedFunctions(home_url);
+        var active_page = <?php echo LR\Filters::escapeJs($activePage) /* line 144 */ ?>;
+        $.getScript(home_url+'/js/init_scripts.js', function()
+        {
+            initSharedFunctions(home_url, active_page);
+        });
         
         function daysInMonth (month, year) {
             return new Date(year, month, 0).getDate();
@@ -693,9 +697,9 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
         });
 
         var daysOfWeek = ["Ne","Po","Út","St","Čt","Pá","So"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 609 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 610 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 611 */ ?>;  
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 613 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 614 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 615 */ ?>;  
         getMyProjects();
         //loadCalendar(actualMonth, actualYear); 
         //loadActualRecords(actualMonth, actualYear);

@@ -25,8 +25,14 @@ class ChargePresenter extends BasePresenter
         
         public function actionDefault(){
             //$this->user->login(3);
+            
+            $myClientHandler = new \ClientHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            $companyId = $myClientHandler->getPrefCompany($this->user->getId());
+            $companySessions->id = $companyId;
+            
             $myRecordHandler = new \RecordHandler($this->database);
-            $this->template->myChargeableProjects = $myRecordHandler->getMyChargeableProjects($this->user->getId());
+            $this->template->myChargeableProjects = $myRecordHandler->getMyChargeableProjects($this->user->getId(), $companyId);
             /*
             $this->template->activeMonth = 1;
             $this->template->activeYear = 2018;
@@ -42,10 +48,6 @@ class ChargePresenter extends BasePresenter
                 {$dateSessions->month = $myRecordHandler->getMaxChargedMonthOfTheYear($this->user->getId(), $dateSessions->year);}
             if($dateSessions->month<1 || $dateSessions->month>12 || $dateSessions->month==""){ $dateSessions->month = date('n');}
             
-            $myClientHandler = new \ClientHandler($this->database);
-            $companySessions = $this->getSession('Company');
-            $companyId = $myClientHandler->getPrefCompany($this->user->getId());
-            $companySessions->id = $companyId;
         
             $this->template->actualMonth = $dateSessions->month;  
             $this->template->actualYear = $dateSessions->year;    
@@ -55,10 +57,15 @@ class ChargePresenter extends BasePresenter
         public function actionGetChargeRecord($month, $year){
             $myRecordHandler = new \RecordHandler($this->database);
             
+            $myClientHandler = new \ClientHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            $companyId = $myClientHandler->getPrefCompany($this->user->getId());
+            $companySessions->id = $companyId;
+            
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
-            $myObj['data'] = $myRecordHandler->getRecordsByMonthYearUser($month, $year, $this->user->getId());
+            $myObj['data'] = $myRecordHandler->getRecordsByMonthYearUser($month, $year, $this->user->getId(), $companyId);
             
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));
@@ -283,11 +290,17 @@ class ChargePresenter extends BasePresenter
         
         public function actionGetMyChargeableProjects(){
             
+            
+            $myClientHandler = new \ClientHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            $companyId = $myClientHandler->getPrefCompany($this->user->getId());
+            $companySessions->id = $companyId;
+            
             $myRecordHandler = new \RecordHandler($this->database);
             $myObj = null;
                 try
                     { 
-                    $row = $myRecordHandler->getMyChargeableProjects($this->user->getId());
+                    $row = $myRecordHandler->getMyChargeableProjects($this->user->getId(), $companyId);
                     $myObj['result'] = 'OK';
                     $myObj['code'] = '0';
                     $myObj['data'] = $row;

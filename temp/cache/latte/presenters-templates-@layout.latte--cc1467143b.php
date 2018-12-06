@@ -111,7 +111,7 @@ class Templatecc1467143b extends Latte\Runtime\Template
         <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 26 */ ?>/js/bootstrap.min.js"></script>
 	<script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 27 */ ?>/js/Chart.js"></script>
         <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 28 */ ?>/js/fontawesome/svg-with-js/js/fontawesome-all.js"></script>
-        <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 29 */ ?>/js/init_scripts.js"></script>
+        <!--<script src="<?php echo LR\Filters::escapeHtmlComment($basePath) /* line 29 */ ?>/js/init_scripts.js"></script> -->
 
 <?php
 	}

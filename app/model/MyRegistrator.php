@@ -106,12 +106,26 @@ class MyRegistrator
                 $companyId = $this->database->table("company")->insert($company);
                 $myClientHandler = new ClientHandler($this->database);
                 $myClientHandler->setPrefCompany($user["id"], $companyId);
-                $newClient = $myClientHandler->createNewClient($user["id"]);
                 $myClientHandler->createUserCompanyRel($user["id"], $companyId, 'owner');
+                /*
+                $newClient = $myClientHandler->createNewClient($user["id"]);
                 $newProject = $myClientHandler->createNewProject($user["id"], $newClient["id"]);
                 $myClientHandler->addParamToProject($newProject["id"], 'status','Status','active');
                 $myClientHandler->addParamToProject($newProject["id"], 'contact','Fakturační kontakt',$newClient["contact"]);
                 $myClientHandler->addParamToProject($newProject["id"], 'email','Fakturační email',$newClient["email"]);
+                */
+                $newDummyClient = $myClientHandler->createNewDummyClient($user["id"]);
+                $newProject2 = $myClientHandler->createNewProjectSpecial($user["id"], $newDummyClient["id"], "Regulérní dovolená", "vacation");
+                $myClientHandler->addParamToProject($newProject2["id"], 'status','Status','active');
+                $myClientHandler->addParamToProject($newProject2["id"], 'contact','Fakturační kontakt','');
+                $myClientHandler->addParamToProject($newProject2["id"], 'email','Fakturační email','no_report@vykazuj.cz');
+                
+                $newProject3 = $myClientHandler->createNewProjectSpecial($user["id"], $newDummyClient["id"], "Neplacená dovolená", "sick");
+                $myClientHandler->addParamToProject($newProject3["id"], 'status','Status','active');
+                $myClientHandler->addParamToProject($newProject3["id"], 'contact','Fakturační kontakt','');
+                $myClientHandler->addParamToProject($newProject3["id"], 'email','Fakturační email','no_report@vykazuj.cz');
+                               
+                
                 //$myClientHandler->createUserProjectRel($user["id"], $newProject["id"], 0);
             }
             catch(\PDOException $e)
