@@ -23,17 +23,67 @@ class RecordHandler {
         $this->database->query('DELETE from record where id = ?',$recordId); 
     }
     
-    function getRecordsByMonthYearUser($month, $year, $userId){
-        return $this->database->fetchAll('select r.*, p.name as projectName from record r, project p where p.id = r.project_id and r.user_id = ? and r.year = ? and r.month = ? ORDER by day ASC',$userId, $year, $month);
+    function getRecordsByMonthYearUser($month, $year, $userId, $companyId){
+        return $this->database->fetchAll('select r.*, p.name as projectName from record r, project p, client cl, company co where co.id = cl.company_id and cl.id = p.client_id and p.id = r.project_id and r.user_id = ? and r.year = ? and r.month = ? and co.id = ? ORDER by day ASC',$userId, $year, $month, $companyId);
     }
     
     function getEmployeeChargesOverview($month, $year, $companyId){
-        return $this->database->fetchAll(' select u.id, u.first_name as firstName, u.last_name as lastName, sum(hours) as hours, sum(hours_over) as hoursOver'
-                . ' from users u, record r, project p, client cl, company c '
-                . ' where u.id = r.user_id and p.id = r.project_id and p.client_id = cl.id and cl.company_id = c.id and c.id = ? and r.year = ? and r.month = ? '
-                . ' GROUP BY u.id, u.first_name, u.last_name ',$companyId, $year, $month);
+        return $this->database->fetchAll(' select '
+                . ' u.id, u.first_name as firstName, '
+                . ' u.last_name as lastName, '
+                . ' sum(case when rec1.special_flag = \'\' then rec1.hours else 0 end ) as hours, '
+                . ' sum(case when rec1.special_flag = \'\' then rec1.hoursOver else 0 end ) as hoursOver, '
+                . ' sum(case when rec1.special_flag = \'vacation\' then rec1.hours else 0 end ) as vacation, '
+                . ' sum(case when rec1.special_flag = \'sick\' then rec1.hours else 0 end ) as sick '
+                . ' from '
+                . 'company c '
+                . 'join client cl on cl.company_id = c.id '
+                . 'left join (select '
+                . '             r.user_id as user_id, '
+                . '             p.client_id as client_id, '
+                . '             p.special_flag as special_flag, '
+                . '             sum(r.hours) as hours, '
+                . '             sum(r.hours_over) as hoursOver '
+                . '           from '
+                . '             project p, '
+                . '             record r '
+                . '           where '
+                . '             p.id = r.project_id '
+                . '             and r.year = ? '
+                . '             and r.month = ? '
+                . '           group by r.user_id, p.client_id, p.special_flag '
+                . '         ) rec1 '
+                . '             on rec1.client_id = cl.id '
+                
+                . ' join users u on rec1.user_id = u.id '
+                . ' where '
+                . ' cl.company_id = c.id '
+                . 'and c.id = ? '
+                . 'group by u.id, u.first_name, u.last_name '
+                , $year, $month, $companyId);
     }
     
+    /*
+    function getEmployeeChargesOverview($month, $year, $companyId){
+        return $this->database->fetchAll(' select u.id, u.first_name as firstName, u.last_name as lastName, sum(hours) as hours, sum(hours_over) as hoursOver'
+                . ' from '
+                . 'users u, '
+                . 'record r, '
+                . 'project p, '
+                . 'client cl, '
+                . 'company c '
+                . ' where '
+                . 'u.id = r.user_id '
+                . 'and p.id = r.project_id '
+                . 'and p.special_flag = ? '
+                . 'and p.client_id = cl.id '
+                . 'and cl.company_id = c.id '
+                . 'and c.id = ? '
+                . 'and r.year = ? '
+                . 'and r.month = ? '
+                . ' GROUP BY u.id, u.first_name, u.last_name ','',$companyId, $year, $month);
+    }
+    */
     function getRecordsByMonthYearProjectUser($month, $year, $project, $userId){
         return $this->database->fetchAll('select r.*, p.name as projectName from record r, project p where p.id = r.project_id and r.user_id = ? and r.year = ? and r.month = ? and r.project_id = ? ORDER by day ASC',$userId, $year, $month, $project);
     }

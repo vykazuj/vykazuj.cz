@@ -317,10 +317,14 @@
   <script>
     
     $(document).ready(function() 
-    {          
+    {               
         var home_url = {$basePath};  
-        initSharedFunctions(home_url);
-        alert('as');
+        var active_page = {$activePage};
+        $.getScript(home_url+'/js/init_scripts.js', function()
+        {
+            initSharedFunctions(home_url, active_page);
+        });
+        
         getMe();
         
         function validateMail(email){
@@ -454,7 +458,7 @@
                    success: function(data)
                         { var json = $.parseJSON(data); 
                             if(json.result==='OK'){
-                                //loadAllRequests();
+                                loadAllRequests();
                             }else{
                                 if(json.code==='405'){ alert('Požadavek je již vyřízený.');}
                             }

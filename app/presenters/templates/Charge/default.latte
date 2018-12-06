@@ -141,7 +141,11 @@
     $(document).ready(function() 
     {          
         var home_url = {$basePath};  
-        initSharedFunctions(home_url);
+        var active_page = {$activePage};
+        $.getScript(home_url+'/js/init_scripts.js', function()
+        {
+            initSharedFunctions(home_url, active_page);
+        });
         
         function daysInMonth (month, year) {
             return new Date(year, month, 0).getDate();

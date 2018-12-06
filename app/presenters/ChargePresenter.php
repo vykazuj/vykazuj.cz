@@ -57,10 +57,15 @@ class ChargePresenter extends BasePresenter
         public function actionGetChargeRecord($month, $year){
             $myRecordHandler = new \RecordHandler($this->database);
             
+            $myClientHandler = new \ClientHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            $companyId = $myClientHandler->getPrefCompany($this->user->getId());
+            $companySessions->id = $companyId;
+            
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
-            $myObj['data'] = $myRecordHandler->getRecordsByMonthYearUser($month, $year, $this->user->getId());
+            $myObj['data'] = $myRecordHandler->getRecordsByMonthYearUser($month, $year, $this->user->getId(), $companyId);
             
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));

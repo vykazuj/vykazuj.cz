@@ -48,13 +48,13 @@
                 });
             }
             
-            function initSharedFunctions(home_url){
+            function initSharedFunctions(home_url, active_page){
                 
                 actionGetMyChargableCompanies(home_url);
-            
                 $("#company-select").change(function(){
                     var companyId = $(this).val();
                     changeActiveCompany(companyId, home_url);
+                    window.location.replace(home_url+'/'+active_page);
                 });
             }
             
