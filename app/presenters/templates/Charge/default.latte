@@ -38,7 +38,15 @@
             <div id="progressContainer">
                                
             </div>   
-                
+          
+            {ifset $flashes}
+                <div n:foreach="$flashes as $flash">
+                    <span>
+                        {$flash->message}
+                    </span>
+                </div>
+            {/ifset}
+            
                 <div class="container container-inner timetable" id="my-charged-records-table">
                         <div class="row" id="my-charged-records-table-first">
                             <div class="col-lg-8">
