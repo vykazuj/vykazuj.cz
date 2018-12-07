@@ -14,7 +14,13 @@
         
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
-            <li><a href="#" id="yearPick">2018</a></li>
+            <li id="liPickYear">
+                <select class="client_not_name_label" id="yearPick">
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2019">2020</option>
+                </select>
+            </li>
             <li class="monthLink{if $actualMonth==1} active{/if}" month="1">Leden</li>
             <li class="monthLink{if $actualMonth==2} active{/if}" month="2">Únor</a></li>
             <li class="monthLink{if $actualMonth==3} active{/if}" month="3">Březen</a></li>
@@ -250,20 +256,20 @@
         }
 
         function bulkRecors(projectId, hours){
-            var year = Number($("#yearPick").text());
             
             $.ajax(
                 {
 
                    type: 'GET',
-                   url: home_url+'/charge/bulk-records?hours='+hours+'&projectId='+projectId+'&month='+actualMonth+'&year='+year,
+                   url: home_url+'/charge/bulk-records?hours='+hours+'&projectId='+projectId+'&month='+actualMonth+'&year='+actualYear,
                    dataType: 'json',
                    cache: false,
                    success: function(data)
                         {
+                            deleteActualRecors();
                             var json = $.parseJSON(data); 
                             if(json.result==='OK'){
-                               fillMeCalendar(actualMonth, year);
+                               fillMeCalendar(actualMonth, actualYear);
                             }else{
                                 alert(json.code);
                             }
@@ -300,7 +306,7 @@
                                 });
                             }else{
                                 
-                                var year = Number($("#yearPick").text());
+                                var year = Number($("#yearPick").val());
                                 var day = Number($(this).parent().children("div.rowDay").text());
                                 let dayName =$(this).parent().children("div.rowDayOfWeek").text();
                                 $.ajax(
@@ -522,8 +528,8 @@
                                                                                           <li>Hodiny: <a id ="totalHours"'+i+'>'+hoursSum(i)+' '+'h</a></li>\n\
                                                                                           <li>Přesčas: <a id ="totalHoursOver">'+hoursSumOver(i)+' '+'h</a></li>\n\
                                                                                           <li>Faktura celkem: 1 000 Kč</li>\n\
-                                                                                          <li><a href="'+home_url+'/charge/create-timesheet?year=2018&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0" target="_blank">Timesheet</a></li>\n\
-                                                                                          <li><a href="'+home_url+'/charge/send-timesheet?year=2018&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0">Odeslat fakturu</a></li>\n\
+                                                                                          <li><a href="'+home_url+'/charge/create-timesheet?year='+actualMonth+'&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0" target="_blank">Timesheet</a></li>\n\
+                                                                                          <li><a href="'+home_url+'/charge/send-timesheet?year='+actualMonth+'&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0">Odeslat fakturu</a></li>\n\
                                                                                       </ul> </br>');
                                                 }               
                                             }
@@ -531,7 +537,15 @@
         
                 
         //Posrane je to posrane
-        
+           
+
+        function deleteActualRecors(){               
+            $.each($("#my-charged-records-table-first").nextAll(), 
+                    function (){ 
+                        $(this).remove();}
+                );
+
+        }
         function fillMeCalendar(month, year){ 
             $.ajax(
                     {
@@ -546,6 +560,7 @@
                                         {  
                                         let days = daysInMonth(month, year); 
                                         let hrouda = 0;   
+                                        deleteActualRecors();
                                         for(var i=1; i<=days;i++){
                                             var date = new Date(month+'/'+i+'/'+year);
                                             var dayName = daysOfWeek[date.getDay()];
@@ -579,108 +594,36 @@
                             }
                     }
                 )
-        }        
-
-        function deleteActualRecors(){               
-            $.each($("#my-charged-records-table-first").nextAll(), 
-                    function (){ 
-                        $(this).remove();}
-                );
-
-        }
+        }     
       
         $("li.monthLink").click(function(){
             var newMonth = $(this).attr('month');
-            deleteActualRecors();
-            //loadCalendar(newMonth, 2018);
-            fillMeCalendar(newMonth, 2018);
-            //loadActualRecords(newMonth, 2018);
+            fillMeCalendar(newMonth, actualYear);
             $('li.active').removeClass('active');
             $(this).addClass('active');
             actualMonth = newMonth;
         });
         
         $("#preFillButton").click(function (){
-            deleteActualRecors();
             projectId = $("#my-chargeable-projects-bulk").val();
             hours = $("#my-hours-bulk").val();
             bulkRecors(projectId, hours);         
             
         });
 
+        
         var daysOfWeek = ["Ne","Po","Út","St","Čt","Pá","So"];
         var actualMonth = {$actualMonth};
         var actualYear = {$actualYear};
         var home_url = {$basePath};  
         getMyProjects();
-        //loadCalendar(actualMonth, actualYear); 
-        //loadActualRecords(actualMonth, actualYear);
-        //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
-       // addChargedRow('St', '12','8','0','asd')   ;
-       
-                                
-               /*      new Chart(
-                document.getElementById("hours-chart"),
-                {   "type":"doughnut",
-                    "data":
-                            {"labels":["Klasické hodiny","Přesčas","Víkend"],
-                             "datasets":[{
-                                  "label":"Hodin:",
-                                  "data":[150, 10, 20],
-                                  "backgroundColor":["#D3155B","#cccdce","E52428"]
-                                 }]
-                             },
-                    "options":{
-                            legend:{
-                                "display": false
-                            },
-                            "cutoutPercentage":"90"
-                    }
-                }
-            );
-    
-
-            new Chart(
-                document.getElementById("hours-chart2"),
-                {   "type":"doughnut",
-                    "data":
-                            {"labels":["Klasické hodiny","Přesčas","Víkend"],
-                             "datasets":[{
-                                  "label":"Hodin:",
-                                  "data":[10, 30, 40],
-                                  "backgroundColor":["#D3155B","#cccdce","E52428"]
-                                 }]
-                             },
-                    "options":{
-                            legend:{
-                                "display": false
-                            },
-                            "cutoutPercentage":"90"
-                    }
-                }
-            );
-    
-
-            new Chart(
-                document.getElementById("hours-chart3"),
-                {   "type":"doughnut",
-                    "data":
-                            {"labels":["Klasické hodiny","Přesčas","Víkend"],
-                             "datasets":[{
-                                  "label":"Hodin:",
-                                  "data":[50, 40, 30],
-                                  "backgroundColor":["#D3155B","#cccdce","E52428"]
-                                 }]
-                             },
-                    "options":{
-                            legend:{
-                                "display": false
-                            },
-                            "cutoutPercentage":"90"
-                    }
-                }
-            );
-           */
+     
+        $("#yearPick").change(function(){
+            actualYear = $(this).val();
+            fillMeCalendar(actualMonth, actualYear);
+            //fillEmployeeChargesOverview(actualMonth, actualYear);
+            alert(actualYear);
+        });
               function progress()
         {
             

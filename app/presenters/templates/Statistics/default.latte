@@ -10,7 +10,13 @@
         
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
-            <li><a href="#" id="yearPick">2018</a></li>
+            <li id="liPickYear">
+                <select class="client_not_name_label" id="yearPick">
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2019">2020</option>
+                </select>
+            </li>
             <li class="monthLink{if $actualMonth==1} active{/if}" month="1">Leden</li>
             <li class="monthLink{if $actualMonth==2} active{/if}" month="2">Únor</a></li>
             <li class="monthLink{if $actualMonth==3} active{/if}" month="3">Březen</a></li>
@@ -164,6 +170,7 @@
                         
     }
         
+        
         function fillEmployeeChargesOverview(month, year){ 
             $(".my-charged-records-table-neco").remove();
             $.ajax(
@@ -197,13 +204,19 @@
         $("li.monthLink").click(function(){
             var newMonth = $(this).attr('month');
             $(".my-charged-records-table-neco").remove();
-            //loadCalendar(newMonth, 2018);
-            fillEmployeeChargesOverview(newMonth, 2018);
-            //loadActualRecords(newMonth, 2018);
+
+            fillEmployeeChargesOverview(newMonth, actualYear);
+
             $('li.active').removeClass('active');
             $(this).addClass('active');
             actualMonth = newMonth;
         });
+              
+        $("#yearPick").change(function(){
+            actualYear = $(this).val();
+            fillEmployeeChargesOverview(actualMonth, actualYear);
+        });
+                
         
         
     });   

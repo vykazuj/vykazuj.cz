@@ -69,14 +69,22 @@
 <style>
     
 .small-screen { display:none;}
-        
-
+   
 select.client_not_name_label{
     font-weight: 600 !important;
     text-align: left !important;
     background-color: #ffffff;
     border-radius: 5px;
     border: 1px solid #ddd;
+    padding-left: 10px;
+}
+
+select#yearPick {
+    font-weight: 600 !important;
+    text-align: left !important;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 0px solid #ddd;
     padding-left: 10px;
 }
 
@@ -92,6 +100,19 @@ select.client_not_name_label{
 
 .nopointer { 
     cursor: initial !important; 
+}
+     
+
+#liPickYear:hover {
+    background-color: #FFFFFF;
+    margin-left: -1px;
+    padding: 5px;
+    flex-grow: 1;
+    color: #20252D;
+    font-weight: 600;
+    font-size: 18px;
+    cursor: pointer;
+
 }
 
 @media screen and (max-width: 992px) {
