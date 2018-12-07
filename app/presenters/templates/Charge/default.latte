@@ -38,7 +38,15 @@
             <div id="progressContainer">
                                
             </div>   
-                
+          
+            {ifset $flashes}
+                <div n:foreach="$flashes as $flash">
+                    <span>
+                        {$flash->message}
+                    </span>
+                </div>
+            {/ifset}
+            
                 <div class="container container-inner timetable" id="my-charged-records-table">
                         <div class="row" id="my-charged-records-table-first">
                             <div class="col-lg-8">
@@ -617,13 +625,15 @@
         var actualYear = {$actualYear};
         var home_url = {$basePath};  
         getMyProjects();
-     
+        
+        $("#yearPick").val(actualYear);
         $("#yearPick").change(function(){
             actualYear = $(this).val();
             fillMeCalendar(actualMonth, actualYear);
             //fillEmployeeChargesOverview(actualMonth, actualYear);
             alert(actualYear);
         });
+        
               function progress()
         {
             
