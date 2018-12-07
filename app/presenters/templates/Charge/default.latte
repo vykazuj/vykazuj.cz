@@ -34,20 +34,28 @@
             <li class="monthLink{if $actualMonth==11} active{/if}" month="11">Listopad</a></li>
             <li class="monthLink{if $actualMonth==12} active{/if}" month="12">Prosinec</a></li>
           </ul>
-        </div>        
-            <div id="progressContainer">
-                               
-            </div>   
-          
+        </div>       
+        
+          <!--<div id="progressContainer"></div>   
+          -->
+            
+                <div class="container container-inner timetable" id="my-charged-records-table"> 
+                    
             {ifset $flashes}
-                <div n:foreach="$flashes as $flash">
+                {if $flashes != null}<br>{/if}
+                <div n:foreach="$flashes as $flash" class="text-left alert alert-{$flash->type}">
                     <span>
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {if $flash->type == "danger"}<strong>Chyba! </strong>
+                        {elseif $flash->type == "warning"}<strong>Varování: </strong>
+                        {elseif $flash->type == "info"}<strong>Info: </strong>
+                        {elseif $flash->type == "success"}<strong>Úspěch: </strong>
+                        {/if}
                         {$flash->message}
                     </span>
                 </div>
             {/ifset}
             
-                <div class="container container-inner timetable" id="my-charged-records-table">
                         <div class="row" id="my-charged-records-table-first">
                             <div class="col-lg-8">
                                 <div class="row">
@@ -536,8 +544,8 @@
                                                                                           <li>Hodiny: <a id ="totalHours"'+i+'>'+hoursSum(i)+' '+'h</a></li>\n\
                                                                                           <li>Přesčas: <a id ="totalHoursOver">'+hoursSumOver(i)+' '+'h</a></li>\n\
                                                                                           <li>Faktura celkem: 1 000 Kč</li>\n\
-                                                                                          <li><a href="'+home_url+'/charge/create-timesheet?year='+actualMonth+'&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0" target="_blank">Timesheet</a></li>\n\
-                                                                                          <li><a href="'+home_url+'/charge/send-timesheet?year='+actualMonth+'&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0">Odeslat fakturu</a></li>\n\
+                                                                                          <li><a href="'+home_url+'/charge/create-timesheet?year='+actualYear+'&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0" target="_blank">Timesheet</a></li>\n\
+                                                                                          <li><a href="'+home_url+'/charge/send-timesheet?year='+actualYear+'&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0">Odeslat fakturu</a></li>\n\
                                                                                       </ul> </br>');
                                                 }               
                                             }
@@ -631,7 +639,6 @@
             actualYear = $(this).val();
             fillMeCalendar(actualMonth, actualYear);
             //fillEmployeeChargesOverview(actualMonth, actualYear);
-            alert(actualYear);
         });
         
               function progress()
@@ -797,7 +804,7 @@
 }
 
 .timetable{
-    margin-top: 20px;
+    margin-top: 18px;
     background-color: #FFFFFF;
     border-radius: 5px;
 }

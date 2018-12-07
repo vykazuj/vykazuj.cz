@@ -4,7 +4,7 @@ namespace App\Presenters;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
-
+use Nette\Utils\Validators;
 class ChargePresenter extends BasePresenter
 {  
         private $database;
@@ -353,9 +353,10 @@ class ChargePresenter extends BasePresenter
 
                  //odeslání emailu
 
-                $to = $myClientHandler->getProjectParam($projectId, 'email');
+                $to = strtolower($myClientHandler->getProjectParam($projectId, 'email'));
                 $userDetails = $myClientHandler->getUserDetails($this->user->getId());
-                $from = $userDetails["first_name"]." ".$userDetails["last_name"]." <".$userDetails['email'].">";
+                $from = $userDetails["first_name"]." ".$userDetails["last_name"]." <".strtolower($userDetails['email']).">";
+                $fromRaw = strtolower($userDetails['email']);
                 $subject = "Faktura za aktuální období";
 
                 $message = "
@@ -376,27 +377,33 @@ class ChargePresenter extends BasePresenter
                 $headers = "MIME-Version: 1.0" . "\r\n";
                 $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-                if( Validators::isEmail($to) && Validators::isEmail($from))
+                if( Validators::isEmail($to) && Validators::isEmail($fromRaw))
                 {
                 // More headers
                 $headers .= 'From: <info@vykazuj.cz>' . "\r\n";
                 $mail = new Message;
                 $mail->setFrom($from)
                     ->addTo($to)
+                    ->addBcc($from)
                     ->setSubject($subject)
                     ->setHtmlBody($message)
                     ->addAttachment('Timesheet_'.$year.'_'.$month.'_'.$userDetails["last_name"].'.pdf',$timesheet, 'application/pdf');
                 //mail($to,$subject,$message,$headers);
                 
                 $mailer = new SendmailMailer();
-                $mailer->send($mail);
+                try{
+                    $mailer->send($mail);
+                    $this->flashMessage('Email byl odeslán.','success');
+                } catch (\Nette\Mail\SendException $e) {
+                    $this->flashMessage($e->getMessage(),'danger');
+                 }
                     
                 }else{
                     if(!Validators::isEmail($to)){  
-                        $this->flashMessage('Zadaný email je neplatný: '.$to);
+                        $this->flashMessage('Odeslání selhalo - Zadaný příjemce je neplatný: \''.$to.'\'','danger');
                     }
-                    if(!Validators::isEmail($from)){  
-                        $this->flashMessage('Zadaný email je neplatný: '.$from);
+                    if(!Validators::isEmail($fromRaw)){  
+                        $this->flashMessage('Odeslání selhalo - Zadaný odesílatel je neplatný: \''.$fromRaw.'\'','danger');
                     }
                 }
             }
