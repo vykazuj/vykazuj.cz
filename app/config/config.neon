@@ -39,8 +39,8 @@ opauth:
 			app_id: ''
 			app_secret: ''
 		Google:
-			client_id: '232158870291-247i8lbpcj496b0tk7gv7ka9molvrm96.apps.googleusercontent.com'
-			client_secret: '8A7Z81YLejvvyvXcpyoxmRDS'
+			client_id: ''
+			client_secret: ''
 		Twitter:
 			key: ''
 			secret: ''
