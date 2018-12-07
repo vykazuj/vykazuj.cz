@@ -617,13 +617,15 @@
         var actualYear = {$actualYear};
         var home_url = {$basePath};  
         getMyProjects();
-     
+        
+        $("#yearPick").val(actualYear);
         $("#yearPick").change(function(){
             actualYear = $(this).val();
             fillMeCalendar(actualMonth, actualYear);
             //fillEmployeeChargesOverview(actualMonth, actualYear);
             alert(actualYear);
         });
+        
               function progress()
         {
             

@@ -376,6 +376,8 @@ class ChargePresenter extends BasePresenter
                 $headers = "MIME-Version: 1.0" . "\r\n";
                 $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
+                if( Validators::isEmail($to) && Validators::isEmail($from))
+                {
                 // More headers
                 $headers .= 'From: <info@vykazuj.cz>' . "\r\n";
                 $mail = new Message;
@@ -388,7 +390,15 @@ class ChargePresenter extends BasePresenter
                 
                 $mailer = new SendmailMailer();
                 $mailer->send($mail);
-
+                    
+                }else{
+                    if(!Validators::isEmail($to)){  
+                        $this->flashMessage('Zadaný email je neplatný: '.$to);
+                    }
+                    if(!Validators::isEmail($from)){  
+                        $this->flashMessage('Zadaný email je neplatný: '.$from);
+                    }
+                }
             }
             $this->redirect('Charge:default');
 	}  
