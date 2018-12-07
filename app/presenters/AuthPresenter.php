@@ -42,7 +42,7 @@ class AuthPresenter extends BasePresenter{
 			$this->redirect('Homepage:default');
 		}
 		$identity = $this->opauth->callback($strategy);
-                        $this->flashMessage($strategy, "info");
+                //$this->flashMessage($strategy, "success");
                         
                 foreach($identity->data as $key => $value){
                     if(!is_array($value)){
