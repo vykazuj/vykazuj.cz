@@ -20,15 +20,17 @@ class ClientHandler {
     }
     
     function getMyClients($userId, $companyId){
-        return $this->database->fetchAll('select DISTINCT cl.* from client cl, users_company_rel ucr where cl.company_id = ucr.company_id and ucr.user_id = ? and ucr.company_id = ? and ucr.role in (?,?) ',$userId, $companyId, 'owner','accountant');
+        return $this->database->fetchAll('select cl.* from client cl, users_company_rel ucr where cl.company_id = ucr.company_id and ucr.user_id = ? and ucr.company_id = ? and ucr.role in (?,?) ',$userId, $companyId, 'owner','accountant');
     }
-    
+    /*
     function getMyClientOrders($userId){
         return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ?',$userId);
     }
-    
+    */
     function getMyClient($userId, $clientId){
-        return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
+        return $this->database->fetchAll('select cl.* from client cl, users_company_rel ucr where cl.company_id = ucr.company_id and ucr.user_id = ? and cl.id = ? and ucr.role in (?,?) ',$userId, $clientId, 'owner','accountant');
+    
+        //return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
     }
     
     function getClient($clientId){
@@ -40,7 +42,7 @@ class ClientHandler {
     }
     
     function getMyClientProjectsWithParameters($userId, $clientId){
-        return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from client cl, company co, project pr, project_param pp where pp.project_id = pr.id and pr.client_id = cl.id and cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId);
+        return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from client cl, company co, project pr, project_param pp, users_company_rel ucr where ucr.company_id = co.id and pp.project_id = pr.id and pr.client_id = cl.id and cl.company_id = co.id and ucr.user_id = ? and cl.id = ? and ucr.role in (?,?) ',$userId, $clientId, 'owner','accountant');
     }
     
     function getProjectWithParameters($projectId){
@@ -82,13 +84,28 @@ class ClientHandler {
         return $this->database->fetchField('select pp.value as value from project pr, project_param pp where pp.project_id = pr.id and pr.id = ? and pp.param_id = ? ',$projectId, $paramId);  
     }
     
-    function isMyClient($userId, $clientId){
+    function isUserAllowedToManageClient($userId, $clientId){
         //$rowNum = $this->database->query('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId)->getRowCount();
         $rowNum = $this->database->query('select cl.* from client cl, company co, users_company_rel ucr where cl.company_id = co.id and co.id = ucr.company_id and ucr.user_id = ? and cl.id = ? and ucr.role in (?,?,?) ',$userId, $clientId,'owner','owner','accountant')->getRowCount();
         if($rowNum>0)
             {return true;}
         else
             {return false;}
+    }
+    
+    function isUserAllowedToChargeOnClient($userId, $clientId){
+        //$rowNum = $this->database->query('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ? and cl.id = ?',$userId, $clientId)->getRowCount();
+        $rowNum = $this->database->query('select cl.* from client cl, company co, users_company_rel ucr where cl.company_id = co.id and co.id = ucr.company_id and ucr.user_id = ? and cl.id = ? and ucr.role in (?,?,?) ',$userId, $clientId,'user','owner','accountant')->getRowCount();
+        if($rowNum>0)
+            {return true;}
+        else
+            {return false;}
+    }
+    
+    function isUserAllowedToChargeOnProject($userId, $projectId){
+        $project = $this->getProject($projectId);
+        $clientId = $project[0]["id"];
+        return $this->isUserAllowedToChargeOnClient($userId, $clientId);
     }
     
     function getClientOfWorkOrder($workOrderId){

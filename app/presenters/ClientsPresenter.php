@@ -71,9 +71,9 @@ class ClientsPresenter extends BasePresenter
             $myObj['data'] = $myClientHandler->getMyClients($this->user->getId(), $companyId);
             
             }else{
-            $myObj['result'] = 'OK';
+            $myObj['result'] = 'NOT OK';
             $myObj['code'] = '101';
-            $myObj['data'] = 'Nemáte právo na požadovaný zdorj';
+            $myObj['data'] = 'Nemáte právo na požadovaný zdroj';
             }
             
             $myJSON = json_encode($myObj);
@@ -87,7 +87,15 @@ class ClientsPresenter extends BasePresenter
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
-            $myObj['data'] = $myClientHandler->getMyClient($this->user->getId(), $clientId);
+            
+            if($this->user->isLoggedIn() ){
+                $myObj['data'] = $myClientHandler->getMyClient($this->user->getId(), $clientId);   
+            }else{
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '102';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+                
+            }
             
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
@@ -97,10 +105,21 @@ class ClientsPresenter extends BasePresenter
             $myClientHandler = new \ClientHandler($this->database);
             
             $myObj = null;
-            $myObj['result'] = 'OK';
-            $myObj['code'] = '0';
-            //$myObj['data'] = $myClientHandler->getMyClientProjects($this->user->getId(), $clientId);
-            $myObj['data'] = $myClientHandler->getMyClientProjectsWithParameters($this->user->getId(), $clientId);
+            if(!$this->user->isLoggedIn()){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '103';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '104';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+                
+            }else{
+                $myObj['result'] = 'OK';
+                $myObj['code'] = '0';
+                $myObj['data'] = $myClientHandler->getMyClientProjectsWithParameters($this->user->getId(), $clientId); 
+            }
+                
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
         }
@@ -111,11 +130,16 @@ class ClientsPresenter extends BasePresenter
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
             
-            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
-                $myObj['data'] = $myClientHandler->getMyClientOrdersWithParameters($clientId);
-            }else{
+            if(!$this->user->isLoggedIn()){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = '404';
+                $myObj['code'] = '105';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '106';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
+                $myObj['data'] = $myClientHandler->getMyClientOrdersWithParameters($clientId);
             }
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
@@ -126,20 +150,33 @@ class ClientsPresenter extends BasePresenter
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
-            
-            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
-                $myObj['data'] = $myClientHandler->getUsersNotLinkedToClientOrders($clientId);
-            }else{
+            if(!$this->user->isLoggedIn()){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = '404';
+                $myObj['code'] = '107';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '108';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
+                $myObj['data'] = $myClientHandler->getUsersNotLinkedToClientOrders($clientId);
             }
+            
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
         }
         
         public function actionCreateNewClient(){
-            $myClientHandler = new \ClientHandler($this->database);
-            $myClientHandler->createNewClient($this->user->getId());
+            $myClientHandler = new \ClientHandler($this->database);    
+            $companySessions = $this->getSession('Company');
+            $companyId = $myClientHandler->getPrefCompany($this->user->getId());
+            $companySessions->id = $companyId;
+            
+            $myRole = $myClientHandler->getUserCompanyRel($this->user->getId(), $companyId);
+            
+            if($this->user->isLoggedIn() && ( $myRole == 'owner' || $myRole == 'accountant') ){
+                $myClientHandler->createNewClient($this->user->getId());   
+            }
             
             $this->redirect("Clients:default");
         }
@@ -150,12 +187,18 @@ class ClientsPresenter extends BasePresenter
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
             
-            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
-                $myClientHandler->createNewWorkOrder($clientId);
-            }else{
+            if(!$this->user->isLoggedIn()){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = 'Nemáte právo na přidání';
+                $myObj['code'] = '109';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '110';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
+                $myClientHandler->createNewWorkOrder($clientId);
             }
+            
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
         }
@@ -166,7 +209,15 @@ class ClientsPresenter extends BasePresenter
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
             
-            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
+            if(!$this->user->isLoggedIn()){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '111';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '112';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
                 $project = $myClientHandler->createNewProject($this->user->getId(), $clientId);
                 $client = $myClientHandler->getClient($clientId);
                 $myClientHandler->addParamToProject($project["id"], 'status','Status','active');
@@ -174,10 +225,8 @@ class ClientsPresenter extends BasePresenter
                 $myClientHandler->addParamToProject($project["id"], 'contactRole','Role fakturačního kontaktu','stavby vedoucí');
                 $myClientHandler->addParamToProject($project["id"], 'email','Fakturační email',$client[0]["email"]);
                 $myObj['data'] = $myClientHandler->getProjectWithParameters($project["id"]);
-            }else{
-                $myObj['result'] = 'NOT OK';
-                $myObj['code'] = 'Nemáte právo na přidání';
             }
+            
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
         }
@@ -189,11 +238,16 @@ class ClientsPresenter extends BasePresenter
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
             
-            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
-                $myClientHandler->updateClient($clientId, $param, $value);
-            }else{
+            if(!$this->user->isLoggedIn()){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = 'Nemáte právo na úpravu';
+                $myObj['code'] = '113';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '114';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
+                $myClientHandler->updateClient($clientId, $param, $value);
             }
             
             $myJSON = json_encode($myObj);
@@ -208,12 +262,17 @@ class ClientsPresenter extends BasePresenter
             $myObj['code'] = '0';
             $client = $myClientHandler->getClientOfWorkOrder($workOrderId);
             $clientId = $client["client_id"];
-                    
-            if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
-                $myClientHandler->updateWorkOrder($workOrderId, $finder, $value);
-            }else{
+            
+             if(!$this->user->isLoggedIn()){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = 'Nemáte právo na úpravu';
+                $myObj['code'] = '115';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '116';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
+                $myClientHandler->updateWorkOrder($workOrderId, $finder, $value);
             }
             
             $myJSON = json_encode($myObj);
@@ -236,16 +295,21 @@ class ClientsPresenter extends BasePresenter
             $client = $myClientHandler->getClientOfWorkOrder($workOrderId);
             $clientId = $client["client_id"];
             
-                if($myClientHandler->isMyClient($this->user->getId(), $clientId)){
-                    if($uworId==-1){
-                        $myClientHandler->createUwor($userId, $workOrderId);
-                    }else{
-                        $myClientHandler->updateUwor($uworId, $finder, $value);
-                    }
+            if(!$this->user->isLoggedIn()){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '117';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '118';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
+                if($uworId==-1){
+                    $myClientHandler->createUwor($userId, $workOrderId);
                 }else{
-                    $myObj['result'] = 'NOT OK';
-                    $myObj['code'] = 'Nemáte právo na úpravu tohoto záznamu (error 9857)';
+                    $myClientHandler->updateUwor($uworId, $finder, $value);
                 }
+            }
             
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 
@@ -258,12 +322,19 @@ class ClientsPresenter extends BasePresenter
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
+            $project = $myClientHandler->getProject($projectId);
+            $clientId = $project[0]["client_id"];
             
-            if($myClientHandler->isMyProject($this->user->getId(), $projectId)){
-                $myClientHandler->updateProject($projectId, $finder, $value);
-            }else{
+            if(!$this->user->isLoggedIn()){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = 'Nemáte právo na úpravu';
+                $myObj['code'] = '119';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '120';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
+                $myClientHandler->updateProject($projectId, $finder, $value);
             }
             
             $myJSON = json_encode($myObj);
@@ -276,12 +347,19 @@ class ClientsPresenter extends BasePresenter
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
+            $project = $myClientHandler->getProject($projectId);
+            $clientId = $project[0]["client_id"];
             
-            if($myClientHandler->isMyProject($this->user->getId(), $projectId)){
-                $myClientHandler->updateProjectParam($projectParamId, $value);
-            }else{
+            if(!$this->user->isLoggedIn()){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = 'Nemáte právo na úpravu';
+                $myObj['code'] = '121';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '122';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
+                $myClientHandler->updateProjectParam($projectParamId, $value);
             }
             
             $myJSON = json_encode($myObj);
@@ -294,12 +372,19 @@ class ClientsPresenter extends BasePresenter
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
+            $project = $myClientHandler->getProject($projectId);
+            $clientId = $project[0]["client_id"];
             
-            if($myClientHandler->isMyProject($this->user->getId(), $projectId)){
-                $myClientHandler->deleteProject($projectId);
-            }else{
+            if(!$this->user->isLoggedIn()){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = 'Nemáte právo na úpravu';
+                $myObj['code'] = '121';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '122';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
+                $myClientHandler->deleteProject($projectId);
             }
             
             $myJSON = json_encode($myObj);
