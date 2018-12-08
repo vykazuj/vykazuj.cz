@@ -8,13 +8,16 @@
         </div>
         
         <div class="container timetable-blank">
+            {if isset($displaySection) and $displaySection}
           <ul class="nav nav-pills" id="my-clients-header">
             <li class="nav-pills-red" id="add-new-client"><i class="fas fa-plus-circle"></i>Nový klient</li>
           </ul>
+            {/if}
         </div>
         
         <div class="container timetable-blank">
             <div class="container-inner timetable">
+            {if isset($displaySection) and $displaySection}
                 <br>
                 <h1 class="text-left font-weight-semibold"><input type="text" value="" id="client_name_label" class="client_labels_all" finder="name"></h1>
                 
@@ -102,6 +105,9 @@
                 </div>
                 
                 <br>
+            {else}
+                Nemáte právo na tuto sekci pro zvolenou firmu. Zvolte jinou firmu nebo požádejte majitele firmy o roli <strong>Účetní.</strong>
+            {/if}
             </div>
         </div>
     </div>

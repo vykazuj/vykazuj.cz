@@ -24,6 +24,11 @@ class ClientsPresenter extends BasePresenter
         public function actionDefault(){
             //$this->user->login(3);
             $myRecordHandler = new \RecordHandler($this->database);
+            
+            $myClientHandler = new \ClientHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            $companyId = $myClientHandler->getPrefCompany($this->user->getId());
+            $companySessions->id = $companyId;
             /*
             $this->template->myChargeableProjects = $myRecordHandler->getMyChargeableProjects($this->user->getId());
             $this->template->activeMonth = 1;
@@ -39,19 +44,37 @@ class ClientsPresenter extends BasePresenter
             if(!isset($dateSessions->month))
                 {$dateSessions->month = $myRecordHandler->getMaxChargedMonthOfTheYear($this->user->getId(), $dateSessions->year);}
             if($dateSessions->month<1 || $dateSessions->month>12 || $dateSessions->month==""){ $dateSessions->month = date('n');}
-            
-            $this->template->actualMonth = $dateSessions->month;  
-            $this->template->actualYear = $dateSessions->year; 
+
+            $myRole = $myClientHandler->getUserCompanyRel($this->user->getId(),$companyId);
+            if($myRole == 'accountant' || $myRole == 'owner'){
+                $this->template->actualMonth = $dateSessions->month;  
+                $this->template->actualYear = $dateSessions->year; 
+                $this->template->myRole = $myRole;
+                $this->template->displaySection = true;
+            }
             
         }       
         
         public function actionGetMyClients(){
             $myClientHandler = new \ClientHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            $companyId = $myClientHandler->getPrefCompany($this->user->getId());
+            $companySessions->id = $companyId;
             
+            $myRole = $myClientHandler->getUserCompanyRel($this->user->getId(),$companyId);
+            if($myRole == 'accountant' || $myRole == 'owner'){
+
             $myObj = null;
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
-            $myObj['data'] = $myClientHandler->getMyClients($this->user->getId());
+            //$myObj['data'] = $myClientHandler->getMyClients($this->user->getId());
+            $myObj['data'] = $myClientHandler->getMyClients($this->user->getId(), $companyId);
+            
+            }else{
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '101';
+            $myObj['data'] = 'Nemáte právo na požadovaný zdorj';
+            }
             
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON)); 

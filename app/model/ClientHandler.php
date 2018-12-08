@@ -19,8 +19,8 @@ class ClientHandler {
         $this->database = $database;
     }
     
-    function getMyClients($userId){
-        return $this->database->fetchAll('select cl.* from client cl, company co where cl.company_id = co.id and co.owner_id = ?',$userId);
+    function getMyClients($userId, $companyId){
+        return $this->database->fetchAll('select DISTINCT cl.* from client cl, users_company_rel ucr where cl.company_id = ucr.company_id and ucr.user_id = ? and ucr.company_id = ? and ucr.role in (?,?) ',$userId, $companyId, 'owner','accountant');
     }
     
     function getMyClientOrders($userId){
@@ -298,6 +298,10 @@ class ClientHandler {
             return $this->database->table("users_company_rel")->insert($input);
             //return $this->database->query("insert into users_company_rel (id, user_id, company_id, role) values (null,?,?,?)",$userId, $companyId, $role);   
         }
+    }
+    
+    function getUserCompanyRel($userId, $companyId){
+        return $this->database->fetchField("select role from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId);
     }
     
     function createUserProjectRel($userId, $projectId, $mdRate){
