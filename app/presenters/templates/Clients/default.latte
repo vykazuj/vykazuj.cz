@@ -8,13 +8,16 @@
         </div>
         
         <div class="container timetable-blank">
+            {if isset($displaySection) and $displaySection}
           <ul class="nav nav-pills" id="my-clients-header">
             <li class="nav-pills-red" id="add-new-client"><i class="fas fa-plus-circle"></i>Nový klient</li>
           </ul>
+            {/if}
         </div>
         
         <div class="container timetable-blank">
             <div class="container-inner timetable">
+            {if isset($displaySection) and $displaySection}
                 <br>
                 <h1 class="text-left font-weight-semibold"><input type="text" value="" id="client_name_label" class="client_labels_all" finder="name"></h1>
                 
@@ -102,6 +105,9 @@
                 </div>
                 
                 <br>
+            {else}
+                Nemáte právo na tuto sekci pro zvolenou firmu. Zvolte jinou firmu nebo požádejte majitele firmy o roli <strong>Účetní.</strong>
+            {/if}
             </div>
         </div>
     </div>
@@ -349,16 +355,18 @@
             //alert(data['param_lic']);
             if (data['param_lic'] !== 'status'){
                     element = '<input type="text" value="'+data["value"]+'" projectid="'+data["id"]+'" projectparamid="'+data['param_id']+'" class="project_param_labels_all font-weight-semibold">';
+                    row = row + element + '</div>';
                 }else{
                     element = '<select class="project_param_labels_all project_param_select_labels_all" projectparamid="'+data['param_id']+'" projectid="'+data["id"]+'"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select>';
-                }
-            
-                row = row + element + '</div>';
-            
+                    row = row + element + '</div>';
+                }            
             
             //$("#clients-row-head").after(row);          
             $("div.project-first-row[projectid='"+data["id"]+"']").append(row); 
-            var len = (1+11*data["name"].length)+'px';
+            
+            if (data['param_lic'] === 'status'){ $("select.project_param_select_labels_all[projectparamid='"+data['param_id']+"']").val(data["value"]);}
+                    
+            //var len = (1+11*data["name"].length)+'px';
             //$("input.project_labels_all[projectid='"+data["id"]+"']").css("width",len);
             //$(".project_param_select_labels_all[projectparamid='"+data["param_id"]+"']").val(data["value"]);
         }
@@ -584,7 +592,7 @@
               { 
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    alert(json.code);
+                    if(json.code!=='101'){ alert(json.code);}
                 }else{
                     var raw_data = json.data;
                     var max_id = 0;
