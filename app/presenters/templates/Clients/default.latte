@@ -27,14 +27,14 @@
                         IČO:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold">
-                        <input type="text" value="24211427" id="client_ico_label" class="client_not_name_label client_labels_all" finder="ico"><br>
+                        <input type="text" value="" id="client_ico_label" class="client_not_name_label client_labels_all" finder="ico"><br>
                     </div>
                     
                     <div class="col-lg-1 col-3 text-left">
                         Telefon:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold">
-                        <input type="text" value="724 903 098" id="client_phone_label" class="client_not_name_label client_labels_all" finder="phone"><br>
+                        <input type="text" value="" id="client_phone_label" class="client_not_name_label client_labels_all" finder="phone"><br>
                     </div>
                 </div>
                 
@@ -44,14 +44,14 @@
                         Kontakt:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold" >
-                        <input type="text" value="Ing. Jan Kuba" id="client_contact_label" class="client_not_name_label client_labels_all" finder="contact"><br>
+                        <input type="text" value="" id="client_contact_label" class="client_not_name_label client_labels_all" finder="contact"><br>
                     </div>
                     
                     <div class="col-lg-1 col-3 text-left">
                         Email:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold">
-                        <input type="text" value="info@granton.cz" id="client_email_label" class="client_not_name_label client_labels_all" finder="email"><br>
+                        <input type="text" value="" id="client_email_label" class="client_not_name_label client_labels_all" finder="email"><br>
                     </div>
                 </div>
                 
@@ -60,7 +60,7 @@
                         Adresa:<br>
                     </div>
                     <div class="col-lg-11 col-9 text-left font-weight-semibold">
-                        <input type="text" value="V Pachmance 540, Nebušice 164 00 Praha" id="client_address_label" class="client_not_name_label client_labels_all" finder="address"><br>
+                        <input type="text" value="" id="client_address_label" class="client_not_name_label client_labels_all" finder="address"><br>
                     </div>
                 </div>
                 
@@ -148,6 +148,11 @@
         
         var getMyClientOrdersSemafor = true;
                
+        function validateMail(email){
+            var re = /\S+@\S+[.]\S+/;
+            return re.test(email);
+        }
+        
         function updateClientDetails(clientId, finder, value){
             $("#save-client").text("Ukládám...");
             $.ajax(
@@ -627,6 +632,10 @@
                 var finder = $(this).attr("finder");
                 var value = $(this).val();
                 var clientId = $("#client_name_label").attr("clientid");
+                
+                if(finder === 'email'){
+                    if(!validateMail(value) && value !==''){ alert('Zadejte platnou e-mailovou adresu.'); return false; }
+                }
                 updateClientDetails(clientId, finder, value);
             });
             $(".client_labels_all[finder='name']").keyup( function(){
@@ -727,7 +736,7 @@
         
     $(document).ready(function() 
     {   
-        getMyClients();        
+        getMyClients();         
         $("#add-new-client").click( function(){
             window.location.href = home_url+"/clients/create-new-client";
         });
