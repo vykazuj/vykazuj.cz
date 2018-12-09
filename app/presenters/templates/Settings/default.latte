@@ -71,10 +71,17 @@
                         </div>
 
                         <div class="col-lg-2 col-3 text-left">
+                            Pozice:<br>
+                        </div>
+                        <div class="col-lg-4 col-9 text-left font-weight-semibold" >
+                            <input type="text" value="" id="name_label7" class="client_not_name_label" finder="job_title"><br>
+                        </div>
+
+                        <div class="col-lg-2 col-3 text-left">
                             Telefon:<br>
                         </div>
                         <div class="col-lg-4 col-9 text-left font-weight-semibold" >
-                            <input type="text" value="" id="name_label5" class="client_not_name_label" finder="phone"><br>
+                            <input type="text" value="" id="name_label5" class="client_not_name_label" finder="password2"><br>
                         </div>
 
                         <div class="col-12">
@@ -351,7 +358,8 @@
                       $("#name_label1").val(raw_data[i]['first_name']);  
                       $("#name_label2").val(raw_data[i]['last_name']);    
                       $("#name_label5").val(raw_data[i]['phone']);   
-                      $("#name_label6").val(raw_data[i]['email']); 
+                      $("#name_label6").val(raw_data[i]['email']);  
+                      $("#name_label7").val(raw_data[i]['job_title']); 
                       $("#mojeID").html(raw_data[i]['integration_id']);  
                     }
                 }                     
@@ -359,7 +367,7 @@
             });  
         }
         
-        function updateMyDetails(name, surname, phone, email){
+        function updateMyDetails(name, surname, phone, email, job_title){
             $("#save-client").text("Ukládám...");
             
             $.ajax(
@@ -369,7 +377,8 @@
               data: {   name: name, 
                         surname: surname,
                         phone: phone,
-                        email: email },
+                        email: email,
+                        job_title: job_title},
               dataType: 'json',
               cache: false,
               success: function(data)
@@ -589,9 +598,10 @@
                 let name = $("#name_label1").val();
                 let surname = $("#name_label2").val();
                 let phone = ''+$("#name_label5").val();
+                let job_title = ''+$("#name_label7").val();
                 let email = $("#name_label6").val();
                 if(validateMail(email)){}else{ alert("Zadaný email je neplatný."); return false; }
-                updateMyDetails(name, surname, phone, email);
+                updateMyDetails(name, surname, phone, email, job_title);
                 
                 if(password !== "" ||  password2 !== ""){
                     if(password===password2){
