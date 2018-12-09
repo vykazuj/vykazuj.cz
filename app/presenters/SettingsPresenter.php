@@ -191,13 +191,35 @@ class SettingsPresenter extends BasePresenter
              
             }
             
-             public function actionGetMyEmployees($company){
+            public function actionGetMyEmployees($company){
             
             $mySettingsHandler = new \SettingsHandler($this->database);
             $myObj = null;
                 try
                     { 
                     $row = $mySettingsHandler->getMyEmployees($this->user->getIdentity()->id, $company);
+                    $myObj['result'] = 'OK';
+                    $myObj['code'] = '0';
+                    $myObj['data'] = $row;
+                    }
+                catch (\Nette\Neon\Exception $e) {
+                    $myObj['result'] = 'NOK';
+                    $myObj['code'] = $e->getMessage();
+                }  
+
+           
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));
+             
+            }
+            
+            public function actionCreateUserCompanyRel($userId,$companyId,$role){
+            
+            $myClientHandler = new \ClientHandler($this->database);
+
+                try
+                    { 
+                    $row = $myClientHandler->createUserCompanyRel($userId, $companyId, $role);
                     $myObj['result'] = 'OK';
                     $myObj['code'] = '0';
                     $myObj['data'] = $row;

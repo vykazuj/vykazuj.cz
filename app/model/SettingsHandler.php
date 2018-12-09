@@ -44,7 +44,7 @@ class SettingsHandler {
     
      function getMyEmployees($userId, $company){
         return $this->database->fetchAll('Select '
-                . 'u.first_name, u.last_name, ucr.role, ucr.internal_costs, ucr.default_md_rate, ucr.id '
+                . 'u.first_name, u.last_name, ucr.role, ucr.internal_costs, ucr.default_md_rate, ucr.user_id '
                 . 'from users u '
                 . 'join users_company_rel ucr on (u.id=ucr.user_id) '
                 . 'where ucr.company_id=?', $company);

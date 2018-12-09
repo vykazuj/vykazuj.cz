@@ -239,7 +239,7 @@
         }
         
         function addEmployeeRow(data){
-         let row = '<div class="row clients-row" id="'+ data["id"] + '">' +
+         let row = '<div class="row clients-row" id="'+ data["user_id"] + '">' +
                         '<div class="col-12 text-left font-weight-semibold">'+
                             data["first_name"]+' ' + data["last_name"] + ' (' + data["role"] + ')'+
                         '</div>'+
@@ -249,7 +249,7 @@
                         '</div>'   +
 
                         '<div class="col-6 text-right">'+
-                            '<input type="text" value="'+data["internal_costs"]+'" id="name_label7" class="earning" finder="my_settings"> Kč'+
+                            '<input type="text" value="'+data["internal_costs"]+'" id="internal_costs'+ data["user_id"] +'" class="earning" finder="my_settings"> Kč'+
                         '</div>' +
 
                         '<div class="col-6 text-left">'+
@@ -257,11 +257,11 @@
                         '</div>'  +
 
                         '<div class="col-6 text-right">'+
-                            '<input type="text" value="'+data["default_md_rate"]+'" id="name_label8" class="earning" finder="my_settings"> Kč'+
+                            '<input type="text" value="'+data["default_md_rate"]+'" id="default_md_rate'+ data["user_id"] +'" class="earning" finder="my_settings"> Kč'+
                         '</div>'   +
 
                         '<div class="col-12 text-right">'+
-                            '<span class="nav-pills-red" id="new-project"><i class="fas fa-minus-circle"></i>Účetní</span>'+
+                            '<span class="nav-pills-red rowRole" id="'+ data["user_id"] +'"><i class="fas fa-plus-circle"></i>Účetní</span>'+
                             '<span class="nav-pills-red" id="new-project"><i class="fas fa-trash-alt"></i>Odstranit</span>'+
                             '<span class="nav-pills-red" id="new-project"><i class="fas fa-save"></i>Uložit</span>'+
                         '</div>'+
@@ -274,6 +274,7 @@
     
     
            function getMyEmployees(company){
+            $(".clients-row").remove();
                  $.ajax(
             {
               type: 'GET',
@@ -290,13 +291,97 @@
                     var raw_data = json.data;
                     for (i in raw_data)
                     {
-                      $("#employees").after(addEmployeeRow(raw_data[i]));  
-                      
+                      $("#employees").after(addEmployeeRow(raw_data[i]));
+                      if(raw_data[i]["role"]==="owner"){
+                          deleteButtonAccoutant(raw_data[i]["user_id"]);
+                      }else if(raw_data[i]["role"]==="accountant"){
+                          modifyButtonAccoutant(raw_data[i]["user_id"]);
+                          setSVGActions(raw_data[i]["user_id"]);
+                      }else{
+                          setSVGActions(raw_data[i]["user_id"]);
+                      }
                     }
                 }                     
               }
             });  
         }
+        
+        function deleteButtonAccoutant(id){
+            $(".rowRole[id='"+id+"']").remove();
+        }
+        
+        function modifyButtonAccoutant(id){
+            let strongRole='<span class="nav-pills-red rowStrongRole" id="'+ id +'"><i class="fas fa-minus-circle"></i>Účetní</span>';
+            $(".rowRole[id='"+id+"']").after(strongRole);
+            $(".rowRole[id='"+id+"']").remove();
+        }
+        
+        function setSVGActions(id){
+            var obj = $(".rowRole[id='"+id+"']");   
+            setActionOnAddRole(obj);
+            var obj = $(".rowStrongRole[id='"+id+"']");   
+            setActionOnDelRole(obj);
+            
+        }
+        
+         function setActionOnAddRole(obj){
+             obj.click( function(){
+             var userId = obj.attr('id');
+             var companyId = $("#company-select").val();
+             
+             $.ajax(
+                  {
+                        type: 'GET',
+                        url: home_url+'/settings/create-user-company-rel',
+                        data: {   userId: userId, 
+                                  companyId: companyId,
+                                  role: "accountant"},
+                        dataType: 'json',
+                        cache: false,
+                        success: function(data)
+                    { 
+                            var json = $.parseJSON(data);
+                            
+                            if(json.result!=='OK'){
+                                alert(json.code);
+                            }else{
+                                getMyEmployees(companyId);
+                            }     
+                
+                    }
+                  });
+            });
+        }
+        
+        function setActionOnDelRole(obj){
+             obj.click( function(){
+             var userId = obj.attr('id');
+             var companyId = $("#company-select").val();
+             
+             $.ajax(
+                  {
+                        type: 'GET',
+                        url: home_url+'/settings/create-user-company-rel',
+                        data: {   userId: userId, 
+                                  companyId: companyId,
+                                  role: "user"},
+                        dataType: 'json',
+                        cache: false,
+                        success: function(data)
+                    { 
+                            var json = $.parseJSON(data);
+                            
+                            if(json.result!=='OK'){
+                                alert(json.code);
+                            }else{
+                                getMyEmployees(companyId);
+                            }     
+                
+                    }
+                  });
+            });
+        }
+        
         
         function updateMyDetails(name, surname, phone, email){
             $("#save-client").text("Ukládám...");
