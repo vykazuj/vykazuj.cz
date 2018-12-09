@@ -148,6 +148,11 @@
         
         var getMyClientOrdersSemafor = true;
                
+        function validateMail(email){
+            var re = /\S+@\S+[.]\S+/;
+            return re.test(email);
+        }
+        
         function updateClientDetails(clientId, finder, value){
             $("#save-client").text("Ukládám...");
             $.ajax(
@@ -627,6 +632,10 @@
                 var finder = $(this).attr("finder");
                 var value = $(this).val();
                 var clientId = $("#client_name_label").attr("clientid");
+                
+                if(finder === 'email'){
+                    if(!validateMail(value)){ alert('Zadejte platnou e-mailovou adresu.'); return false; }
+                }
                 updateClientDetails(clientId, finder, value);
             });
             $(".client_labels_all[finder='name']").keyup( function(){
