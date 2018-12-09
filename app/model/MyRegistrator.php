@@ -35,6 +35,7 @@ class MyRegistrator
         $input["status"] = 'registered';
         $input["source"] = 'vykazuj';
         $input["source_id"] = '';
+        $input["job_title"] = 'Dodavatel';
         $input["email_confirmation"] = $randstring;
         $input["password"]= Passwords::hash($input["password"]);
         
@@ -84,6 +85,7 @@ class MyRegistrator
             $user["first_name"] = $input->first_name;
             $user["username"] = $source.$input->id;
             $user["last_name"] = $input->last_name;
+            $user["job_title"] = 'Dodavatel';
             $user["source"] = $source;
             $user["source_id"] = $input->id;
             $user["email"] = $input->email;

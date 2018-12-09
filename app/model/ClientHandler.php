@@ -115,15 +115,15 @@ class ClientHandler {
     function getWorkOrderOfUwor($uworId){
         return $this->database->fetch("select * from users_work_order_rel where id = ?",$uworId);
     }
-    
+    /*
     function isMyProject($userId, $projectId){
-        $rowNum = $this->database->query('select * from users_project_rel where user_id = ? and project_id = ?',$userId, $projectId)->getRowCount();
+        $rowNum = $this->database->query('select * from users_project_rel where user_id = ? and project_id = ? and rel = ? ',$userId, $projectId,'user')->getRowCount();
         if($rowNum>0)
             {return true;}
         else
             {return false;}
     }
-    
+    */
     function isMyCompany($userId, $companyId){
         $rowNum = $this->database->query('select * from users_company_rel where user_id = ? and company_id = ?',$userId, $companyId)->getRowCount();
         if($rowNum>0)

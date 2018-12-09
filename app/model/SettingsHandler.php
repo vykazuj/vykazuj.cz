@@ -22,15 +22,16 @@ class SettingsHandler {
     }
 
     function getMe($userId){
-        return $this->database->fetchAll('select first_name, last_name, phone, email, integration_id from users where id = ?',$userId);
+        return $this->database->fetchAll('select first_name, last_name, phone, email, integration_id, job_title from users where id = ?',$userId);
     }
 
-    function updateMyDetails($userId, $name, $surname, $phone, $email){
+    function updateMyDetails($userId, $name, $surname, $phone, $email, $job_title){
         return $this->database->query('UPDATE users set ', [
             'first_name' => $name,
             'last_name' => $surname,
             'phone' => $phone,
-            'email' => $email,]
+            'email' => $email,
+            'job_title' => $job_title,]
             , 'WHERE id = ?', $userId
         );
         
@@ -49,5 +50,5 @@ class SettingsHandler {
                 . 'join users_company_rel ucr on (u.id=ucr.user_id) '
                 . 'where ucr.company_id=?', $company);
      }
-    
+
 }
