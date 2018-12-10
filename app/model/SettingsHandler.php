@@ -43,12 +43,12 @@ class SettingsHandler {
         return $this->database->query('update users set password= ? where id = ?',$pw, $userId);
     }
     
-     function getMyEmployees($userId, $company){
+     function getMyEmployees($userId, $companyId){
         return $this->database->fetchAll('Select '
                 . 'u.first_name, u.last_name, ucr.role, ucr.internal_costs, ucr.default_md_rate, ucr.user_id '
                 . 'from users u '
                 . 'join users_company_rel ucr on (u.id=ucr.user_id) '
-                . 'where ucr.company_id=?', $company);
+                . 'where ucr.company_id=? and ucr.role not in (?)', $companyId, 'alumni');
      }
 
 }

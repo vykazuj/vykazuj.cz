@@ -341,4 +341,32 @@ class SettingsPresenter extends BasePresenter
                 $this->sendResponse(new JsonResponse($myJSON)); 
             }
             
+            public function actionUpdateUsersCosts($userId, $companyId, $internalCost, $defaultMDRate){
+            
+            $myObj = null;
+            if(!$this->user->isLoggedIn() ){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '414';
+            }else{
+                
+                    $myClientHandler = new \ClientHandler($this->database);
+
+                    $myObj = null;
+                    try
+                        { 
+                        $row = $myClientHandler->updateUsersCosts($userId, $companyId, $internalCost, $defaultMDRate);
+                        $myObj['result'] = 'OK';
+                        $myObj['code'] = '0';
+                        $myObj['data'] = $row;
+                        }
+                    catch (\Nette\Neon\Exception $e) {
+                        $myObj['result'] = 'NOK';
+                        $myObj['code'] = $e->getMessage();
+                    } 
+                
+            }
+                $myJSON = json_encode($myObj);
+                $this->sendResponse(new JsonResponse($myJSON)); 
+            }
+            
         }

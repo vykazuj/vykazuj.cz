@@ -384,4 +384,8 @@ class ClientHandler {
         return $this->database->table('project_param')->insert($newParam);
     }
     
+    function updateUsersCosts($userId, $companyId, $internalCost, $defaultMDRate){
+     return $this->database->query("UPDATE users_company_rel set internal_costs = ?, default_md_rate = ? where user_id = ? and company_id = ? ", $internalCost, $defaultMDRate, $userId, $companyId);
+    }
+    
 }
