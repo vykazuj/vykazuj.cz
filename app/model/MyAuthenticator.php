@@ -27,13 +27,7 @@ class MyAuthenticator implements NS\IAuthenticator
         if ($row["status"]=="registered") {
             throw new NS\AuthenticationException('Účet není aktivní. Potvrďte jí podle instrukcí v e-mailu.');
         }                
-        return new NS\Identity($row->id, 
-                $row->role, 
-                ['username' => $row->username, 
-                    'first_name' => $row->first_name, 
-                    'last_name' => $row->last_name, 
-                    'image' => $row->image, 
-                    'job_title' => $row->job_title]);
+        return new NS\Identity($row->id, $row->role, ['username' => $row->username, 'first_name' => $row->first_name, 'last_name' => $row->last_name, 'image' => $row->image]);
     }
     
     function authenticateExternal($source, $source_id)
@@ -49,12 +43,6 @@ class MyAuthenticator implements NS\IAuthenticator
         if (!$row) {
             throw new NS\AuthenticationException('Nesprávné jméno či heslo.');
         }        
-        return new NS\Identity($row->id, 
-                $row->role, 
-                ['username' => $row->username, 
-                    'first_name' => $row->first_name, 
-                    'last_name' => $row->last_name, 
-                    'image' => $row->image, 
-                    'job_title' => $row->job_title]);
+        return new NS\Identity($row->id, $row->role, ['username' => $row->username, 'first_name' => $row->first_name, 'last_name' => $row->last_name, 'image' => $row->image]);
     }
 }

@@ -18,15 +18,10 @@ class ClientsPresenter extends BasePresenter
                 $this->template->firstName = $this->user->getIdentity()->first_name;
                 $this->template->lastName = $this->user->getIdentity()->last_name; 
                 $this->template->userImage = $this->user->getIdentity()->image; 
-                $this->template->jobTitle = $this->user->getIdentity()->job_title; 
                 $this->template->activePage = 'clients'; 
 	}
         
         public function actionDefault(){
-            if(!$this->user->isLoggedIn() ){
-                $this->redirect('Homepage:default');
-            }
-            
             //$this->user->login(3);
             $myRecordHandler = new \RecordHandler($this->database);
             
@@ -61,32 +56,24 @@ class ClientsPresenter extends BasePresenter
         }       
         
         public function actionGetMyClients(){
-            
-                        
-            if(!$this->user->isLoggedIn() ){
-                $myObj['result'] = 'NOT OK';
-                $myObj['code'] = '100';
-                $myObj['data'] = 'Nejste přihlášen.'; 
-            }else{
-            
             $myClientHandler = new \ClientHandler($this->database);
             $companySessions = $this->getSession('Company');
             $companyId = $myClientHandler->getPrefCompany($this->user->getId());
             $companySessions->id = $companyId;
+            
             $myRole = $myClientHandler->getUserCompanyRel($this->user->getId(),$companyId);
             if($myRole == 'accountant' || $myRole == 'owner'){
 
-                    $myObj = null;
-                    $myObj['result'] = 'OK';
-                    $myObj['code'] = '0';
-                    //$myObj['data'] = $myClientHandler->getMyClients($this->user->getId());
-                    $myObj['data'] = $myClientHandler->getMyClients($this->user->getId(), $companyId);
-
-                }else{
-                $myObj['result'] = 'NOT OK';
-                $myObj['code'] = '101';
-                $myObj['data'] = 'Nemáte právo na požadovaný zdroj';
-                }
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            //$myObj['data'] = $myClientHandler->getMyClients($this->user->getId());
+            $myObj['data'] = $myClientHandler->getMyClients($this->user->getId(), $companyId);
+            
+            }else{
+            $myObj['result'] = 'NOT OK';
+            $myObj['code'] = '101';
+            $myObj['data'] = 'Nemáte právo na požadovaný zdroj';
             }
             
             $myJSON = json_encode($myObj);

@@ -141,11 +141,11 @@ class Templatecc1467143b extends Latte\Runtime\Template
         <span class="full-name"><?php echo LR\Filters::escapeHtmlText($firstName) /* line 45 */ ?> <?php
 		echo LR\Filters::escapeHtmlText($lastName) /* line 45 */ ?></span>
         <span class="job-title"><?php
-		if (isset($jobTitle)) {
-			echo LR\Filters::escapeHtmlText($jobTitle) /* line 46 */;
+		if ($lastName == 'Haase' || $lastName == 'Lamaj') {
+			?>Slave<?php
 		}
 		else {
-			?>Dodavatel<?php
+			?>Jednatel<?php
 		}
 ?></span>
         <div class="list-group">

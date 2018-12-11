@@ -22,16 +22,15 @@ class SettingsHandler {
     }
 
     function getMe($userId){
-        return $this->database->fetchAll('select first_name, last_name, phone, email, integration_id, job_title from users where id = ?',$userId);
+        return $this->database->fetchAll('select first_name, last_name, phone, email, integration_id from users where id = ?',$userId);
     }
 
-    function updateMyDetails($userId, $name, $surname, $phone, $email, $job_title){
+    function updateMyDetails($userId, $name, $surname, $phone, $email){
         return $this->database->query('UPDATE users set ', [
             'first_name' => $name,
             'last_name' => $surname,
             'phone' => $phone,
-            'email' => $email,
-            'job_title' => $job_title,]
+            'email' => $email,]
             , 'WHERE id = ?', $userId
         );
         
