@@ -141,11 +141,11 @@ class Templatecc1467143b extends Latte\Runtime\Template
         <span class="full-name"><?php echo LR\Filters::escapeHtmlText($firstName) /* line 45 */ ?> <?php
 		echo LR\Filters::escapeHtmlText($lastName) /* line 45 */ ?></span>
         <span class="job-title"><?php
-		if (isset($jobTitle)) {
-			echo LR\Filters::escapeHtmlText($jobTitle) /* line 46 */;
+		if ($lastName == 'Haase' || $lastName == 'Lamaj') {
+			?>Slave<?php
 		}
 		else {
-			?>Dodavatel<?php
+			?>Jednatel<?php
 		}
 ?></span>
         <div class="list-group">
@@ -201,7 +201,17 @@ class Templatecc1467143b extends Latte\Runtime\Template
 		extract($_args);
 ?>
 <style>
-    
+
+.users_list {
+        border: 1px solid #dee2e6 !important;
+        border-radius: 10px;
+        padding-right: 8px;
+        white-space: pre;
+    }   
+.users_list:hover {
+        background-color: #EDEDED;
+        cursor: pointer;
+    }    
 .small-screen { display:none;}
    
 select.client_not_name_label{

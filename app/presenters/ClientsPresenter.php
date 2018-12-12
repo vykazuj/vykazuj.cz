@@ -18,15 +18,10 @@ class ClientsPresenter extends BasePresenter
                 $this->template->firstName = $this->user->getIdentity()->first_name;
                 $this->template->lastName = $this->user->getIdentity()->last_name; 
                 $this->template->userImage = $this->user->getIdentity()->image; 
-                $this->template->jobTitle = $this->user->getIdentity()->job_title; 
                 $this->template->activePage = 'clients'; 
 	}
         
         public function actionDefault(){
-            if(!$this->user->isLoggedIn() ){
-                $this->redirect('Homepage:default');
-            }
-            
             //$this->user->login(3);
             $myRecordHandler = new \RecordHandler($this->database);
             
@@ -61,32 +56,24 @@ class ClientsPresenter extends BasePresenter
         }       
         
         public function actionGetMyClients(){
-            
-                        
-            if(!$this->user->isLoggedIn() ){
-                $myObj['result'] = 'NOT OK';
-                $myObj['code'] = '100';
-                $myObj['data'] = 'Nejste přihlášen.'; 
-            }else{
-            
             $myClientHandler = new \ClientHandler($this->database);
             $companySessions = $this->getSession('Company');
             $companyId = $myClientHandler->getPrefCompany($this->user->getId());
             $companySessions->id = $companyId;
+            
             $myRole = $myClientHandler->getUserCompanyRel($this->user->getId(),$companyId);
             if($myRole == 'accountant' || $myRole == 'owner'){
 
-                    $myObj = null;
-                    $myObj['result'] = 'OK';
-                    $myObj['code'] = '0';
-                    //$myObj['data'] = $myClientHandler->getMyClients($this->user->getId());
-                    $myObj['data'] = $myClientHandler->getMyClients($this->user->getId(), $companyId);
-
-                }else{
-                $myObj['result'] = 'NOT OK';
-                $myObj['code'] = '101';
-                $myObj['data'] = 'Nemáte právo na požadovaný zdroj';
-                }
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            //$myObj['data'] = $myClientHandler->getMyClients($this->user->getId());
+            $myObj['data'] = $myClientHandler->getMyClients($this->user->getId(), $companyId);
+            
+            }else{
+            $myObj['result'] = 'NOT OK';
+            $myObj['code'] = '101';
+            $myObj['data'] = 'Nemáte právo na požadovaný zdroj';
             }
             
             $myJSON = json_encode($myObj);
@@ -293,6 +280,35 @@ class ClientsPresenter extends BasePresenter
             
         } 
         
+        
+        public function actionUpdateUsersProjectRel($userId, $projectId, $rel){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if(!$this->user->isLoggedIn()){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '123';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif($myClientHandler->isUserAllowedToManageProject($userId, $projectId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'ERR125 - Vlastník a PMO projektu lze změnit jen přes vlastnosti projektu.';
+                $myObj['data'] = 'Nemáte právo na tento projekt'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageProject($this->user->getId(), $projectId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '124';
+                $myObj['data'] = 'Nemáte právo na tento projekt'; 
+            }else{
+                $myClientHandler->upsertUserProjectRel($userId, $projectId, 0, $rel);
+            }
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+            
+        } 
+        
+        
         public function actionUpdateUworDetails($uworId, $finder, $value, $userId, $workOrderId){
             $myClientHandler = new \ClientHandler($this->database);
             
@@ -365,11 +381,11 @@ class ClientsPresenter extends BasePresenter
             
             if(!$this->user->isLoggedIn()){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = '121';
+                $myObj['code'] = '126';
                 $myObj['data'] = 'Nejste přihlášen.'; 
             }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = '122';
+                $myObj['code'] = '127';
                 $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
             }else{
                 $myClientHandler->updateProjectParam($projectParamId, $value);
