@@ -154,7 +154,7 @@ class ClientHandler {
     }
     function isUserAllowedToChargeOnProject($userId, $projectId){
         $project = $this->getProject($projectId);
-        $clientId = $project[0]["id"];
+        $clientId = $project[0]["client_id"];
         return $this->isUserAllowedToChargeOnClient($userId, $clientId);
     }
     
