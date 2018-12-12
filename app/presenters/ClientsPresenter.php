@@ -280,6 +280,35 @@ class ClientsPresenter extends BasePresenter
             
         } 
         
+        
+        public function actionUpdateUsersProjectRel($userId, $projectId, $rel){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if(!$this->user->isLoggedIn()){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '123';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif($myClientHandler->isUserAllowedToManageProject($userId, $projectId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = 'ERR125 - Vlastník a PMO projektu lze změnit jen přes vlastnosti projektu.';
+                $myObj['data'] = 'Nemáte právo na tento projekt'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageProject($this->user->getId(), $projectId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '124';
+                $myObj['data'] = 'Nemáte právo na tento projekt'; 
+            }else{
+                $myClientHandler->upsertUserProjectRel($userId, $projectId, 0, $rel);
+            }
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+            
+        } 
+        
+        
         public function actionUpdateUworDetails($uworId, $finder, $value, $userId, $workOrderId){
             $myClientHandler = new \ClientHandler($this->database);
             
@@ -352,11 +381,11 @@ class ClientsPresenter extends BasePresenter
             
             if(!$this->user->isLoggedIn()){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = '121';
+                $myObj['code'] = '126';
                 $myObj['data'] = 'Nejste přihlášen.'; 
             }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
                 $myObj['result'] = 'NOT OK';
-                $myObj['code'] = '122';
+                $myObj['code'] = '127';
                 $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
             }else{
                 $myClientHandler->updateProjectParam($projectParamId, $value);

@@ -639,7 +639,7 @@ class Container_32484185c6 extends Nette\DI\Container
 		$service = new NetteOpauth\NetteOpauth([
 			'path' => '/vykazuj/www/auth/',
 			'callback_url' => '{path}callback',
-			'security_salt' => '123abc456def',
+			'security_salt' => '',
 			'debug' => true,
 			'callback_transport' => 'session',
 			'Strategy' => [

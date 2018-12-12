@@ -13,6 +13,11 @@
  */
 class ClientHandler {
     public $database;
+    public $rolesToManageProject = array("owner", "pmo");
+    public $rolesActiveForCompany = array('owner','accountant','user');
+    public $rolesInactiveForCompany = array('alumni');
+    public $rolesActiveForProject = array('user','pmo','owner');
+    public $rolesInactiveForProject = array('alumni');
     
     function __construct(Nette\Database\Context $database)
     {
@@ -42,7 +47,23 @@ class ClientHandler {
     }
     
     function getMyClientProjectsWithParameters($userId, $clientId){
-        return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from client cl, company co, project pr, project_param pp, users_company_rel ucr where ucr.company_id = co.id and pp.project_id = pr.id and pr.client_id = cl.id and cl.company_id = co.id and ucr.user_id = ? and cl.id = ? and ucr.role in (?,?) ',$userId, $clientId, 'owner','accountant');
+        $projects =  $this->database->fetchAll('select pr.* from project pr, users_project_rel upr where upr.user_id = ? and upr.project_id = pr.id and pr.client_id = ? and upr.rel in (?,?) ',$userId, $clientId, 'owner','pmo');
+        $client = $this->getClient($clientId);
+        $companyId = $client[0]["company_id"];
+        $i = 0;
+        $return = null;
+        foreach($projects as $project){
+            $return[$i]["project"] = $project;
+            $return[$i]["projectParams"]= $this->database->fetchAll('select pp.project_id as project_id, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from project_param pp where pp.project_id = ? ',$project->id);
+            $return[$i]["activeUsers"]= $this->database->fetchAll('select upr.id as uprId, u.* from users u, users_project_rel upr where upr.user_id = u.id and upr.project_id = ? ',$project->id);
+            $return[$i]["inactiveUsers"]= $this->database->fetchAll('select -1 as uprId, u.* from users_company_rel ucr, users u left join users_project_rel upr on upr.user_id = u.id and upr.rel in (?) where upr.user_id is null and u.id = ucr.user_id and ucr.company_id = ? and ucr.role in (?) ',$this->rolesActiveForProject,$companyId,$this->rolesActiveForCompany);
+            $i++;
+        }
+        return $return;
+        // $project =  $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from client cl, company co, project pr, project_param pp, users_company_rel ucr where ucr.company_id = co.id and pp.project_id = pr.id and pr.client_id = cl.id and cl.company_id = co.id and ucr.user_id = ? and cl.id = ? and ucr.role in (?,?) ',$userId, $clientId, 'owner','accountant');
+        
+        
+        
     }
     
     function getProjectWithParameters($projectId){
@@ -76,6 +97,7 @@ class ClientHandler {
 
     }
     
+    
     function getProject($projectId){
         return $this->database->fetchAll('select pr.*, pp.param as param, pp.value as value, pp.id as param_id from project pr, project_param pp where pp.project_id = pr.id and pr.id = ?',$projectId);  
     }
@@ -102,6 +124,13 @@ class ClientHandler {
             {return false;}
     }
     
+    function isUserAllowedToManageProject($userId, $projectId){
+        $role = $this->getUserProjectRel($userId, $projectId);
+        if (in_array($role, $this->rolesToManageProject))
+            {return true;}
+        else
+            {return false;}
+    }
     function isUserAllowedToChargeOnProject($userId, $projectId){
         $project = $this->getProject($projectId);
         $clientId = $project[0]["id"];
@@ -115,15 +144,15 @@ class ClientHandler {
     function getWorkOrderOfUwor($uworId){
         return $this->database->fetch("select * from users_work_order_rel where id = ?",$uworId);
     }
-    
+    /*
     function isMyProject($userId, $projectId){
-        $rowNum = $this->database->query('select * from users_project_rel where user_id = ? and project_id = ?',$userId, $projectId)->getRowCount();
+        $rowNum = $this->database->query('select * from users_project_rel where user_id = ? and project_id = ? and rel = ? ',$userId, $projectId,'user')->getRowCount();
         if($rowNum>0)
             {return true;}
         else
             {return false;}
     }
-    
+    */
     function isMyCompany($userId, $companyId){
         $rowNum = $this->database->query('select * from users_company_rel where user_id = ? and company_id = ?',$userId, $companyId)->getRowCount();
         if($rowNum>0)
@@ -247,6 +276,28 @@ class ClientHandler {
         return $this->database->table("users_work_order_rel")->insert($input);
     }
     
+    function getUpr($uprId){
+        return $this->database->fetch('select * from users_project_rel where id = ?',$uprId);
+    }
+    
+    function updateUpr($uprId, $finder, $value){
+        $os = array("status", "md_rate");
+        if (in_array($finder, $os)) {
+            return $this->database->query("update users_project_rel set ".$finder." = ? where id = ?", $value, $uprId);
+        }else{
+            return false;
+        }
+    }
+    
+    function createUpr($userId, $projectId){
+        $input["id"] = null;
+        $input["user_id"] = $userId;
+        $input["project_id"] = $projectId;
+        $input["md_rate"] = 0;
+        $input["status"] = 'active';
+        return $this->database->table("users_project_rel")->insert($input);
+    }
+    
     function updateProject($projectId, $finder, $value){
         $os = array("name");
         if (in_array($finder, $os)) {
@@ -321,14 +372,23 @@ class ClientHandler {
         return $this->database->fetchField("select role from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId);
     }
     
-    function createUserProjectRel($userId, $projectId, $mdRate){
+    function getUserProjectRel($userId, $projectId){
+        return $this->database->fetchField("select rel from users_project_rel where user_id = ? and project_id = ?",$userId, $projectId);
+    }
+    
+    function upsertUserProjectRel($userId, $projectId, $mdRate, $rel){
         $input["user_id"] = $userId;
         $input["project_id"] = $projectId;
-        $input["rel"] = 'user';
+        $input["rel"] = $rel;
         $input["md_rate"] = $mdRate;
-        //return $this->database->query("insert into users_company_rel (id, user_id, project_id, rel, md_rate) values (null,?,?,?)",$userId, $projectId, 'user' ,$mdRate);
-        return $this->database->table('users_project_rel')->insert($input);
+        $rownum = $this->database->query("select * from users_project_rel where user_id = ? and project_id = ?",$userId, $projectId)->getRowCount();
+        if($rownum>0){
+            return $this->database->query("UPDATE users_project_rel set rel = ? where user_id = ? and project_id = ? ", $rel, $userId, $projectId);
+        }else{
+            return $this->database->table("users_project_rel")->insert($input);
+        }
     }
+        
     
     function createNewProjectSpecial($userId, $clientId,$name,$flag){
         $project["id"] = null;
@@ -341,7 +401,7 @@ class ClientHandler {
         $userProjectRel["id"] = null;
         $userProjectRel["user_id"] = $userId;
         $userProjectRel["project_id"] = $row["id"];
-        $userProjectRel["rel"] = 'user';
+        $userProjectRel["rel"] = 'owner';
         $row2 = $this->database->table('users_project_rel')->insert($userProjectRel);
         
         return $row->toArray();
@@ -357,7 +417,7 @@ class ClientHandler {
         $userProjectRel["id"] = null;
         $userProjectRel["user_id"] = $userId;
         $userProjectRel["project_id"] = $row["id"];
-        $userProjectRel["rel"] = 'user';
+        $userProjectRel["rel"] = 'owner';
         $row2 = $this->database->table('users_project_rel')->insert($userProjectRel);
         
         return $row->toArray();
@@ -382,6 +442,10 @@ class ClientHandler {
         $newParam["param"] = $param;
         $newParam["value"] = $value;
         return $this->database->table('project_param')->insert($newParam);
+    }
+    
+    function updateUsersCosts($userId, $companyId, $internalCost, $defaultMDRate){
+     return $this->database->query("UPDATE users_company_rel set internal_costs = ?, default_md_rate = ? where user_id = ? and company_id = ? ", $internalCost, $defaultMDRate, $userId, $companyId);
     }
     
 }

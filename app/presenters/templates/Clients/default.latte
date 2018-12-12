@@ -27,14 +27,14 @@
                         IČO:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold">
-                        <input type="text" value="24211427" id="client_ico_label" class="client_not_name_label client_labels_all" finder="ico"><br>
+                        <input type="text" value="" id="client_ico_label" class="client_not_name_label client_labels_all" finder="ico"><br>
                     </div>
                     
                     <div class="col-lg-1 col-3 text-left">
                         Telefon:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold">
-                        <input type="text" value="724 903 098" id="client_phone_label" class="client_not_name_label client_labels_all" finder="phone"><br>
+                        <input type="text" value="" id="client_phone_label" class="client_not_name_label client_labels_all" finder="phone"><br>
                     </div>
                 </div>
                 
@@ -44,14 +44,14 @@
                         Kontakt:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold" >
-                        <input type="text" value="Ing. Jan Kuba" id="client_contact_label" class="client_not_name_label client_labels_all" finder="contact"><br>
+                        <input type="text" value="" id="client_contact_label" class="client_not_name_label client_labels_all" finder="contact"><br>
                     </div>
                     
                     <div class="col-lg-1 col-3 text-left">
                         Email:<br>
                     </div>
                     <div class="col-lg-5 col-9 text-left font-weight-semibold">
-                        <input type="text" value="info@granton.cz" id="client_email_label" class="client_not_name_label client_labels_all" finder="email"><br>
+                        <input type="text" value="" id="client_email_label" class="client_not_name_label client_labels_all" finder="email"><br>
                     </div>
                 </div>
                 
@@ -60,7 +60,7 @@
                         Adresa:<br>
                     </div>
                     <div class="col-lg-11 col-9 text-left font-weight-semibold">
-                        <input type="text" value="V Pachmance 540, Nebušice 164 00 Praha" id="client_address_label" class="client_not_name_label client_labels_all" finder="address"><br>
+                        <input type="text" value="" id="client_address_label" class="client_not_name_label client_labels_all" finder="address"><br>
                     </div>
                 </div>
                 
@@ -148,6 +148,11 @@
         
         var getMyClientOrdersSemafor = true;
                
+        function validateMail(email){
+            var re = /\S+@\S+[.]\S+/;
+            return re.test(email);
+        }
+        
         function updateClientDetails(clientId, finder, value){
             $("#save-client").text("Ukládám...");
             $.ajax(
@@ -341,7 +346,7 @@
                                 //+'<span class="delete_project" projectid="'+data["id"]+'"><i class="fas fa-trash-alt fa-1x clients-svg"></i></span> '
                                 //+'</small>'                        
                                 +'<input type="text" value="'+data["name"]+'" projectid="'+data["id"]+'" finder="name" class="project_labels_all font-weight-semibold">'
-                        +'</div>';     
+                        +'</div></div>';     
             
             $("#clients-row-head").after(row);          
             //var len = (1+11*data["name"].length)+'px';
@@ -354,21 +359,64 @@
             var element = '';    
             //alert(data['param_lic']);
             if (data['param_lic'] !== 'status'){
-                    element = '<input type="text" value="'+data["value"]+'" projectid="'+data["id"]+'" projectparamid="'+data['param_id']+'" class="project_param_labels_all font-weight-semibold">';
+                    element = '<input type="text" value="'+data["value"]+'" projectid="'+data["project_id"]+'" projectparamid="'+data['param_id']+'" class="project_param_labels_all font-weight-semibold">';
                     row = row + element + '</div>';
                 }else{
-                    element = '<select class="project_param_labels_all project_param_select_labels_all" projectparamid="'+data['param_id']+'" projectid="'+data["id"]+'"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select>';
+                    element = '<select class="project_param_labels_all project_param_select_labels_all" projectparamid="'+data['param_id']+'" projectid="'+data["project_id"]+'"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select>';
                     row = row + element + '</div>';
-                }            
-            
-            //$("#clients-row-head").after(row);          
-            $("div.project-first-row[projectid='"+data["id"]+"']").append(row); 
+                }                 
+            $("div.project-first-row[projectid='"+data["project_id"]+"']").append(row); 
             
             if (data['param_lic'] === 'status'){ $("select.project_param_select_labels_all[projectparamid='"+data['param_id']+"']").val(data["value"]);}
-                    
-            //var len = (1+11*data["name"].length)+'px';
-            //$("input.project_labels_all[projectid='"+data["id"]+"']").css("width",len);
-            //$(".project_param_select_labels_all[projectparamid='"+data["param_id"]+"']").val(data["value"]);
+        }
+        
+        function addRowOfActiveUserToProject(data, project_id){
+                var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Aktivní uživatelé: </div>';
+                row = row + '<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px active-project-users" projectid="'+project_id+'">';
+                for(i in data){
+                row = row + '<span class="users_list del-user-from-project" userid="'+data[i]['id']+'"><i class="fas fa-times-circle"></i>'+data[i]['first_name']+' '+data[i]['last_name']+'</span> ';
+                }
+                row = row + '</div>';
+                $("div.project-first-row[projectid='"+project_id+"']").append(row); 
+        }
+         
+               
+        function addRowOfInactiveUserToProject(data, project_id){
+                var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Nepřiřazení uživatelé: </div>';
+                row = row + '<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px inactive-project-users" projectid="'+project_id+'">';
+                for(i in data){
+                    row = row + '<span class="users_list add-user-to-project" userid="'+data[i]['id']+'"><i class="fas fa-plus-circle"></i>'+data[i]['first_name']+' '+data[i]['last_name']+'</span> ';
+                }
+                row = row + '</div>';
+                $("div.project-first-row[projectid='"+project_id+"']").append(row); 
+        }
+        
+        function addSingleActiveUserToProject(name, user_id, project_id){
+                row = '<span class="users_list del-user-from-project" userid="'+user_id+'"><i class="fas fa-times-circle"></i>'+name+'</span> ';
+                $("div.active-project-users[projectid='"+project_id+"']").append(row); 
+                
+                $("span.del-user-from-project[userid='"+user_id+"']").click( function(){
+                var projectId = $(this).parent().attr("projectid");
+                var userId = $(this).attr("userid");
+                $(this).children("svg").remove();
+                addSingleInctiveUserToProject($(this).text(), userId, projectId);
+                $(this).remove();
+                updateUsersProjectRel(user_id, project_id, 'user');
+            });
+        }
+        
+        function addSingleInctiveUserToProject(name, user_id, project_id){
+                row = '<span class="users_list add-user-to-project" userid="'+user_id+'"><i class="fas fa-plus-circle"></i>'+name+'</span> ';
+                $("div.inactive-project-users[projectid='"+project_id+"']").append(row); 
+                
+                $("span.add-user-to-project[userid='"+user_id+"']").click( function(){
+                    var projectId = $(this).parent().attr("projectid");
+                    var userId = $(this).attr("userid");
+                    $(this).children("svg").remove();
+                    addSingleActiveUserToProject($(this).text(), userId, projectId);
+                    $(this).remove();
+                });
+                updateUsersProjectRel(user_id, project_id, 'alumni');
         }
         
         function createNewWorkOrder(){
@@ -441,7 +489,29 @@
                 });      
         }      
         
+        function updateUsersProjectRel(user_id, project_id, rel){
+            
+            $.ajax(
+            {
+               type: 'GET',
+               url: home_url+'/clients/update-users-project-rel',
+               data: {  userId: user_id,
+                        projectId: project_id,
+                        rel : rel},
+               dataType: 'json',
+               cache: false,
+               success: function(data)
+                    { var json = $.parseJSON(data); 
+                        if(json.result==='OK'){
+                        }else{
+                            alert(json.code);
+                        }
+                    }
+            }); 
+        }      
+                
         function getMyClientOrders(id){
+            /*
             if(getMyClientOrdersSemafor){
                 getMyClientOrdersSemafor = false;
                 $.ajax(
@@ -476,9 +546,11 @@
                   }
                 });  
             }
+         */
         }
         
         function getMyClientOrdersPart2(id){
+            /*
             $.ajax(
             {
               type: 'GET',
@@ -503,7 +575,7 @@
                 
               }
             });  
-            
+            */
         }
         
         function getMyClientProjects(id){
@@ -516,24 +588,22 @@
               success: function(data)
               { 
                 var json = $.parseJSON(data);
-                var lastProjectID = -1;
                 if(json.result!=='OK'){
                     alert(json.code);
                 }else{
                     var raw_data = json.data;
                     for (i in raw_data)
                     {
-                        if(raw_data[i]['id'] !== lastProjectID){
-                            if(lastProjectID !== -1){
-                                $("#clients-row-head").after('</div>');  
-                            }
-                            lastProjectID = raw_data[i]['id'];
-                            addClientFirstRow(raw_data[i]);
+                        var project_id = raw_data[i]["project"]["id"];
+                        addClientFirstRow(raw_data[i]["project"]);
+                        for(j in raw_data[i]["projectParams"] ){
+                            addClientRow(raw_data[i]["projectParams"][j]);
                         }
-                       addClientRow(raw_data[i]);
+                            addRowOfActiveUserToProject(raw_data[i]["activeUsers"], project_id);
+                            addRowOfInactiveUserToProject(raw_data[i]["inactiveUsers"], project_id);
+                        //addClientRow(raw_data[i]);
                       //setSelectAction(raw_data[i].id);
                     }
-                      $("#clients-row-head").after('</div>');  
                       setUpMyProjectsDetails();
                 }     
                 
@@ -627,6 +697,10 @@
                 var finder = $(this).attr("finder");
                 var value = $(this).val();
                 var clientId = $("#client_name_label").attr("clientid");
+                
+                if(finder === 'email'){
+                    if(!validateMail(value) && value !==''){ alert('Zadejte platnou e-mailovou adresu.'); return false; }
+                }
                 updateClientDetails(clientId, finder, value);
             });
             $(".client_labels_all[finder='name']").keyup( function(){
@@ -657,6 +731,22 @@
                 var projectParamId = $(this).attr("projectparamid");
                 var value = $(this).val();
                 updateProjectParam(projectId, projectParamId, value);
+            });
+                        
+            $("span.del-user-from-project").click( function(){
+                var projectId = $(this).parent().attr("projectid");
+                var userId = $(this).attr("userid");
+                $(this).children("svg").remove();
+                addSingleInctiveUserToProject($(this).text(), userId, projectId);
+                $(this).remove();
+            });
+                        
+            $("span.add-user-to-project").click( function(){
+                var projectId = $(this).parent().attr("projectid");
+                var userId = $(this).attr("userid");
+                $(this).children("svg").remove();
+                addSingleActiveUserToProject($(this).text(), userId, projectId);
+                $(this).remove();
             });
                         
             $(".delete_project").click( function(){
@@ -727,7 +817,7 @@
         
     $(document).ready(function() 
     {   
-        getMyClients();        
+        getMyClients();         
         $("#add-new-client").click( function(){
             window.location.href = home_url+"/clients/create-new-client";
         });
@@ -1049,10 +1139,6 @@ div.clients-row{
     border-radius: 5px;
     padding-bottom: 3px;
     padding-top: 3px;
-}
-
-div.clients-row:hover{
-    background-color: #EDEDED;
 }
 
 input.clients_labels_kc {

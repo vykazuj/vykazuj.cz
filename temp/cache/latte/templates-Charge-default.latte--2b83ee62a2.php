@@ -29,6 +29,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 	function prepare()
 	{
 		extract($this->params);
+		if (isset($this->params['flash'])) trigger_error('Variable $flash overwritten in foreach on line 46');
 		Nette\Bridges\ApplicationLatte\UIRuntime::initialize($this, $this->parentName, $this->blocks);
 		
 	}
@@ -53,7 +54,13 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
         
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
-            <li><a href="#" id="yearPick">2018</a></li>
+            <li id="liPickYear">
+                <select class="client_not_name_label" id="yearPick">
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2019">2020</option>
+                </select>
+            </li>
             <li class="monthLink<?php
 		if ($actualMonth==1) {
 			?> active<?php
@@ -115,12 +122,54 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 		}
 ?>" month="12">Prosinec</a></li>
           </ul>
-        </div>        
-            <div id="progressContainer">
-                               
-            </div>   
-                
-                <div class="container container-inner timetable" id="my-charged-records-table">
+        </div>       
+        
+          <!--<div id="progressContainer"></div>   
+          -->
+            
+                <div class="container container-inner timetable" id="my-charged-records-table"> 
+                    
+<?php
+		if (isset($flashes)) {
+			?>                <?php
+			if ($flashes != null) {
+				?><br><?php
+			}
+?>
+
+<?php
+			$iterations = 0;
+			foreach ($flashes as $flash) {
+				?>                <div class="text-left alert alert-<?php echo LR\Filters::escapeHtmlAttr($flash->type) /* line 46 */ ?>">
+                    <span>
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <?php
+				if ($flash->type == "danger") {
+?><strong>Chyba! </strong>
+                        <?php
+				}
+				elseif ($flash->type == "warning") {
+?><strong>Varování: </strong>
+                        <?php
+				}
+				elseif ($flash->type == "info") {
+?><strong>Info: </strong>
+                        <?php
+				}
+				elseif ($flash->type == "success") {
+?><strong>Úspěch: </strong>
+<?php
+				}
+				?>                        <?php echo LR\Filters::escapeHtmlText($flash->message) /* line 54 */ ?>
+
+                    </span>
+                </div>
+<?php
+				$iterations++;
+			}
+		}
+?>
+            
                         <div class="row" id="my-charged-records-table-first">
                             <div class="col-lg-8">
                                 <div class="row">
@@ -167,15 +216,14 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
             <li class="nav-pills-graph nopointer">
                 
             <div style="margin-left:5%; width:90%; position:relative; text-align: center; nopointer">
-            <br>
-                <a target="_blank" href="<?php echo LR\Filters::escapeHtmlAttr($this->global->uiControl->link("createTimesheet", [2018, 12, 4, 0])) ?>">Timesheet<i class="fas fa-download"></i></a>
-                    <br>
+            
+                <!--<br><a n:href="createTimesheet 2018, 12, 4, 0" target="_blank">Timesheet<i class="fas fa-download"></i></a> <br -->
                 </span>
                 <br>
                 <div class ="graph-title">
                     
                     <div>
-                      <p class = "right-block-p">  Souhrn za měsíc </p> 
+                      <p class = "right-block-p">  Souhrn za měsíc:</p> 
                     </div>                    
                     
                         <div id = "chargedProject">
@@ -227,8 +275,8 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
      
     $(document).ready(function() 
     {          
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 143 */ ?>;  
-        var active_page = <?php echo LR\Filters::escapeJs($activePage) /* line 144 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 164 */ ?>;  
+        var active_page = <?php echo LR\Filters::escapeJs($activePage) /* line 165 */ ?>;
         $.getScript(home_url+'/js/init_scripts.js', function()
         {
             initSharedFunctions(home_url, active_page);
@@ -338,20 +386,20 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
         }
 
         function bulkRecors(projectId, hours){
-            var year = Number($("#yearPick").text());
             
             $.ajax(
                 {
 
                    type: 'GET',
-                   url: home_url+'/charge/bulk-records?hours='+hours+'&projectId='+projectId+'&month='+actualMonth+'&year='+year,
+                   url: home_url+'/charge/bulk-records?hours='+hours+'&projectId='+projectId+'&month='+actualMonth+'&year='+actualYear,
                    dataType: 'json',
                    cache: false,
                    success: function(data)
                         {
+                            deleteActualRecors();
                             var json = $.parseJSON(data); 
                             if(json.result==='OK'){
-                               fillMeCalendar(actualMonth, year);
+                               fillMeCalendar(actualMonth, actualYear);
                             }else{
                                 alert(json.code);
                             }
@@ -388,7 +436,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
                                 });
                             }else{
                                 
-                                var year = Number($("#yearPick").text());
+                                var year = Number($("#yearPick").val());
                                 var day = Number($(this).parent().children("div.rowDay").text());
                                 let dayName =$(this).parent().children("div.rowDayOfWeek").text();
                                 $.ajax(
@@ -610,8 +658,8 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
                                                                                           <li>Hodiny: <a id ="totalHours"'+i+'>'+hoursSum(i)+' '+'h</a></li>\n\
                                                                                           <li>Přesčas: <a id ="totalHoursOver">'+hoursSumOver(i)+' '+'h</a></li>\n\
                                                                                           <li>Faktura celkem: 1 000 Kč</li>\n\
-                                                                                          <li><a href="'+home_url+'/charge/create-timesheet?year=2018&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0" target="_blank">Timesheet</a></li>\n\
-                                                                                          <li><a href="'+home_url+'/charge/send-timesheet?year=2018&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0">Odeslat fakturu</a></li>\n\
+                                                                                          <li><a href="'+home_url+'/charge/create-timesheet?year='+actualYear+'&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0" target="_blank">Timesheet</a></li>\n\
+                                                                                          <li><a href="'+home_url+'/charge/send-timesheet?year='+actualYear+'&amp;month='+actualMonth+'&amp;projectId='+selectedId[i]+'&amp;withPrices=0">Odeslat fakturu</a></li>\n\
                                                                                       </ul> </br>');
                                                 }               
                                             }
@@ -619,7 +667,15 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
         
                 
         //Posrane je to posrane
-        
+           
+
+        function deleteActualRecors(){               
+            $.each($("#my-charged-records-table-first").nextAll(), 
+                    function (){ 
+                        $(this).remove();}
+                );
+
+        }
         function fillMeCalendar(month, year){ 
             $.ajax(
                     {
@@ -634,6 +690,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
                                         {  
                                         let days = daysInMonth(month, year); 
                                         let hrouda = 0;   
+                                        deleteActualRecors();
                                         for(var i=1; i<=days;i++){
                                             var date = new Date(month+'/'+i+'/'+year);
                                             var dayName = daysOfWeek[date.getDay()];
@@ -667,108 +724,37 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
                             }
                     }
                 )
-        }        
-
-        function deleteActualRecors(){               
-            $.each($("#my-charged-records-table-first").nextAll(), 
-                    function (){ 
-                        $(this).remove();}
-                );
-
-        }
+        }     
       
         $("li.monthLink").click(function(){
             var newMonth = $(this).attr('month');
-            deleteActualRecors();
-            //loadCalendar(newMonth, 2018);
-            fillMeCalendar(newMonth, 2018);
-            //loadActualRecords(newMonth, 2018);
+            fillMeCalendar(newMonth, actualYear);
             $('li.active').removeClass('active');
             $(this).addClass('active');
             actualMonth = newMonth;
         });
         
         $("#preFillButton").click(function (){
-            deleteActualRecors();
             projectId = $("#my-chargeable-projects-bulk").val();
             hours = $("#my-hours-bulk").val();
             bulkRecors(projectId, hours);         
             
         });
 
+        
         var daysOfWeek = ["Ne","Po","Út","St","Čt","Pá","So"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 613 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 614 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 615 */ ?>;  
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 632 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 633 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 634 */ ?>;  
         getMyProjects();
-        //loadCalendar(actualMonth, actualYear); 
-        //loadActualRecords(actualMonth, actualYear);
-        //alert('Aktuální rok je: '+actualMonth+'/'+actualYear);
-       // addChargedRow('St', '12','8','0','asd')   ;
-       
-                                
-               /*      new Chart(
-                document.getElementById("hours-chart"),
-                {   "type":"doughnut",
-                    "data":
-                            {"labels":["Klasické hodiny","Přesčas","Víkend"],
-                             "datasets":[{
-                                  "label":"Hodin:",
-                                  "data":[150, 10, 20],
-                                  "backgroundColor":["#D3155B","#cccdce","E52428"]
-                                 }]
-                             },
-                    "options":{
-                            legend:{
-                                "display": false
-                            },
-                            "cutoutPercentage":"90"
-                    }
-                }
-            );
-    
-
-            new Chart(
-                document.getElementById("hours-chart2"),
-                {   "type":"doughnut",
-                    "data":
-                            {"labels":["Klasické hodiny","Přesčas","Víkend"],
-                             "datasets":[{
-                                  "label":"Hodin:",
-                                  "data":[10, 30, 40],
-                                  "backgroundColor":["#D3155B","#cccdce","E52428"]
-                                 }]
-                             },
-                    "options":{
-                            legend:{
-                                "display": false
-                            },
-                            "cutoutPercentage":"90"
-                    }
-                }
-            );
-    
-
-            new Chart(
-                document.getElementById("hours-chart3"),
-                {   "type":"doughnut",
-                    "data":
-                            {"labels":["Klasické hodiny","Přesčas","Víkend"],
-                             "datasets":[{
-                                  "label":"Hodin:",
-                                  "data":[50, 40, 30],
-                                  "backgroundColor":["#D3155B","#cccdce","E52428"]
-                                 }]
-                             },
-                    "options":{
-                            legend:{
-                                "display": false
-                            },
-                            "cutoutPercentage":"90"
-                    }
-                }
-            );
-           */
+        
+        $("#yearPick").val(actualYear);
+        $("#yearPick").change(function(){
+            actualYear = $(this).val();
+            fillMeCalendar(actualMonth, actualYear);
+            //fillEmployeeChargesOverview(actualMonth, actualYear);
+        });
+        
               function progress()
         {
             
@@ -938,7 +924,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 }
 
 .timetable{
-    margin-top: 20px;
+    margin-top: 18px;
     background-color: #FFFFFF;
     border-radius: 5px;
 }

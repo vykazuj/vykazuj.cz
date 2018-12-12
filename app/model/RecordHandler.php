@@ -13,6 +13,7 @@
  */
 class RecordHandler {
     public $database;
+    public $rolesToChargeOnProject = array('user','pmo','owner');
     
     function __construct(Nette\Database\Context $database)
     {
@@ -122,11 +123,11 @@ class RecordHandler {
     }
     
     function getMyChargeableProjects($userId, $companyId){
-        return $this->database->fetchAll('select p.* from project p, users_project_rel upr, project_param pp, client cl, company co where co.id = cl.company_id and cl.id = p.client_id and p.id = upr.project_id and p.id = pp.project_id and pp.param_id = ? and pp.value = ? and upr.user_id = ? and upr.rel = ? and co.id= ? ','status','active',$userId,'user',$companyId);
+        return $this->database->fetchAll('select p.* from project p, users_project_rel upr, project_param pp, client cl, company co where co.id = cl.company_id and cl.id = p.client_id and p.id = upr.project_id and p.id = pp.project_id and pp.param_id = ? and pp.value = ? and upr.user_id = ? and upr.rel in (?) and co.id= ? ','status','active',$userId,$this->rolesToChargeOnProject,$companyId);
     }
     
     function isMyChargeableProject($projectId, $userId){
-        $rowCount = $this->database->query('select * from users_project_rel upr, project_param pp where upr.project_id = ? and upr.project_id = pp.project_id and pp.param_id = ? and pp.value = ?  and upr.user_id = ?  and upr.rel = ?',$projectId,'status','active', $userId, 'user')->getRowCount();
+        $rowCount = $this->database->query('select * from users_project_rel upr, project_param pp where upr.project_id = ? and upr.project_id = pp.project_id and pp.param_id = ? and pp.value = ?  and upr.user_id = ?  and upr.rel in (?) ',$projectId,'status','active', $userId, $this->rolesToChargeOnProject)->getRowCount();
         if($rowCount>0)
             {return true;}
             else
