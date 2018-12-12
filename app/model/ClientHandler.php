@@ -55,8 +55,28 @@ class ClientHandler {
         foreach($projects as $project){
             $return[$i]["project"] = $project;
             $return[$i]["projectParams"]= $this->database->fetchAll('select pp.project_id as project_id, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from project_param pp where pp.project_id = ? ',$project->id);
-            $return[$i]["activeUsers"]= $this->database->fetchAll('select upr.id as uprId, u.* from users u, users_project_rel upr where upr.user_id = u.id and upr.project_id = ? ',$project->id);
-            $return[$i]["inactiveUsers"]= $this->database->fetchAll('select -1 as uprId, u.* from users_company_rel ucr, users u left join users_project_rel upr on upr.user_id = u.id and upr.rel in (?) where upr.user_id is null and u.id = ucr.user_id and ucr.company_id = ? and ucr.role in (?) ',$this->rolesActiveForProject,$companyId,$this->rolesActiveForCompany);
+            $return[$i]["activeUsers"]= $this->database->fetchAll('select upr.id as uprId, u.* from users u, users_project_rel upr where upr.user_id = u.id and upr.project_id = ? and upr.rel in (?)',$project->id, $this->rolesActiveForProject);
+            $return[$i]["inactiveUsers"]= $this->database->fetchAll('select -1 as uprId, u.* from users_company_rel ucr, users u  join users_project_rel upr on upr.user_id = u.id and upr.project_id = ? where upr.rel in (?) and u.id = ucr.user_id and ucr.company_id = ? and ucr.role in (?) ',$project->id,$this->rolesInactiveForProject, $companyId,$this->rolesActiveForCompany);
+            $return[$i]["inactiveUsers"] += $this->database->fetchAll(''
+                    . ' select -1 as uprId, '
+                    . ' u.* '
+                    . ' from company co '
+                    . ' join client cl '
+                    . '     on cl.company_id = co.id '
+                    . ' join project pr '
+                    . '     on pr.client_id = cl.id '
+                    . ' join users_company_rel ucr '
+                    . '     on ucr.company_id = co.id '
+                    . ' join users u '
+                    . '     on ucr.user_id = u.id '
+                    . ' left join users_project_rel upr '
+                    . '     on upr.user_id = u.id '
+                    . '     and upr.project_id = pr.id '
+                    . ' where '
+                    . '     upr.id is null '
+                    . '     and cl.id = ? '
+                    . '     and co.id = ? '
+                    . '     and pr.id = ? ' ,$clientId, $companyId, $project->id);
             $i++;
         }
         return $return;

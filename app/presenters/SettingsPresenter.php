@@ -161,10 +161,10 @@ class SettingsPresenter extends BasePresenter
                     $myClientHandler->createUserCompanyRel($this->user->getId(), $companyId, 'user');
 
                     $vacationProjectId = $myClientHandler->getCompanySpecialProjectId($companyId, 'vacation');
-                    $myClientHandler->createUserProjectRel($this->user->getId(), $vacationProjectId, 0);
+                    $myClientHandler->upsertUserProjectRel($this->user->getId(), $vacationProjectId, 'user');
 
                     $sickProjectId = $myClientHandler->getCompanySpecialProjectId($companyId, 'sick');
-                    $myClientHandler->createUserProjectRel($this->user->getId(), $sickProjectId, 0);
+                    $myClientHandler->upsertUserProjectRel($this->user->getId(), $sickProjectId, 'user');
                 }
             }
             $myJSON = json_encode($myObj);
