@@ -392,6 +392,11 @@ class ClientHandler {
     function getUserCompanyRel($userId, $companyId){
         return $this->database->fetchField("select role from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId);
     }
+    
+    function getCompanyIdByProjectId($projectId){
+        return $this->database->fetchField("select cl.company_id from client cl, project pr where cl.id = pr.client_id and pr.id = ?", $projectId);
+    }
+    
     function getUserCompanyDefaultMDRate($userId, $companyId){
         return $this->database->fetchField("select default_md_rate from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId);
     }
@@ -420,7 +425,7 @@ class ClientHandler {
         if($rownum>0){
             return $this->database->query("UPDATE users_project_rel set rel = ?, md_rate = ? where user_id = ? and project_id = ? ", $rel, $mdRate, $userId, $projectId);
         }else{
-            $input["md_rate"] = $this->getUserCompanyDefaultMDRate($userId, $companyId);
+            $input["md_rate"] = $this->getUserCompanyDefaultMDRate($userId, $this->getCompanyIdByProjectId($projectId));
             return $this->database->table("users_project_rel")->insert($input);
         }
     }
