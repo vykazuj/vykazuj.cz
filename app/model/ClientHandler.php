@@ -18,6 +18,7 @@ class ClientHandler {
     public $rolesInactiveForCompany = array('alumni');
     public $rolesActiveForProject = array('user','pmo','owner');
     public $rolesInactiveForProject = array('alumni');
+    public $mapCompanyRoles = array('owner' => 'Jednatel','user' => 'Zaměstnanec','accountant' => 'Účetní');
     
     function __construct(Nette\Database\Context $database)
     {
@@ -391,20 +392,35 @@ class ClientHandler {
     function getUserCompanyRel($userId, $companyId){
         return $this->database->fetchField("select role from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId);
     }
+    function getUserCompanyDefaultMDRate($userId, $companyId){
+        return $this->database->fetchField("select default_md_rate from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId);
+    }
+    
+    function getUserCompanyRelTranslated($userId, $companyId){
+        $role = $this->database->fetchField("select role from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId);
+        if(isset($this->mapCompanyRoles[$role])){ 
+            return $this->mapCompanyRoles[$role];
+        }else{
+            $this->mapCompanyRoles['user'];
+            
+        }
+    }
     
     function getUserProjectRel($userId, $projectId){
         return $this->database->fetchField("select rel from users_project_rel where user_id = ? and project_id = ?",$userId, $projectId);
     }
     
+    
+    
     function upsertUserProjectRel($userId, $projectId, $mdRate, $rel){
         $input["user_id"] = $userId;
         $input["project_id"] = $projectId;
         $input["rel"] = $rel;
-        $input["md_rate"] = $mdRate;
         $rownum = $this->database->query("select * from users_project_rel where user_id = ? and project_id = ?",$userId, $projectId)->getRowCount();
         if($rownum>0){
-            return $this->database->query("UPDATE users_project_rel set rel = ? where user_id = ? and project_id = ? ", $rel, $userId, $projectId);
+            return $this->database->query("UPDATE users_project_rel set rel = ?, md_rate = ? where user_id = ? and project_id = ? ", $rel, $mdRate, $userId, $projectId);
         }else{
+            $input["md_rate"] = $this->getUserCompanyDefaultMDRate($userId, $companyId);
             return $this->database->table("users_project_rel")->insert($input);
         }
     }

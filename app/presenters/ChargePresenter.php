@@ -48,9 +48,10 @@ class ChargePresenter extends BasePresenter
                 {$dateSessions->month = $myRecordHandler->getMaxChargedMonthOfTheYear($this->user->getId(), $dateSessions->year);}
             if($dateSessions->month<1 || $dateSessions->month>12 || $dateSessions->month==""){ $dateSessions->month = date('n');}
             
-        
             $this->template->actualMonth = $dateSessions->month;  
             $this->template->actualYear = $dateSessions->year;    
+            
+            $this->template->jobTitle =  $myClientHandler->getUserCompanyRelTranslated($this->user->getId(), $companyId);
             
         }
         
