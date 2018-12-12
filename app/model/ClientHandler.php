@@ -175,33 +175,38 @@ class ClientHandler {
     }
     */
     function isMyCompany($userId, $companyId){
-        $rowNum = $this->database->query('select * from users_company_rel where user_id = ? and company_id = ?',$userId, $companyId)->getRowCount();
-        if($rowNum>0)
-            {return true;
+        $rowNum = $this->database->query('select * from users_company_rel where user_id = ? and company_id = ? and role in (?)',$userId, $companyId,$this->rolesActiveForCompany)->getRowCount();
+        if($rowNum>0){
+            return true;
         }else{
-            $rowNum2 = $this->database->query('select * from company where id = ? and owner_id = ?',$companyId, $userId)->getRowCount();
-            if($rowNum>0){
-                return true;
-            }else{
-                return false;
-            }
+            return false;
         }
     }
     
     function setPrefCompany($userId, $companyId){
         return $this->database->query("update users set pref_company = ? where id = ? ",$companyId, $userId);
     }
+    function getCompanyIdByOwnerId($userId){
+        return $this->database->fetchField("select max(id) from company where owner_id = ? ", $userId);
+    }
     
     function getPrefCompany($userId){
-        return $this->database->fetchField("select pref_company from users where id = ? ", $userId);
+        $prefCompanyId = $this->database->fetchField("select pref_company from users where id = ? ", $userId);
+        if($this->isMyCompany($userId, $prefCompanyId)) {
+            return $prefCompanyId;
+        }else{
+            $newCompanyId = $this->getCompanyIdByOwnerId($userId);
+            $this->setPrefCompany($userId, $newCompanyId);
+            return $newCompanyId;
+        }
     }
     
     function getMyCompanies($userId){
         return $this->database->fetchAll('select distinct abc.id, abc.name, u.pref_company from ('
-                . 'select c.id, c.name from users_company_rel ucr, company c where c.id = ucr.company_id and ucr.user_id = ?  '
+                . 'select c.id, c.name from users_company_rel ucr, company c where c.id = ucr.company_id and ucr.user_id = ? and ucr.role in (?) '
                 . ' UNION '
                 . 'select c2.id, c2.name from company c2 where c2.owner_id = ? '
-                . ') abc left join users u on u.pref_company = abc.id and u.id = ? ',$userId, $userId, $userId);
+                . ') abc left join users u on u.pref_company = abc.id and u.id = ? ',$userId, $this->rolesActiveForCompany, $userId, $userId);
     }
     
     function getUserIdByIntegrationId($integrationId){
