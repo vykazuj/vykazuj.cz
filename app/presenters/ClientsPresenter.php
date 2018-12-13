@@ -53,6 +53,8 @@ class ClientsPresenter extends BasePresenter
                 $this->template->displaySection = true;
             }
             
+            $this->template->jobTitle =  $myClientHandler->getUserCompanyRelTranslated($this->user->getId(), $companyId);
+            
         }       
         
         public function actionGetMyClients(){

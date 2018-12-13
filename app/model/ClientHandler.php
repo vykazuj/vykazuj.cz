@@ -18,6 +18,7 @@ class ClientHandler {
     public $rolesInactiveForCompany = array('alumni');
     public $rolesActiveForProject = array('user','pmo','owner');
     public $rolesInactiveForProject = array('alumni');
+    public $mapCompanyRoles = array('owner' => 'Jednatel','user' => 'Zaměstnanec','accountant' => 'Účetní');
     
     function __construct(Nette\Database\Context $database)
     {
@@ -153,7 +154,7 @@ class ClientHandler {
     }
     function isUserAllowedToChargeOnProject($userId, $projectId){
         $project = $this->getProject($projectId);
-        $clientId = $project[0]["id"];
+        $clientId = $project[0]["client_id"];
         return $this->isUserAllowedToChargeOnClient($userId, $clientId);
     }
     
@@ -174,33 +175,38 @@ class ClientHandler {
     }
     */
     function isMyCompany($userId, $companyId){
-        $rowNum = $this->database->query('select * from users_company_rel where user_id = ? and company_id = ?',$userId, $companyId)->getRowCount();
-        if($rowNum>0)
-            {return true;
+        $rowNum = $this->database->query('select * from users_company_rel where user_id = ? and company_id = ? and role in (?)',$userId, $companyId,$this->rolesActiveForCompany)->getRowCount();
+        if($rowNum>0){
+            return true;
         }else{
-            $rowNum2 = $this->database->query('select * from company where id = ? and owner_id = ?',$companyId, $userId)->getRowCount();
-            if($rowNum>0){
-                return true;
-            }else{
-                return false;
-            }
+            return false;
         }
     }
     
     function setPrefCompany($userId, $companyId){
         return $this->database->query("update users set pref_company = ? where id = ? ",$companyId, $userId);
     }
+    function getCompanyIdByOwnerId($userId){
+        return $this->database->fetchField("select max(id) from company where owner_id = ? ", $userId);
+    }
     
     function getPrefCompany($userId){
-        return $this->database->fetchField("select pref_company from users where id = ? ", $userId);
+        $prefCompanyId = $this->database->fetchField("select pref_company from users where id = ? ", $userId);
+        if($this->isMyCompany($userId, $prefCompanyId)) {
+            return $prefCompanyId;
+        }else{
+            $newCompanyId = $this->getCompanyIdByOwnerId($userId);
+            $this->setPrefCompany($userId, $newCompanyId);
+            return $newCompanyId;
+        }
     }
     
     function getMyCompanies($userId){
         return $this->database->fetchAll('select distinct abc.id, abc.name, u.pref_company from ('
-                . 'select c.id, c.name from users_company_rel ucr, company c where c.id = ucr.company_id and ucr.user_id = ?  '
+                . 'select c.id, c.name from users_company_rel ucr, company c where c.id = ucr.company_id and ucr.user_id = ? and ucr.role in (?) '
                 . ' UNION '
                 . 'select c2.id, c2.name from company c2 where c2.owner_id = ? '
-                . ') abc left join users u on u.pref_company = abc.id and u.id = ? ',$userId, $userId, $userId);
+                . ') abc left join users u on u.pref_company = abc.id and u.id = ? ',$userId, $this->rolesActiveForCompany, $userId, $userId);
     }
     
     function getUserIdByIntegrationId($integrationId){
@@ -255,7 +261,7 @@ class ClientHandler {
     }
     
     function isAlreadyEmployee($userId, $companyId){
-        $rowCount = $this->database->query("select * from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId)->getRowCount();
+        $rowCount = $this->database->query("select * from users_company_rel where user_id = ? and company_id = ? and role in (?)",$userId, $companyId, $this->rolesActiveForCompany)->getRowCount();
         if($rowCount==0){return false;}else{return true;}
     }
     
@@ -392,19 +398,39 @@ class ClientHandler {
         return $this->database->fetchField("select role from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId);
     }
     
+    function getCompanyIdByProjectId($projectId){
+        return $this->database->fetchField("select cl.company_id from client cl, project pr where cl.id = pr.client_id and pr.id = ?", $projectId);
+    }
+    
+    function getUserCompanyDefaultMDRate($userId, $companyId){
+        return $this->database->fetchField("select default_md_rate from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId);
+    }
+    
+    function getUserCompanyRelTranslated($userId, $companyId){
+        $role = $this->database->fetchField("select role from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId);
+        if(isset($this->mapCompanyRoles[$role])){ 
+            return $this->mapCompanyRoles[$role];
+        }else{
+            $this->mapCompanyRoles['user'];
+            
+        }
+    }
+    
     function getUserProjectRel($userId, $projectId){
         return $this->database->fetchField("select rel from users_project_rel where user_id = ? and project_id = ?",$userId, $projectId);
     }
+    
+    
     
     function upsertUserProjectRel($userId, $projectId, $mdRate, $rel){
         $input["user_id"] = $userId;
         $input["project_id"] = $projectId;
         $input["rel"] = $rel;
-        $input["md_rate"] = $mdRate;
         $rownum = $this->database->query("select * from users_project_rel where user_id = ? and project_id = ?",$userId, $projectId)->getRowCount();
         if($rownum>0){
-            return $this->database->query("UPDATE users_project_rel set rel = ? where user_id = ? and project_id = ? ", $rel, $userId, $projectId);
+            return $this->database->query("UPDATE users_project_rel set rel = ?, md_rate = ? where user_id = ? and project_id = ? ", $rel, $mdRate, $userId, $projectId);
         }else{
+            $input["md_rate"] = $this->getUserCompanyDefaultMDRate($userId, $this->getCompanyIdByProjectId($projectId));
             return $this->database->table("users_project_rel")->insert($input);
         }
     }

@@ -43,7 +43,7 @@
              {/if}
                 " class="rounded-circle" alt="Cinque Terre" width="150px">
         <span class="full-name">{$firstName} {$lastName}</span>
-        <span class="job-title">{if $lastName == 'Haase' || $lastName == 'Lamaj'}Slave{else}Jednatel{/if}</span>
+        <span class="job-title">{if isset($jobTitle) }{$jobTitle}{else}Uživatel{/if}</span>
         <div class="list-group">
             <a n:href="Charge:default" class="list-group-item {if $activePage=='charge'}active{/if}"><i class="far fa-clock"></i>Timesheety</a>
             <a n:href="Clients:default" class="list-group-item {if $activePage=='clients'}active{/if}"><i class="fas fa-users"></i>Klienti</a>

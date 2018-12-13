@@ -48,9 +48,10 @@ class ChargePresenter extends BasePresenter
                 {$dateSessions->month = $myRecordHandler->getMaxChargedMonthOfTheYear($this->user->getId(), $dateSessions->year);}
             if($dateSessions->month<1 || $dateSessions->month>12 || $dateSessions->month==""){ $dateSessions->month = date('n');}
             
-        
             $this->template->actualMonth = $dateSessions->month;  
             $this->template->actualYear = $dateSessions->year;    
+            
+            $this->template->jobTitle =  $myClientHandler->getUserCompanyRelTranslated($this->user->getId(), $companyId);
             
         }
         
@@ -341,7 +342,7 @@ class ChargePresenter extends BasePresenter
 
             $myClientHandler = new \ClientHandler($this->database);
             
-            if($myClientHandler->isMyProject($this->user->getId(), $projectId))
+            if($myClientHandler->isUserAllowedToChargeOnProject($this->user->getId(), $projectId))
             {
                 $myTimeSheet = new \DiplomHandler($this->database);
                 $myTimeSheet->setMonth($month);
@@ -368,7 +369,7 @@ class ChargePresenter extends BasePresenter
                 <p>Dobrý den,</p>
                 <p>v příloze Vám zasílám fakturu za aktuální období.</p>
                 <br>
-                <p>Díky, Martin</p>
+                <p>Díky, ".$userDetails["first_name"]."</p>
                 </body>
                 </html>
                 ";

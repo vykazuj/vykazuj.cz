@@ -47,7 +47,8 @@ class StatisticsPresenter extends BasePresenter
                 {$dateSessions->month = $myRecordHandler->getMaxChargedMonthOfTheYear($this->user->getId(), $dateSessions->year);}
                 
             $this->template->actualMonth = $dateSessions->month;  
-            $this->template->actualYear = $dateSessions->year;    
+            $this->template->actualYear = $dateSessions->year;   
+            $this->template->jobTitle =  $myClientHandler->getUserCompanyRelTranslated($this->user->getId(), $companyId); 
             
         }
                 
