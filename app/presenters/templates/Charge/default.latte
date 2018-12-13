@@ -57,20 +57,18 @@
             {/ifset}
             
                         <div class="row" id="my-charged-records-table-first">
-                            <div class="col-lg-8 col-xl-8 col-md-6 col-sm-6 nopadding">
+                            <div class="col-lg-8 col-xl-8 col-md-8 col-sm-8 nopadding">
                                 <div class="row">
-                                    <div class="col-1 text-right font-weight-semibold nopadding ">
-                                    </div>
-                                    <div class="col-2 text-mid font-weight-semibold nopadding">
+                                    <div class="col-2 text-left font-weight-semibold nopadding">
                                         Datum
                                     </div>
-                                    <div class="col-9 text-left font-weight-semibold nopadding">
+                                    <div class="col-10 text-left font-weight-semibold nopadding">
                                         Projekt
                                     </div>
                                 </div>
                             </div>
 
-                             <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6  nopadding text-right font-weight-semibold">
+                             <div class="col-lg-4 col-xl-4 col-md-4 col-sm-4  nopadding text-right font-weight-semibold">
                                         Čas | Přesčas | Akce
                             </div>
                         </div>
@@ -401,7 +399,7 @@
         function createChargedRow(obj, day, dayName){
             let selectHTML = $("#my-chargeable-projects").html();
 
-            let row='<div class="nopadding row rows-intable withL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+            let row='<div class="nopadding row rows-intable withL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8 nopadding"><div class="row">'+
                     '<div class="nopadding col-2 col-xl-2 col-lg-2 col-md-2  col-sm-2  text-left font-weight-semibold" recordId="'+obj["id"]+'">'+
                     '<span class="nopadding font-weight-semibold rowPlus" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></span> '+
                     '<span class="nopadding font-weight-semibold rowDay" recordId="'+obj["id"]+'">'+day+'</span> '+
@@ -422,7 +420,7 @@
 
           function createChargedRowBlank(i, day, dayName){
             let selectHTML = $("#my-chargeable-projects").html();
-            let row='<div class="nopadding row rows-intable withL" id="'+-i+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+            let row='<div class="nopadding row rows-intable withL" id="'+-i+'"><div class="col-md-12 col-lg-8 nopadding"><div class="row">'+
                     '<div class="nopadding col-2 col-xl-2 col-lg-2 col-md-2  col-sm-2  text-left font-weight-semibold" recordId="'+-i+'">'+
                     '<span class="nopadding font-weight-semibold rowPlus" recordId="'+-i+'"><i class="fas fa-plus-circle"></i></span> '+
                     '<span class="nopadding font-weight-semibold rowDay" recordId="'+-i+'">'+day+'</span> '+
@@ -442,7 +440,7 @@
 
             function createNewRowUnderDate(obj){
                 let selectHTML = $("#my-chargeable-projects").html();
-                let row='<div class="nopadding row rows-intable withoutL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                let row='<div class="nopadding row rows-intable withoutL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8 nopadding"><div class="row">'+
                     '<div class="nopadding col-2 col-xl-2 col-lg-2 col-md-2  col-sm-2  text-left font-weight-semibold" recordId="'+obj["id"]+'">'+
                     '<span class="nopadding font-weight-semibold rowPlus tiny" recordId="'+-i+'"></span> '+
                     '<span class="nopadding font-weight-semibold rowDay" recordId="'+obj["id"]+'"></span> '+
