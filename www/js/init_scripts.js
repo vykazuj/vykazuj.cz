@@ -2,9 +2,10 @@
                 
             function createMyCompaniesNewRow(data){
                 var selected = '';
-                if(data["pref_company"] !== null){ selected = 'selected';}
+                if(data["pref_company"] !== null){ selected = 'selected'; }
                 var row = '<option value="'+data['id']+'" '+selected+'>'+data['name']+'</option>';
                 $('#company-select').append(row);
+                if(data["pref_company"] !== null){ selected = 'selected'; $('#company-select').val(data['id']);}
             }            
             
             function actionGetMyChargableCompanies(home_url){     
@@ -29,7 +30,7 @@
                 });
             }
             
-            function changeActiveCompany(companyId, home_url){     
+            function changeActiveCompany(companyId, home_url, active_page){     
                 $('.requests').remove();
                 $.ajax(
                 {
@@ -44,7 +45,11 @@
                             }else{
                                 alert(json.code);
                             }
-                        }      
+                            window.location.replace(home_url+'/'+active_page);
+                        },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                }  
                 });
             }
             
@@ -53,8 +58,7 @@
                 actionGetMyChargableCompanies(home_url);
                 $("#company-select").change(function(){
                     var companyId = $(this).val();
-                    changeActiveCompany(companyId, home_url);
-                    window.location.replace(home_url+'/'+active_page);
+                    changeActiveCompany(companyId, home_url, active_page);
                 });
             }
             
