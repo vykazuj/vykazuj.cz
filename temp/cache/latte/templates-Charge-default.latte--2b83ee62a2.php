@@ -424,8 +424,8 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
                             }else{
                                 
                                 var year = Number($("#yearPick").val());
-                                var day = Number($(this).parent().children("div.rowDay").text());
-                                let dayName =$(this).parent().children("div.rowDayOfWeek").text();
+                                var day = Number($(this).parent().children("span.rowDay").text());
+                                let dayName =$(this).parent().children("span.rowDayOfWeek").text();
                                 $.ajax(
                                 {
                                     
@@ -583,7 +583,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
                   {
                       var thisProject = $(this).val();
                       var recordId = $(this).attr("recordid");
-                      var hoursAdd = Number($("div.rowHours[recordid='"+recordId+"']").children("input").val());
+                      var hoursAdd = Number($("span.rowHours[recordid='"+recordId+"']").children("input").val());
                       if(isNaN(hoursAdd)){ hoursAdd = 0;}  
                       var hoursOld = Number(myArray1[thisProject]);
                       if(isNaN(hoursOld)){ hoursOld = 0;}  
