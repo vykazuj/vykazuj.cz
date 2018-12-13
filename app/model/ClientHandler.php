@@ -261,7 +261,7 @@ class ClientHandler {
     }
     
     function isAlreadyEmployee($userId, $companyId){
-        $rowCount = $this->database->query("select * from users_company_rel where user_id = ? and company_id = ?",$userId, $companyId)->getRowCount();
+        $rowCount = $this->database->query("select * from users_company_rel where user_id = ? and company_id = ? and role in (?)",$userId, $companyId, $this->rolesActiveForCompany)->getRowCount();
         if($rowCount==0){return false;}else{return true;}
     }
     
