@@ -111,12 +111,14 @@ class SettingsPresenter extends BasePresenter
                     $myClientHandler->setPrefCompany($this->user->getId(), $companyId);
                     $companySessions->id = $companyId;
                     $myObj['result'] = 'OK';
-                    $myObj['code'] = '0';
+                    $myObj['code'] = $companyId;
+                    $myObj['data'] = $companyId;
 
                 }else{
                     $myObj = null;
                     $myObj['result'] = 'NOT OK';
                     $myObj['code'] = '416';
+                    $myObj['data'] = 9000000+$companyId;
                 }
             }
             
