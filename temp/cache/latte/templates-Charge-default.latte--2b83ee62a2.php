@@ -177,7 +177,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
                                         Datum
                                     </div>
                                     <div class="col-10 text-left font-weight-semibold nopadding">
-                                        Projekt
+                                        &nbsp;&nbsp;Projekt
                                     </div>
                                 </div>
                             </div>
