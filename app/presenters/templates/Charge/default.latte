@@ -115,7 +115,7 @@
                         <div id = "chargedProject">
                             
                         </div>
-                                                            
+                                                           
                 </div>                                   
                 </div>
                 
@@ -239,7 +239,7 @@
              
         
         function setActionOnDeleteRecord(obj){
-                            obj.click( function(){                                
+                            obj.click( function(){                               
                             var recordId = obj.attr('recordid');                  
                             $.ajax(
                             {
@@ -256,16 +256,15 @@
                                                 let dayName=$(".rowDayOfWeek[recordid='"+recordId+"']").html();
                                                 $("#"+recordId).replaceWith(createChargedRowBlank(day, day, dayName));
                                                 setSVGActions(-day);
-                                                setSelectOption(-day, -day);
-                                                progress();
+                                                setSelectOption(-day, -day); 
+                                                projectCharged();
                                             } else {
                                             $("#"+recordId).remove();
-                                            progress();
+                                            projectCharged();
                                             }                                                 
                                         }else{
-                                            alert(json.code);
-                                        }
-                                        projectCharged();
+                                            alert(json.code);                                            
+                                        }                                       
                                     }
                             });
                         });
@@ -288,7 +287,7 @@
                                fillMeCalendar(actualMonth, actualYear);
                             }else{
                                 alert(json.code);
-                            }
+                            }                            
                         }
                 });
         }
@@ -519,8 +518,12 @@
                 $('.timetable').on('input', function()
                 {
                     projectCharged();
-                });  
-                            
+                }); 
+                
+                
+               
+                
+    
                 // vypsani projektu do praveho bloku
                 
                 function projectCharged(){  // vytvorim si array a dam do ni projekty, ktere jsou na dane strance
@@ -560,8 +563,8 @@
                     function (){ 
                         $(this).remove();}
                 );
-
         }
+        
         function fillMeCalendar(month, year){ 
             $.ajax(
                     {
@@ -600,7 +603,7 @@
                                                     hrouda++;
                                                 }                                                                                      
                                             }
-                                            projectCharged();                                     
+                                            projectCharged();                                            
                                             
                                             
                                                                                     }
