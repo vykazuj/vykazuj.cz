@@ -18,15 +18,15 @@ class SettingsPresenter extends BasePresenter
                 $this->template->firstName = $this->user->getIdentity()->first_name;
                 $this->template->lastName = $this->user->getIdentity()->last_name; 
                 $this->template->userImage = $this->user->getIdentity()->image; 
-                $this->template->jobTitle = $this->user->getIdentity()->job_title; 
                 $this->template->activePage = 'settings'; 
 	}
         
         public function actionDefault(){
+            $myClientHandler = new \ClientHandler($this->database);
+                
             if(!$this->user->isLoggedIn() ){
                 $this->redirect('Homepage:default');
             }else{
-                $myClientHandler = new \ClientHandler($this->database);
                 $companySessions = $this->getSession('Company');
                 $company = $myClientHandler->getMyCompany($this->user->getId());
                 $companyId = $company["id"];
@@ -34,6 +34,8 @@ class SettingsPresenter extends BasePresenter
                     { $companyId = $companySessions->id; }
                 $companySessions->id = $companyId;
             }
+                        
+            $this->template->jobTitle =  $myClientHandler->getUserCompanyRelTranslated($this->user->getId(), $companyId);
             
         }       
         
@@ -109,12 +111,14 @@ class SettingsPresenter extends BasePresenter
                     $myClientHandler->setPrefCompany($this->user->getId(), $companyId);
                     $companySessions->id = $companyId;
                     $myObj['result'] = 'OK';
-                    $myObj['code'] = '0';
+                    $myObj['code'] = $companyId;
+                    $myObj['data'] = $companyId;
 
                 }else{
                     $myObj = null;
                     $myObj['result'] = 'NOT OK';
                     $myObj['code'] = '416';
+                    $myObj['data'] = 9000000+$companyId;
                 }
             }
             
@@ -161,10 +165,10 @@ class SettingsPresenter extends BasePresenter
                     $myClientHandler->createUserCompanyRel($this->user->getId(), $companyId, 'user');
 
                     $vacationProjectId = $myClientHandler->getCompanySpecialProjectId($companyId, 'vacation');
-                    $myClientHandler->createUserProjectRel($this->user->getId(), $vacationProjectId, 0);
+                    $myClientHandler->upsertUserProjectRel($this->user->getId(), $vacationProjectId, 0, 'user');
 
                     $sickProjectId = $myClientHandler->getCompanySpecialProjectId($companyId, 'sick');
-                    $myClientHandler->createUserProjectRel($this->user->getId(), $sickProjectId, 0);
+                    $myClientHandler->upsertUserProjectRel($this->user->getId(), $sickProjectId, 0, 'user');
                 }
             }
             $myJSON = json_encode($myObj);

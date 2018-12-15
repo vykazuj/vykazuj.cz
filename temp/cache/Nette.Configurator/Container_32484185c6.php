@@ -644,7 +644,10 @@ class Container_32484185c6 extends Nette\DI\Container
 			'callback_transport' => 'session',
 			'Strategy' => [
 				'Facebook' => ['app_id' => '', 'app_secret' => ''],
-				'Google' => ['client_id' => '', 'client_secret' => ''],
+				'Google' => [
+					'client_id' => '232158870291-247i8lbpcj496b0tk7gv7ka9molvrm96.apps.googleusercontent.com',
+					'client_secret' => '8A7Z81YLejvvyvXcpyoxmRDS',
+				],
 				'Twitter' => ['key' => '', 'secret' => ''],
 				'LinkedIn' => ['api_key' => '', 'secret_key' => ''],
 			],

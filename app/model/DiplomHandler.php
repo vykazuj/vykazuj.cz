@@ -95,10 +95,11 @@ class DiplomHandler {
         $projectDetails = $myRecordHandler->getProjectDetails($this->projectId);
         $projectContact = $myRecordHandler->getProjectParam($this->projectId, 'contact');
         $projectContactRole = $myRecordHandler->getProjectParam($this->projectId, 'contactRole');
-        $projectRole = $myRecordHandler->getProjectParam($this->projectId, 'projectRole');
+        //$projectRole = $myRecordHandler->getProjectParam($this->projectId, 'projectRole');
         $clientId = $projectDetails->client_id;
         $client =  $myClientHandler->getClient($clientId)[0];
         $myDetails = $myUserHandler->getAttributes($this->userId);
+        $projectRole = $myDetails["job_title"];
         /*
         $rankings = $myGame->getRankings();
         $totalRanking = $myGame->getTotalRanking();

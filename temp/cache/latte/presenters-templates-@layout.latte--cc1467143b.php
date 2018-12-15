@@ -145,7 +145,7 @@ class Templatecc1467143b extends Latte\Runtime\Template
 			echo LR\Filters::escapeHtmlText($jobTitle) /* line 46 */;
 		}
 		else {
-			?>Dodavatel<?php
+			?>Uživatel<?php
 		}
 ?></span>
         <div class="list-group">
@@ -201,7 +201,17 @@ class Templatecc1467143b extends Latte\Runtime\Template
 		extract($_args);
 ?>
 <style>
-    
+
+.users_list {
+        border: 1px solid #dee2e6 !important;
+        border-radius: 10px;
+        padding-right: 8px;
+        white-space: pre;
+    }   
+.users_list:hover {
+        background-color: #EDEDED;
+        cursor: pointer;
+    }    
 .small-screen { display:none;}
    
 select.client_not_name_label{
