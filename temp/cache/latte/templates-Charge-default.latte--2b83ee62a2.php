@@ -171,20 +171,18 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 ?>
             
                         <div class="row" id="my-charged-records-table-first">
-                            <div class="col-lg-8 col-xl-8 col-md-6 col-sm-6 nopadding">
+                            <div class="col-lg-8 col-xl-8 col-md-8 col-sm-8 nopadding">
                                 <div class="row">
-                                    <div class="col-1 text-right font-weight-semibold nopadding ">
-                                    </div>
-                                    <div class="col-2 text-mid font-weight-semibold nopadding">
+                                    <div class="col-2 text-left font-weight-semibold nopadding">
                                         Datum
                                     </div>
-                                    <div class="col-9 text-left font-weight-semibold nopadding">
-                                        Projekt
+                                    <div class="col-10 text-left font-weight-semibold nopadding">
+                                        &nbsp;&nbsp;Projekt
                                     </div>
                                 </div>
                             </div>
 
-                             <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6  nopadding text-right font-weight-semibold">
+                             <div class="col-lg-4 col-xl-4 col-md-4 col-sm-4  nopadding text-right font-weight-semibold">
                                         Čas | Přesčas | Akce
                             </div>
                         </div>
@@ -262,8 +260,8 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
      
     $(document).ready(function() 
     {          
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 151 */ ?>;  
-        var active_page = <?php echo LR\Filters::escapeJs($activePage) /* line 152 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 149 */ ?>;  
+        var active_page = <?php echo LR\Filters::escapeJs($activePage) /* line 150 */ ?>;
         $.getScript(home_url+'/js/init_scripts.js', function()
         {
             initSharedFunctions(home_url, active_page);
@@ -515,7 +513,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
         function createChargedRow(obj, day, dayName){
             let selectHTML = $("#my-chargeable-projects").html();
 
-            let row='<div class="nopadding row rows-intable withL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+            let row='<div class="nopadding row rows-intable withL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8 nopadding"><div class="row">'+
                     '<div class="nopadding col-2 col-xl-2 col-lg-2 col-md-2  col-sm-2  text-left font-weight-semibold" recordId="'+obj["id"]+'">'+
                     '<span class="nopadding font-weight-semibold rowPlus" recordId="'+obj["id"]+'"><i class="fas fa-plus-circle"></i></span> '+
                     '<span class="nopadding font-weight-semibold rowDay" recordId="'+obj["id"]+'">'+day+'</span> '+
@@ -536,7 +534,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 
           function createChargedRowBlank(i, day, dayName){
             let selectHTML = $("#my-chargeable-projects").html();
-            let row='<div class="nopadding row rows-intable withL" id="'+-i+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+            let row='<div class="nopadding row rows-intable withL" id="'+-i+'"><div class="col-md-12 col-lg-8 nopadding"><div class="row">'+
                     '<div class="nopadding col-2 col-xl-2 col-lg-2 col-md-2  col-sm-2  text-left font-weight-semibold" recordId="'+-i+'">'+
                     '<span class="nopadding font-weight-semibold rowPlus" recordId="'+-i+'"><i class="fas fa-plus-circle"></i></span> '+
                     '<span class="nopadding font-weight-semibold rowDay" recordId="'+-i+'">'+day+'</span> '+
@@ -556,7 +554,7 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 
             function createNewRowUnderDate(obj){
                 let selectHTML = $("#my-chargeable-projects").html();
-                let row='<div class="nopadding row rows-intable withoutL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8"><div class="row">'+
+                let row='<div class="nopadding row rows-intable withoutL" id="'+obj["id"]+'"><div class="col-md-12 col-lg-8 nopadding"><div class="row">'+
                     '<div class="nopadding col-2 col-xl-2 col-lg-2 col-md-2  col-sm-2  text-left font-weight-semibold" recordId="'+obj["id"]+'">'+
                     '<span class="nopadding font-weight-semibold rowPlus tiny" recordId="'+-i+'"></span> '+
                     '<span class="nopadding font-weight-semibold rowDay" recordId="'+obj["id"]+'"></span> '+
@@ -733,9 +731,9 @@ class Template2b83ee62a2 extends Latte\Runtime\Template
 
         
         var daysOfWeek = ["Ne","Po","Út","St","Čt","Pá","So"];
-        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 622 */ ?>;
-        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 623 */ ?>;
-        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 624 */ ?>;  
+        var actualMonth = <?php echo LR\Filters::escapeJs($actualMonth) /* line 620 */ ?>;
+        var actualYear = <?php echo LR\Filters::escapeJs($actualYear) /* line 621 */ ?>;
+        var home_url = <?php echo LR\Filters::escapeJs($basePath) /* line 622 */ ?>;  
         getMyProjects();
         
         $("#yearPick").val(actualYear);

@@ -224,9 +224,10 @@ class ClientsPresenter extends BasePresenter
                 $client = $myClientHandler->getClient($clientId);
                 $myClientHandler->addParamToProject($project["id"], 'status','Status','active');
                 $myClientHandler->addParamToProject($project["id"], 'contact','Fakturační kontakt',$client[0]["contact"]);
-                $myClientHandler->addParamToProject($project["id"], 'contactRole','Role fakturačního kontaktu','stavby vedoucí');
+                $myClientHandler->addParamToProject($project["id"], 'contactRole','Role fakturačního kontaktu','PMO');
                 $myClientHandler->addParamToProject($project["id"], 'email','Fakturační email',$client[0]["email"]);
-                $myObj['data'] = $myClientHandler->getProjectWithParameters($project["id"]);
+                $myObj['data'] = $myClientHandler->getMyClientProjectWithParameters($this->user->getId(), $clientId, $project["id"]);
+                
             }
             
             $myJSON = json_encode($myObj);
@@ -303,6 +304,29 @@ class ClientsPresenter extends BasePresenter
                 $myObj['data'] = 'Nemáte právo na tento projekt'; 
             }else{
                 $myClientHandler->upsertUserProjectRel($userId, $projectId, 0, $rel);
+            }
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+            
+        }         
+        
+        public function actionUpdateProjectWorkOrderRel($workOrderId, $projectId, $role){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if(!$this->user->isLoggedIn()){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '201';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageProject($this->user->getId(), $projectId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '124';
+                $myObj['data'] = 'Nemáte právo na tento projekt'; 
+            }else{
+                $myClientHandler->upsertProjectWorkOrderRel($workOrderId, $projectId, $role);
             }
             
             $myJSON = json_encode($myObj);
