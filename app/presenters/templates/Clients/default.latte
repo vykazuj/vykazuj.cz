@@ -324,7 +324,7 @@
             var row = '<div class="row orders-first-row" workorderid="'+data["id"]+'">'
                     +'<div class="col-12 text-left font-weight-semibold"><input type="text"  class="work-order-name-input client_labels_all font-weight-semibold" value ="'+data["name"]+'"  finder="name" workorderid="'+data["id"]+'"></div>'
                     +'<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Status:</div>'
-                    +'<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px"><select class="work-order-status-select client_not_name_label client_labels_all" workorderid="'+data["id"]+'" finder="status"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select><span class="invisible"> Kč</span></div>'
+                    +'<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px"><select class="work-order-status-select project_param_labels_all users_list" workorderid="'+data["id"]+'" finder="status"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select><span class="invisible"> Kč</span></div>'
                     +'<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Částka k čerpání:</div>'
                     +'<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px"><input type="text"  class="work-order-amount-input client_not_name_label client_labels_all clients_labels_kc" value ="'+data["amount"]+'"  finder="amount" workorderid="'+data["id"]+'"><span class="clients_labels_kc"> Kč</span></div>'
                     //+'<div class="col-xl-4 col-lg-4 col-md-0 col-sm-0 col-0 text-left  order-details"></div>';
@@ -463,7 +463,7 @@
                 }                 
             $("div.project-first-row[projectid='"+data["project_id"]+"']").append(row); 
             
-            if (data['param_lic'] === 'status'){ $("select.project_param_select_labels_all[projectparamid='"+data['param_id']+"']").val(data["value"]);}
+            if (data['param_lic'] === 'status'){ $("select.project_param_labels_all[projectparamid='"+data['param_id']+"']").val(data["value"]);}
         }
         
         function addRowOfWorkOrderToProject(data, project_id){
