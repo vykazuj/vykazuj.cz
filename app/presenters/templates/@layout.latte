@@ -25,7 +25,7 @@
         <script src="{$basePath}/js/jquery-3.3.1.min.js"></script>        
         <script src="{$basePath}/js/bootstrap.min.js"></script>
 	<script src="{$basePath}/js/Chart.js"></script>
-        <script src="{$basePath}/js/fontawesome/svg-with-js/js/fontawesome-all.js"></script>
+        <script src="{$basePath}/js/fontawesome/js/all.js"></script>
         <!--<script src="{$basePath}/js/init_scripts.js"></script> -->
 
 {/block}
@@ -77,7 +77,28 @@
 .users_list:hover {
         background-color: #EDEDED;
         cursor: pointer;
-    }    
+    }
+
+.owner-of-project{
+    background-color: #bbbbff;
+}
+
+.owner-of-project:hover{
+    background-color: #bbbbff;
+    cursor: not-allowed;
+}
+.owner-of-project > svg:hover{
+    cursor: not-allowed;
+}
+
+.del-user-from-project, .del-project-from-workorder {
+    background-color: #bbffbb;
+}
+
+.add-user-to-project, .add-project-to-workorder {
+    background-color: #ffbbbb;
+}
+
 .small-screen { display:none;}
    
 select.client_not_name_label{

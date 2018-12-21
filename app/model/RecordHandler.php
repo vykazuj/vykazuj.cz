@@ -14,6 +14,7 @@
 class RecordHandler {
     public $database;
     public $rolesToChargeOnProject = array('user','pmo','owner');
+    public $rolesPrimaryWorkOrderForProject = array('primary');
     
     function __construct(Nette\Database\Context $database)
     {
@@ -97,12 +98,20 @@ class RecordHandler {
         return $this->database->fetchField('select user_id from record where id = ?', $recordId);
     }
     
+    function getPrimaryWorkOrder($projectId){
+        $workOrderId =  $this->database->fetchField("select work_order_id from project_work_order_rel where role in (?) and project_id = ? ",$this->rolesPrimaryWorkOrderForProject, $projectId);
+        if($workOrderId == NULL){ return -1;}else{ return $workOrderId;}
+        
+    }
+    
     function insertNewRecord($row){
+        $row["work_order_id"] = $this->getPrimaryWorkOrder($row["project_id"]);
         return $this->database->table('record')->insert($row)->toArray();
     }
     
     function updateRecord($recordId, $projectId, $hours, $hoursOver){
-        return $this->database->query("UPDATE record set hours = ?, hours_over = ?, project_id = ? WHERE id = ?", $hours, $hoursOver, $projectId, $recordId);
+        $workOrderIdNew = $this->getPrimaryWorkOrder($projectId);
+        return $this->database->query("UPDATE record set work_order_id = ?, hours = ?, hours_over = ?, project_id = ? WHERE id = ?", $workOrderIdNew, $hours, $hoursOver, $projectId, $recordId);
     }
     
     function getProjectName($recordId){
