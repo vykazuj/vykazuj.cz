@@ -58,12 +58,14 @@ class ClientHandler {
         $return = null;
         foreach($projects as $project){
             $return[$i]["project"] = $project;
+            $return[$i]["activeWorkOrders"]= $this->database->fetchAll('select wo.name, wo.id as work_order_id, pwor.id as pwor_id, pwor.role as role from work_order wo, project_work_order_rel pwor where pwor.work_order_id = wo.id and pwor.project_id = ? and pwor.role in (?) order by pwor.work_order_id DESC',$project->id, $this->rolesActiveForWorkOrder);
             $return[$i]["projectParams"]= $this->database->fetchAll('select pp.project_id as project_id, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from project_param pp where pp.project_id = ? ',$project->id);
-            $return[$i]["activeUsers"]= $this->database->fetchAll('select upr.id as uprId, u.* from users u, users_project_rel upr where upr.user_id = u.id and upr.project_id = ? and upr.rel in (?)',$project->id, $this->rolesActiveForProject);
-            $return[$i]["inactiveUsers"]= $this->database->fetchAll('select -1 as uprId, u.* from users_company_rel ucr, users u  join users_project_rel upr on upr.user_id = u.id and upr.project_id = ? where upr.rel in (?) and u.id = ucr.user_id and ucr.company_id = ? and ucr.role in (?) ',$project->id,$this->rolesInactiveForProject, $companyId,$this->rolesActiveForCompany);
+            $return[$i]["activeUsers"]= $this->database->fetchAll('select upr.id as uprId, u.*, upr.rel as rel from users u, users_project_rel upr where upr.user_id = u.id and upr.project_id = ? and upr.rel in (?)',$project->id, $this->rolesActiveForProject);
+            $return[$i]["inactiveUsers"]= $this->database->fetchAll('select -1 as uprId, u.*, upr.rel as rel from users_company_rel ucr, users u  join users_project_rel upr on upr.user_id = u.id and upr.project_id = ? where upr.rel in (?) and u.id = ucr.user_id and ucr.company_id = ? and ucr.role in (?) ',$project->id,$this->rolesInactiveForProject, $companyId,$this->rolesActiveForCompany);
             $return[$i]["inactiveUsers"] += $this->database->fetchAll(''
                     . ' select -1 as uprId, '
-                    . ' u.* '
+                    . ' u.*, '
+                    . ' \'inactive\' as rel '
                     . ' from company co '
                     . ' join client cl '
                     . '     on cl.company_id = co.id '
@@ -94,11 +96,12 @@ class ClientHandler {
         foreach($projects as $project){
             $return[$i]["project"] = $project;
             $return[$i]["projectParams"]= $this->database->fetchAll('select pp.project_id as project_id, pp.param as param, pp.value as value, pp.id as param_id, pp.param_id as param_lic  from project_param pp where pp.project_id = ? ',$project->id);
-            $return[$i]["activeUsers"]= $this->database->fetchAll('select upr.id as uprId, u.* from users u, users_project_rel upr where upr.user_id = u.id and upr.project_id = ? and upr.rel in (?)',$project->id, $this->rolesActiveForProject);
-            $return[$i]["inactiveUsers"]= $this->database->fetchAll('select -1 as uprId, u.* from users_company_rel ucr, users u  join users_project_rel upr on upr.user_id = u.id and upr.project_id = ? where upr.rel in (?) and u.id = ucr.user_id and ucr.company_id = ? and ucr.role in (?) ',$project->id,$this->rolesInactiveForProject, $companyId,$this->rolesActiveForCompany);
+            $return[$i]["activeUsers"]= $this->database->fetchAll('select upr.id as uprId, u.*, upr.rel as rel  from users u, users_project_rel upr where upr.user_id = u.id and upr.project_id = ? and upr.rel in (?)',$project->id, $this->rolesActiveForProject);
+            $return[$i]["inactiveUsers"]= $this->database->fetchAll('select -1 as uprId, u.*, upr.rel as rel  from users_company_rel ucr, users u  join users_project_rel upr on upr.user_id = u.id and upr.project_id = ? where upr.rel in (?) and u.id = ucr.user_id and ucr.company_id = ? and ucr.role in (?) ',$project->id,$this->rolesInactiveForProject, $companyId,$this->rolesActiveForCompany);
             $return[$i]["inactiveUsers"] += $this->database->fetchAll(''
                     . ' select -1 as uprId, '
-                    . ' u.* '
+                    . ' u.*, '
+                    . ' \'inactive\' as rel '
                     . ' from company co '
                     . ' join client cl '
                     . '     on cl.company_id = co.id '
