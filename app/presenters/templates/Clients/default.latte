@@ -165,7 +165,7 @@
               { 
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    alert(json.code);
+                    alert("ERR"+json.code);
                     $("#save-client").text('Chyba');
                 }else{
                     $("#save-client").text('Uloženo');
@@ -188,7 +188,7 @@
               { 
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    alert(json.code);
+                    alert("ERR"+json.code);
                     $("#new-work-order").text('Chyba');
                 }else{
                     $("#new-work-order").text('Přidat další');
@@ -210,7 +210,7 @@
               { 
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    alert(json.code);
+                    alert("ERR"+json.code);
                     $("#new-work-order").text('Chyba');
                 }else{
                     $("#new-work-order").text('Přidat další');
@@ -222,6 +222,28 @@
             }); 
         }
             
+            
+        function updatePrimaryWorkOrder(projectId, value){
+            $("#new-project").text("Ukládám...");
+            $.ajax(
+            {
+              type: 'GET',
+              url: home_url+'/clients/update-primary-work-order?projectId='+projectId+'&value='+value,
+              dataType: 'json',
+              cache: false,
+              success: function(data)
+              { 
+                var json = $.parseJSON(data);
+                if(json.result!=='OK'){
+                    alert("ERR"+json.code);
+                    $("#new-project").text('Chyba');
+                }else{
+                    $("#new-project").text('Přidat další');
+                }     
+                
+              }
+            });  
+        }        
                 
         function updateProjectParam(projectId, projectParamId, value){
             $("#new-project").text("Ukládám...");
@@ -235,7 +257,7 @@
               { 
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    alert(json.code);
+                    alert("ERR"+json.code);
                     $("#new-project").text('Chyba');
                 }else{
                     $("#new-project").text('Přidat další');
@@ -256,7 +278,7 @@
               { 
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    alert(json.code);
+                    alert("ERR"+json.code);
                     $("#new-project").text('Chyba');
                 }else{
                     $("#new-project").text('Přidat další');
@@ -278,7 +300,7 @@
               { 
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    alert(json.code);
+                    alert("ERR"+json.code);
                     $("#new-project").text('Chyba');
                 }else{
                     $("#new-project").text('Přidat další');
@@ -335,7 +357,6 @@
 
         }
         
-        
         function addRowOfActiveProjectToWorkOrder(data, work_order_id){
                 var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Přiřazené projekty: </div>';
                 row = row + '<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px active-project" workorderid="'+work_order_id+'">';
@@ -356,7 +377,29 @@
                 row = row + '</div>';
                 $("div.orders-first-row[workorderid='"+work_order_id+"']").append(row); 
         }
-        
+              
+        function addSingleWorkOrderSpanHandler(name, user_id, project_id, rel){
+            if(rel==="alumni"){
+                row = '<span class="users_list add-user-to-project"  projectid="'+project_id+'" userid="'+user_id+'"><i class="fas fa-plus-circle"></i>'+name+'</span> ';
+                $("div.inactive-project-users[projectid='"+project_id+"']").append(row); 
+                
+                $("span.del-user-from-project[userid='"+user_id+"'][projectid='"+project_id+"']").remove();
+                
+                $("span.add-user-to-project[userid='"+user_id+"'][projectid='"+project_id+"']").click( function(){
+                    addSingleActiveUserToProject($(this).text(), user_id, project_id);
+                });
+                
+            }else{
+                row = '<span class="users_list del-user-from-project"  projectid="'+project_id+'" userid="'+user_id+'"><i class="fas fa-times-circle"></i>'+name+'</span> ';
+                $("div.active-project-users[projectid='"+project_id+"']").append(row); 
+                
+                $("span.add-user-to-project[userid='"+user_id+"'][projectid='"+project_id+"']").remove();
+                
+                $("span.del-user-from-project[userid='"+user_id+"'][projectid='"+project_id+"']").click( function(){
+                    addSingleInactiveUserToProject($(this).text(), user_id, project_id);
+                });
+            }
+        }
         function addSingleActiveProjectToWorkOrder(name, workorderid, projectid){
                 updateProjectWorkOrderRel(workorderid, projectid, 'active', name);
         }
@@ -425,24 +468,24 @@
         
         function addRowOfWorkOrderToProject(data, project_id){
                 var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Primární objednávka: </div>';
-                var primaryProjectId = -1;
+                var primaryWorkOrderId = -1;
                 row = row + '<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px primary-project"><select class="primary-work-order-select project_param_labels_all users_list" projectid="'+project_id+'">';
                 for(a in data){
                     var selected = "";
-                    if( data[a]['role'] === 'primary'){ primaryProjectId = data[a]['project_id']; selected = 'selected';}
+                    if( data[a]['role'] === 'primary'){ primaryWorkOrderId = data[a]['work_order_id']; selected = 'selected';}
                     row = row + '<option value = "'+data[a]['work_order_id']+'" workorderid="'+data[a]['work_order_id']+'" '+selected+'>'+data[a]['name']+'</option>';
                 }
                 row = row + '</select></div>';
                 $("div.project-first-row[projectid='"+project_id+"']").append(row); 
-                if(primaryProjectId === -1){ $("select.primary-work-order-select[projectid='"+project_id+"']").append('<option value ="-1" workorderid="-1" selected> -vyberte- </option>');}
-                $("select.primary-work-order-select[projectid='"+project_id+"']").val(primaryProjectId); 
+                if(primaryWorkOrderId === -1){ $("select.primary-work-order-select[projectid='"+project_id+"']").append('<option value ="-1" workorderid="-1" selected> -vyberte- </option>');}
+                $("select.primary-work-order-select[projectid='"+project_id+"']").val(primaryWorkOrderId); 
         }
         function addRowOfActiveUserToProject(data, project_id){
                 var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Aktivní uživatelé: </div>';
                 row = row + '<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px active-project-users" projectid="'+project_id+'">';
                 for(a in data){
                     if(data[a]['rel'] === 'user'){
-                        row = row + '<span class="users_list del-user-from-project" userid="'+data[a]['id']+'"><i class="fas fa-times-circle"></i>'+data[a]['first_name']+' '+data[a]['last_name']+'</span> ';
+                        row = row + '<span class="users_list del-user-from-project" projectid="'+project_id+'" userid="'+data[a]['id']+'"><i class="fas fa-times-circle"></i>'+data[a]['first_name']+' '+data[a]['last_name']+'</span> ';
                     }
                     if(data[a]['rel'] === 'owner'){
                         row = row + '<span class="users_list owner-of-project" userid="'+data[a]['id']+'"><i class="fas fa-crown"></i>'+data[a]['first_name']+' '+data[a]['last_name']+'</span> ';
@@ -457,14 +500,16 @@
                 var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Nepřiřazení uživatelé: </div>';
                 row = row + '<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px inactive-project-users" projectid="'+project_id+'">';
                 for(a in data){
-                    row = row + '<span class="users_list add-user-to-project" userid="'+data[a]['id']+'"><i class="fas fa-plus-circle"></i>'+data[a]['first_name']+' '+data[a]['last_name']+'</span> ';
+                    row = row + '<span class="users_list add-user-to-project" projectid="'+project_id+'" userid="'+data[a]['id']+'"><i class="fas fa-plus-circle"></i>'+data[a]['first_name']+' '+data[a]['last_name']+'</span> ';
                 }
                 row = row + '</div>';
                 $("div.project-first-row[projectid='"+project_id+"']").append(row); 
         }
         
         function addSingleActiveUserToProject(name, user_id, project_id){
-                row = '<span class="users_list del-user-from-project" userid="'+user_id+'"><i class="fas fa-times-circle"></i>'+name+'</span> ';
+                updateUsersProjectRel(name, user_id, project_id, 'user');
+                /*
+                row = '<span class="users_list del-user-from-project"  projectid="'+project_id+'" userid="'+user_id+'"><i class="fas fa-times-circle"></i>'+name+'</span> ';
                 $("div.active-project-users[projectid='"+project_id+"']").append(row); 
                 
                 $("span.del-user-from-project[userid='"+user_id+"']").click( function(){
@@ -474,11 +519,13 @@
                 addSingleInactiveUserToProject($(this).text(), userId, projectId);
                 $(this).remove();
             });
-                updateUsersProjectRel(user_id, project_id, 'user');
+                */
         }
         
         function addSingleInactiveUserToProject(name, user_id, project_id){
-                row = '<span class="users_list add-user-to-project" userid="'+user_id+'"><i class="fas fa-plus-circle"></i>'+name+'</span> ';
+                updateUsersProjectRel(name, user_id, project_id, 'alumni');
+                /*
+                row = '<span class="users_list add-user-to-project"  projectid="'+project_id+'" userid="'+user_id+'"><i class="fas fa-plus-circle"></i>'+name+'</span> ';
                 $("div.inactive-project-users[projectid='"+project_id+"']").append(row); 
                 
                 $("span.add-user-to-project[userid='"+user_id+"']").click( function(){
@@ -488,7 +535,7 @@
                     addSingleActiveUserToProject($(this).text(), userId, projectId);
                     $(this).remove();
                 });
-                updateUsersProjectRel(user_id, project_id, 'alumni');
+                */
         }
         
         function createNewWorkOrder(){
@@ -504,7 +551,7 @@
                   { 
                     var json = $.parseJSON(data);
                     if(json.result!=='OK'){
-                        alert(json.code);
+                        alert("ERR"+json.code);
                         $("#new-work-order").text('Chyba');
                     }else{
                         getMyClientOrders(clientId);
@@ -530,7 +577,7 @@
                   { 
                     var json = $.parseJSON(data);
                     if(json.result!=='OK'){
-                        alert(json.code);
+                        alert("ERR"+json.code);
                         $("#new-project").text('Chyba');
                     }else{
                         var raw_data = json.data;
@@ -557,7 +604,7 @@
                 });      
         }      
         
-        function updateUsersProjectRel(user_id, project_id, rel){
+        function updateUsersProjectRel(name, user_id, project_id, rel){
             
             $.ajax(
             {
@@ -571,9 +618,10 @@
                success: function(data)
                     { var json = $.parseJSON(data); 
                         if(json.result==='OK'){
-                          setUpMyProjectsDetails();
+                          addSingleWorkOrderSpanHandler(name, user_id, project_id, rel);
+                          //setUpMyProjectsDetails();
                         }else{
-                            alert(json.code);
+                            alert("ERR"+json.code);
                         }
                     }
             }); 
@@ -594,7 +642,7 @@
                         if(json.result==='OK'){
                             addSingleProjectSpanHandler(role, name, workorderid, projectid);
                         }else{
-                            alert(json.code);
+                            alert("ERR"+json.code);
                         }
                     }
             }); 
@@ -614,7 +662,7 @@
                       
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    alert(json.code);
+                    alert("ERR"+json.code);
                 }else{
                     $(".orders-first-row").html('');
                     var raw_data = json.data;
@@ -633,7 +681,7 @@
                     var json = $.parseJSON(data);
                     var lastProjectID = -1;
                     if(json.result!=='OK'){
-                        alert(json.code);
+                        alert("ERR"+json.code);
                     }else{
                         $("#orders-first-row").html('');
                         var raw_data = json.data;
@@ -668,7 +716,7 @@
               { 
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    alert(json.code);
+                    alert("ERR"+json.code);
                 }else{
                     var raw_data = json.data;
                     for (i in raw_data)
@@ -702,7 +750,7 @@
               { 
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    alert(json.code);
+                    alert("ERR"+json.code);
                 }else{
                     var raw_data = json.data;
                     for (i in raw_data)
@@ -742,7 +790,7 @@
               { 
                 var json = $.parseJSON(data);
                 if(json.result!=='OK'){
-                    if(json.code!=='101'){ alert(json.code);}
+                    if(json.code!=='101'){ alert("ERR"+json.code);}
                 }else{
                     var raw_data = json.data;
                     var max_id = 0;
@@ -812,9 +860,15 @@
                 var value = $(this).val();
                 updateProjectParam(projectId, projectParamId, value);
             });
-                        
+            
+            $(".primary-work-order-select").change( function(){
+                var projectId = $(this).attr("projectid");
+                var value = $(this).val();
+                updatePrimaryWorkOrder(projectId, value);
+            });
+        
             $("span.del-user-from-project").click( function(){
-                var projectId = $(this).parent().attr("projectid");
+                var projectId = $(this).attr("projectid");
                 var userId = $(this).attr("userid");
                 $(this).children("svg").remove();
                 addSingleInactiveUserToProject($(this).text(), userId, projectId);
@@ -822,7 +876,7 @@
             });
                         
             $("span.add-user-to-project").click( function(){
-                var projectId = $(this).parent().attr("projectid");
+                var projectId = $(this).attr("projectid");
                 var userId = $(this).attr("userid");
                 $(this).children("svg").remove();
                 addSingleActiveUserToProject($(this).text(), userId, projectId);

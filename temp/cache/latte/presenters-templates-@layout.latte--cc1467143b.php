@@ -110,7 +110,7 @@ class Templatecc1467143b extends Latte\Runtime\Template
         <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 25 */ ?>/js/jquery-3.3.1.min.js"></script>        
         <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 26 */ ?>/js/bootstrap.min.js"></script>
 	<script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 27 */ ?>/js/Chart.js"></script>
-        <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 28 */ ?>/js/fontawesome/svg-with-js/js/fontawesome-all.js"></script>
+        <script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 28 */ ?>/js/fontawesome/js/all.js"></script>
         <!--<script src="<?php echo LR\Filters::escapeHtmlComment($basePath) /* line 29 */ ?>/js/init_scripts.js"></script> -->
 
 <?php
@@ -211,7 +211,20 @@ class Templatecc1467143b extends Latte\Runtime\Template
 .users_list:hover {
         background-color: #EDEDED;
         cursor: pointer;
-    }    
+    }
+
+.owner-of-project{
+    background-color: #bbbbff;
+}
+
+.owner-of-project:hover{
+    background-color: #bbbbff;
+    cursor: not-allowed;
+}
+.owner-of-project > svg:hover{
+    cursor: not-allowed;
+}
+    
 .small-screen { display:none;}
    
 select.client_not_name_label{

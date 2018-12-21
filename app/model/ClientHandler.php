@@ -401,6 +401,12 @@ class ClientHandler {
         return $this->database->query("update project_param set value = ? where id = ?", $value, $projectParamId);
     }
     
+    function updatePrimaryWorkOrder($projectId, $value){
+        $this->database->query("update project_work_order_rel set role = ? where project_id = ? and role = ?", 'active', $projectId,'primary');
+        $this->database->query("update project_work_order_rel set role = ? where project_id = ? and work_order_id = ?", 'primary', $projectId, $value);
+        return true;
+    }
+    
     function deleteProject($projectId){
 
         return $this->database->query("delete from project where id = ?", $projectId);
