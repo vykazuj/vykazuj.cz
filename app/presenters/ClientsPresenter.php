@@ -147,6 +147,27 @@ class ClientsPresenter extends BasePresenter
             $this->sendResponse(new JsonResponse($myJSON)); 
         }
         
+        public function actionGetMyClientOrder($clientId, $workOrderId){
+            $myClientHandler = new \ClientHandler($this->database);
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            
+            if(!$this->user->isLoggedIn()){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '105';
+                $myObj['data'] = 'Nejste přihlášen.'; 
+            }elseif(!$myClientHandler->isUserAllowedToManageClient($this->user->getId(), $clientId)){
+                $myObj['result'] = 'NOT OK';
+                $myObj['code'] = '106';
+                $myObj['data'] = 'Nemáte právo na tohoto klienta'; 
+            }else{
+                $myObj['data'] = $myClientHandler->getMyClientOrderWithParameters($clientId);
+            }
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON)); 
+        }
+        
         public function actionGetUsersNotLinkedToClientOrders($clientId){
             $myClientHandler = new \ClientHandler($this->database);
             $myObj = null;

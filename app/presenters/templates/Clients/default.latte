@@ -554,12 +554,12 @@
                         alert("ERR"+json.code);
                         $("#new-work-order").text('Chyba');
                     }else{
+                        $("#new-work-order").text("Přidat další");
+                        //cleanOrderRows();
                         getMyClientOrders(clientId);
+                        setUpMyClientOrders();
                     }
                     
-                    $("#new-work-order").text("Přidat další");
-                    getMyClientOrders(clientId);
-                    setUpMyClientOrders();
                   }
                 });      
         }      
@@ -653,51 +653,71 @@
                 getMyClientOrdersSemafor = false;
                 $.ajax(
                 {
-                  type: 'GET',
-                  url: home_url+'/clients/get-my-client-orders?clientId='+id,
-                  dataType: 'json',
-                  cache: false,
-                  success: function(data)
-                  { 
-                      
-                var json = $.parseJSON(data);
-                if(json.result!=='OK'){
-                    alert("ERR"+json.code);
-                }else{
-                    $(".orders-first-row").html('');
-                    var raw_data = json.data;
-                    for (i in raw_data)
-                    {
-                        var work_order_id = raw_data[i]["workOrder"]["id"];
-                        addOrderFirstRow(raw_data[i]["workOrder"]);
-                        addRowOfActiveProjectToWorkOrder(raw_data[i]["activeProjects"], work_order_id);
-                        addRowOfInactiveProjectToWorkOrder(raw_data[i]["inactiveProjects"], work_order_id);
-                        //addClientRow(raw_data[i]);
-                      //setSelectAction(raw_data[i].id);
-                    }
-                      setUpMyClientOrders();
-                }   
-                /*
-                    var json = $.parseJSON(data);
-                    var lastProjectID = -1;
-                    if(json.result!=='OK'){
-                        alert("ERR"+json.code);
-                    }else{
-                        $("#orders-first-row").html('');
-                        var raw_data = json.data;
-                        for (i in raw_data)
-                        {
-                            if(raw_data[i]['id'] !== lastProjectID){
-                                lastProjectID = raw_data[i]['id'];
-                                addOrderFirstRow(raw_data[i]);
+                    type: 'GET',
+                    url: home_url+'/clients/get-my-client-orders?clientId='+id,
+                    dataType: 'json',
+                    cache: false,
+                    success: function(data)
+                    { 
 
-                            }
-                           addOrderRow(raw_data[i]);
-                          //setSelectAction(raw_data[i].id);
-                        }
-                        getMyClientOrdersPart2(id);
-                        setUpMyClientOrders();
-                  }*/
+                      var json = $.parseJSON(data);
+                      if(json.result!=='OK'){
+                          alert("ERR"+json.code);
+                      }else{
+                          $(".orders-first-row").html('');
+                          var raw_data = json.data;
+                          for (i in raw_data)
+                          {
+                              var work_order_id = raw_data[i]["workOrder"]["id"];
+                              addOrderFirstRow(raw_data[i]["workOrder"]);
+                              addRowOfActiveProjectToWorkOrder(raw_data[i]["activeProjects"], work_order_id);
+                              addRowOfInactiveProjectToWorkOrder(raw_data[i]["inactiveProjects"], work_order_id);
+                              //addClientRow(raw_data[i]);
+                            //setSelectAction(raw_data[i].id);
+                          }
+                            setUpMyClientOrders();
+                            getMyClientOrdersSemafor = true;
+                        }   
+                    }     
+
+                });  
+            }
+        } 
+        
+        function getMyClientSingleOrder(id, workOrderId){
+            if(getMyClientOrdersSemafor){
+                getMyClientOrdersSemafor = false;
+                $.ajax(
+                {
+                    type: 'GET',
+                    url: home_url+'/clients/get-my-client-order',
+                    data:{
+                        clientId:id,
+                        workOrderId:workOrderId
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function(data)
+                    { s
+
+                      var json = $.parseJSON(data);
+                      if(json.result!=='OK'){
+                          alert("ERR"+json.code);
+                      }else{
+                          $(".orders-first-row").html('');
+                          var raw_data = json.data;
+                          for (i in raw_data)
+                          {
+                              var work_order_id = raw_data[i]["workOrder"]["id"];
+                              addOrderFirstRow(raw_data[i]["workOrder"]);
+                              addRowOfActiveProjectToWorkOrder(raw_data[i]["activeProjects"], work_order_id);
+                              addRowOfInactiveProjectToWorkOrder(raw_data[i]["inactiveProjects"], work_order_id);
+                              //addClientRow(raw_data[i]);
+                            //setSelectAction(raw_data[i].id);
+                          }
+                            setUpMyClientOrders();
+                            getMyClientOrdersSemafor = true;
+                        }   
                     }     
 
                 });  

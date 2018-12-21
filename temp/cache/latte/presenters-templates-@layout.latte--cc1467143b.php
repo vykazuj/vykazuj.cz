@@ -224,7 +224,15 @@ class Templatecc1467143b extends Latte\Runtime\Template
 .owner-of-project > svg:hover{
     cursor: not-allowed;
 }
-    
+
+.del-user-from-project, .del-project-from-workorder {
+    background-color: #bbffbb;
+}
+
+.add-user-to-project, .add-project-to-workorder {
+    background-color: #ffbbbb;
+}
+
 .small-screen { display:none;}
    
 select.client_not_name_label{

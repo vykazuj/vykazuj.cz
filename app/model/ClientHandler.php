@@ -155,13 +155,33 @@ class ClientHandler {
             $i++;
         }
         return $return;
-        /*return $this->database->fetchAll('select wo.status as status, wo.amount as amount, u.id as userId, u.first_name as firstName, u.last_name as lastName, uwor.md_rate as mdRate, uwor.status as uworStatus, wo.name as name, wo.id as id, uwor.id as uworId from '
-                . ' client cl '
-                . ' left join work_order wo on cl.id = wo.client_id '
-                . ' left join users_work_order_rel uwor on uwor.work_order_id = wo.id '
-                . ' left join users u on uwor.user_id = u.id '
-                . 'where cl.id = ? order by cl.id', $clientId);
-         */
+    }
+    
+    function getMyClientOrderWithParameters($clientId, $workOrderId){
+        $workOrder =  $this->database->fetchAll('select wo.* from work_order wo where id = ?', $workOrderId);
+        $client = $this->getClient($clientId);
+        $companyId = $client[0]["company_id"];
+        $i = 0;
+        $return = null;
+
+            $return[$i]["workOrder"] = $workOrder;
+            $return[$i]["activeProjects"]= $this->database->fetchAll('select pr.name, pr.id as project_id, pwor.id as pwor_id, pwor.role as role from project pr, project_work_order_rel pwor where pwor.project_id = pr.id and pwor.work_order_id = ? and pwor.role in (?) order by role DESC',$workOrderId, $this->rolesActiveForWorkOrder);
+            $return[$i]["inactiveProjects"]= $this->database->fetchAll('select pr.name, pr.id as project_id, pwor.id as pwor_id, pwor.role as role from project pr, project_work_order_rel pwor where pwor.project_id = pr.id and pwor.work_order_id = ? and pwor.role in (?) order by role DESC',$workOrderId, $this->rolesInactiveForWorkOrder);
+            $return[$i]["inactiveProjects"] += $this->database->fetchAll(''
+                    . ' select pr.name, pr.id as project_id, -1 as pwor_id, pwor.role as role '
+                    . ' from company co '
+                    . ' join client cl '
+                    . '     on cl.company_id = co.id '
+                    . ' join project pr '
+                    . '     on pr.client_id = cl.id '
+                    . ' left join project_work_order_rel pwor '
+                    . '     on pwor.project_id = pr.id '
+                    . '     and pwor.work_order_id = ? '
+                    . ' where '
+                    . '     pwor.id is null '
+                    . '     and cl.id = ? '
+                    . '     and co.id = ? ', $workOrderId ,$clientId, $companyId);
+        return $return;
     }
  
     function getUsersNotLinkedToClientOrders($clientId){
