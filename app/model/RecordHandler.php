@@ -63,29 +63,55 @@ class RecordHandler {
                 . 'and c.id = ? '
                 . 'group by u.id, u.first_name, u.last_name '
                 , $year, $month, $companyId);
+    }    
+    function getWorkOrderChargesOverview($month, $year, $companyId){
+        return $this->database->fetchAll(' select '
+                . ' wo.id as workorderid, wo.name as name, sum(upr.md_rate*(r.hours+r.hours_over)/8) as charged '
+                . ' from '
+                . ' company co'
+                . ' join client cl '
+                . '   on cl.company_id = co.id'
+                . ' join work_order wo '
+                . '   on wo.client_id = cl.id '
+                . ' join record r '
+                . '   on r.work_order_id = wo.id '
+                . '   and r.year = ? '
+                . '   and r.month = ? '
+                . ' join project pr '
+                . '   on pr.client_id = cl.id '
+                . ' join users_project_rel upr '
+                . '   on r.user_id = upr.user_id '
+                . '   and pr.id = upr.project_id'
+                . ' where '
+                . '   co.id = ? '
+                . ' group by '
+                . '   wo.id, wo.name '
+                , $year, $month, $companyId);
     }
     
-    /*
-    function getEmployeeChargesOverview($month, $year, $companyId){
-        return $this->database->fetchAll(' select u.id, u.first_name as firstName, u.last_name as lastName, sum(hours) as hours, sum(hours_over) as hoursOver'
+    function getWorkOrdersOverview($companyId){
+        return $this->database->fetchAll(' select '
+                . ' wo.id as workorderid, wo.name as name, wo.amount as amount, sum(upr.md_rate*(r.hours+r.hours_over)/8) as charged '
                 . ' from '
-                . 'users u, '
-                . 'record r, '
-                . 'project p, '
-                . 'client cl, '
-                . 'company c '
+                . ' company co'
+                . ' join client cl '
+                . '   on cl.company_id = co.id'
+                . ' join work_order wo '
+                . '   on wo.client_id = cl.id '
+                . ' join record r '
+                . '   on r.work_order_id = wo.id '
+                . ' join project pr '
+                . '   on pr.client_id = cl.id '
+                . ' join users_project_rel upr '
+                . '   on r.user_id = upr.user_id '
+                . '   and pr.id = upr.project_id'
                 . ' where '
-                . 'u.id = r.user_id '
-                . 'and p.id = r.project_id '
-                . 'and p.special_flag = ? '
-                . 'and p.client_id = cl.id '
-                . 'and cl.company_id = c.id '
-                . 'and c.id = ? '
-                . 'and r.year = ? '
-                . 'and r.month = ? '
-                . ' GROUP BY u.id, u.first_name, u.last_name ','',$companyId, $year, $month);
+                . '   co.id = ? '
+                . ' group by '
+                . '   wo.id, wo.name, wo.amount '
+                , $companyId);
     }
-    */
+    
     function getRecordsByMonthYearProjectUser($month, $year, $project, $userId){
         return $this->database->fetchAll('select r.*, p.name as projectName from record r, project p where p.id = r.project_id and r.user_id = ? and r.year = ? and r.month = ? and r.project_id = ? ORDER by day ASC',$userId, $year, $month, $project);
     }

@@ -65,6 +65,34 @@ class StatisticsPresenter extends BasePresenter
             $this->sendResponse(new JsonResponse($myJSON));
              
         }
+                
+        public function actionGetWorkOrderChargesOverview($month, $year){
+            $myRecordHandler = new \RecordHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $myObj['data'] = $myRecordHandler->getWorkOrderChargesOverview($month, $year, $companySessions->id);
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));
+             
+        }
+                
+        public function actionGetWorkOrdersOverview(){
+            $myRecordHandler = new \RecordHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $myObj['data'] = $myRecordHandler->getWorkOrdersOverview($companySessions->id);
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));
+             
+        }
         
         
 }
