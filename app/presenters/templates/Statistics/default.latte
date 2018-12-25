@@ -65,19 +65,19 @@
                              <span class="big-screen">Objednávka:</span>
                              <span class="small-screen">Obj.:</span>
                         </div>
-                        <div class="col-2 font-weight-semibold nopadding">
+                        <div class="col-4 col-lg-2 font-weight-semibold nopadding">
                              <span class="big-screen">Tento měsíc:</span>
                              <span class="small-screen">Měsíc</span>
                         </div>
-                        <div class="col-2 font-weight-semibold nopadding">
+                        <div class="col-2 d-none d-lg-block  font-weight-semibold nopadding">
                              <span class="big-screen">Suma:</span>
                              <span class="small-screen">Suma</span>
                         </div>
-                        <div class="col-2 font-weight-semibold nopadding">
+                        <div class="col-2 d-none d-lg-block  font-weight-semibold nopadding">
                              <span class="big-screen">Výše objednávky:</span>
                              <span class="small-screen">Max</span>
                         </div>
-                        <div class="col-2 font-weight-semibold nopadding">
+                        <div class="col-4 col-lg-2 font-weight-semibold nopadding">
                              <span class="big-screen">Zbývá vyčerpat:</span>
                              <span class="small-screen">Zbývá</span>
                         </div>
@@ -119,16 +119,15 @@
                         
     }        
         function addRowWorkOrderChargesOverview(input){
-        
             var row ='<div class="row my-charged-records-table-neco"><div class="col-4 text-left nopadding">'
                 +input['name']+
-                '</div><div class="col-2 nopadding wo-actual" workorderid="'+input['workorderid']+'">'
-                +input['charged']+
-                '</div><div class="col-2 nopadding wo-sum" workorderid="'+input['workorderid']+'">'
+                '</div><div class="col-4 col-lg-2 nopadding wo-actual" workorderid="'+input['workorderid']+'">'
+                +input['charged']+' Kč'+
+                '</div><div class="col-2 d-none d-lg-block   nopadding wo-sum" workorderid="'+input['workorderid']+'">'
                 +
-                '</div><div class="col-2 nopadding wo-amount" workorderid="'+input['workorderid']+'">'
+                '</div><div class="col-2 d-none d-lg-block   nopadding wo-amount" workorderid="'+input['workorderid']+'">'
                 +
-                '</div><div class="col-2 nopadding wo-rest" workorderid="'+input['workorderid']+'">'
+                '</div><div class="col-4 col-lg-2 nopadding wo-rest" workorderid="'+input['workorderid']+'">'
                 +'</div></div>';
             $("#my-work-order-charged-records-table-first").after(row);
                         

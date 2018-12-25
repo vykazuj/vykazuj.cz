@@ -270,14 +270,14 @@ select#yearPick {
 
 #liPickYear:hover {
     background-color: #FFFFFF;
-    margin-left: -1px;
-    padding: 5px;
+    padding: 3px;
     flex-grow: 1;
     color: #20252D;
     font-weight: 600;
-    font-size: 18px;
     cursor: pointer;
-
+}
+#liPickYear > select {
+    cursor: pointer;
 }
 
 @media screen and (max-width: 992px) {
