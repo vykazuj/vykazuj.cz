@@ -8,6 +8,9 @@
                 if(data["pref_company"] !== null){ selected = 'selected'; $('#company-select').val(data['id']);}
             }            
             
+            function mojeFunckce(){
+                return 424242;
+            }
             function actionGetMyChargableCompanies(home_url){     
                 $.ajax(
                 {
@@ -61,5 +64,6 @@
                     changeActiveCompany(companyId, home_url, active_page);
                 });
             }
+            
             
             

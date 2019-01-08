@@ -46,10 +46,12 @@ class ClientsPresenter extends BasePresenter
             if($dateSessions->month<1 || $dateSessions->month>12 || $dateSessions->month==""){ $dateSessions->month = date('n');}
 
             $myRole = $myClientHandler->getUserCompanyRel($this->user->getId(),$companyId);
+            
+            $this->template->actualMonth = $dateSessions->month;  
+            $this->template->actualYear = $dateSessions->year; 
+            $this->template->myRole = $myRole;
+                
             if($myRole == 'accountant' || $myRole == 'owner'){
-                $this->template->actualMonth = $dateSessions->month;  
-                $this->template->actualYear = $dateSessions->year; 
-                $this->template->myRole = $myRole;
                 $this->template->displaySection = true;
             }
             

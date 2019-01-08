@@ -1,13 +1,16 @@
 {block content}
        
         
-    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">        
+    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">    
+        {if 1==2}       
         <div class="container timetable-blank text-right">
             Aktivní firma: 
           <select id = "company-select" class="client_not_name_label">
           </select>
         </div>
+        {/if}
         
+        {if isset($displaySection) and $displaySection}
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
             <li id="liPickYear">
@@ -31,12 +34,11 @@
             <li class="monthLink{if $actualMonth==12} active{/if}" month="12">Prosinec</a></li>
           </ul>
         </div>        
-            <div id="progressContainer">
-                               
-            </div>   
+        <div id="progressContainer">
+        </div>   
                 
                 <div class="container container-inner timetable" id="my-charged-records-table">
-                    <h1 class="text-left font-weight-semibold">Počty hodin</h1>
+                    <h1 class="text-left font-weight-semibold">Zaměstnanci</h1>
                     <div class="row" id="my-users-charged-records-table-first">
                         <div class="col-4 font-weight-semibold text-left nopadding">
                              <span class="big-screen">Jméno:</span>
@@ -59,6 +61,27 @@
                              <span class="small-screen">Dov.</span>
                         </div>
                     </div>
+                    <h1 class="text-left font-weight-semibold">Klienti a Projekty</h1>
+                    <div class="row" id="my-project-charged-records-table-first">
+                        <div class="col-3 font-weight-semibold text-left nopadding">
+                             <span class="big-screen">Klient:</span>
+                             <span class="small-screen">Kli.</span>
+                        </div>
+                        <div class="col-3 font-weight-semibold text-left nopadding">
+                             <span class="big-screen">Projekt:</span>
+                             <span class="small-screen">Proj.</span>
+                        </div>
+                        <div class="col-4 font-weight-semibold text-left nopadding">
+                             <span class="big-screen">Jméno:</span>
+                             <span class="small-screen">Jméno:</span>
+                        </div>
+                        <div class="col-2 font-weight-semibold text-left nopadding">
+                             <span class="big-screen">Hodiny:</span>
+                             <span class="small-screen">Hod.</span>
+                        </div>
+                    </div>
+                    
+                    {if 1==2}
                     <h1 class="text-left font-weight-semibold">Údaje pro fakturaci</h1>
                     <div class="row" id="my-work-order-charged-records-table-first">
                         <div class="col-4 font-weight-semibold text-left nopadding">
@@ -82,8 +105,9 @@
                              <span class="small-screen">Zbývá</span>
                         </div>
                     </div>
+                    {/if}
                 </div>
-        
+        {/if}
     </div>
                 
 </body>
@@ -117,7 +141,20 @@
                 +input['vacation']+'</div></div>';
             $("#my-users-charged-records-table-first").after(row);
                         
-    }        
+    }      
+    
+        function addRowProjectChargesOverview(input){
+        
+            var row ='<div class="row my-charged-records-table-neco">'
+                        +'<div class="col-3 text-left nopadding">'+input['clientName']+'</div>'
+                        +'<div class="col-3 text-left nopadding">'+input['projectName']+'</div>'
+                        +'<div class="col-4 text-left nopadding">'+input['firstName']+' '+input['lastName']+'</div>'
+                        +'<div class="col-2 text-left nopadding">'+input['hours']+'</div>'
+                    +'</div>';
+            $("#my-project-charged-records-table-first").after(row);
+                        
+    }      
+    
         function addRowWorkOrderChargesOverview(input){
             var row ='<div class="row my-charged-records-table-neco"><div class="col-4 text-left nopadding">'
                 +input['name']+
@@ -142,7 +179,7 @@
         }
         
         function fillEmployeeChargesOverview(month, year){ 
-            $(".my-charged-records-table-neco").remove();
+            //$(".my-charged-records-table-neco").remove();
             $.ajax(
                     {
                         type: 'GET',
@@ -170,6 +207,34 @@
                 );
         }     
         fillEmployeeChargesOverview(actualMonth, actualYear);
+        
+        function fillProjectChargesOverview(month, year){ 
+            //$(".my-charged-records-table-neco").remove();
+            $.ajax(
+                    {
+                        type: 'GET',
+                        url: home_url+ '/statistics/get-project-charges-overview?month='+month+'&year='+year,
+                        dataType: 'json',
+                        cache: false,
+                        success: function(data)
+                            { 
+                                var json = $.parseJSON(data);
+                                    if(json.result === 'OK')
+                                        {  
+                                            var raw_data = json.data;
+                                            for (i in raw_data)
+                                            {
+                                              addRowProjectChargesOverview(raw_data[i]);
+                                            }  
+                                        }
+                                    else{
+                                            alert(json.code);
+                                        }                                 
+                            }
+                    }
+                );
+        }     
+        fillProjectChargesOverview(actualMonth, actualYear);
         
         function fillWorkOrdersOverview(){ 
             $.ajax(
@@ -201,7 +266,7 @@
         
         
         function fillWorkOrderChargesOverview(month, year){ 
-            $(".my-charged-records-table-neco").remove();
+            //$(".my-charged-records-table-neco").remove();
             $.ajax(
                     {
                         type: 'GET',
@@ -236,7 +301,10 @@
             $(".my-charged-records-table-neco").remove();
 
             fillEmployeeChargesOverview(newMonth, actualYear);
-            fillWorkOrderChargesOverview(newMonth, actualYear);
+            fillProjectChargesOverview(newMonth, actualYear);
+            if(1==2){
+                fillWorkOrderChargesOverview(newMonth, actualYear);
+            }
 
             $('li.active').removeClass('active');
             $(this).addClass('active');
@@ -247,7 +315,10 @@
             $(".my-charged-records-table-neco").remove();
             actualYear = $(this).val();
             fillEmployeeChargesOverview(actualMonth, actualYear);
-            fillWorkOrderChargesOverview(actualMonth, actualYear);
+            fillProjectChargesOverview(actualMonth, actualYear);
+            if(1==2){
+                fillWorkOrderChargesOverview(actualMonth, actualYear);
+            }
         });
                 
         

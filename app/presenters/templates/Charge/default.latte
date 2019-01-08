@@ -1,17 +1,20 @@
 {block content}
        
         
-    <div class="col-12 col-lg-8 col-sm-12 col-xs-12 text-center panel-mid">        
-        <div class="container timetable-blank text-left">
+    <div class="col-12 col-lg-8 col-sm-12 col-xs-12 text-center panel-mid"> 
+        <div class="container timetable-blank text-left">    
+        {if 1==2}
             Aktivní firma: 
           <select id = "company-select" class="client_not_name_label">
-          </select> <br class="active-project-separator" /> Aktivní projekt:  
+          </select> <br class="active-project-separator" /> 
+          
+        {/if}
+          Aktivní projekt:  
           <select class="client_not_name_label" id="my-chargeable-projects">
               <br class="active-project-separator"/>
           </select>   
                     
         </div>
-        
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
             <li id="liPickYear">

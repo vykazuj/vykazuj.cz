@@ -64,6 +64,27 @@ class RecordHandler {
                 . 'group by u.id, u.first_name, u.last_name '
                 , $year, $month, $companyId);
     }    
+    
+    function getProjectChargesOverview($month, $year, $companyId){
+        return $this->database->fetchAll(' select '
+                . ' cl.name as clientName, pr.name as projectName, u.first_name as firstName, '
+                . ' u.last_name as lastName, sum(rec.hours)+sum(rec.hours_over) as hours'
+                . ' from '
+                . 'company c '
+                . 'join client cl on cl.company_id = c.id '
+                . 'join project pr on pr.client_id = cl.id '
+                . 'join record rec on rec.project_id = pr.id '
+                . 'join users u on rec.user_id = u.id '
+                . '     and rec.year = ? '
+                . '     and rec.month = ? '
+                . ' where '
+                . ' c.id = ? '
+                . 'group by cl.name, pr.name, u.first_name, u.last_name '
+                . 'order by cl.name, pr.name, u.first_name, u.last_name '
+                , $year, $month, $companyId);
+    }    
+    
+    
     function getWorkOrderChargesOverview($month, $year, $companyId){
         return $this->database->fetchAll(' select '
                 . ' wo.id as workorderid, wo.name as name, sum(upr.md_rate*(r.hours+r.hours_over)/8) as charged '

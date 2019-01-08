@@ -1,11 +1,13 @@
 {block content}
         
-    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">        
+    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">     
+        {if 1==2}      
         <div class="container timetable-blank text-right">
             Aktivní firma: 
           <select id = "company-select" class="client_not_name_label">
           </select>
         </div>
+        {/if}
         
         <div class="container timetable-blank">
             {if isset($displaySection) and $displaySection}
@@ -86,7 +88,8 @@
                     </div>
                 </div>
 
-                
+                 
+        {if 1==2}      
                 <hr class="gray">
                 
                 <div class="row orders-row-head" id ="orders-row-head">
@@ -105,6 +108,7 @@
                 </div>
                 
                 <br>
+        {/if}
             {else}
                 Nemáte právo na tuto sekci pro zvolenou firmu. Zvolte jinou firmu nebo požádejte majitele firmy o roli <strong>Účetní.</strong>
             {/if}
@@ -145,7 +149,6 @@
         {
             initSharedFunctions(home_url, active_page);
         });
-        
         var getMyClientOrdersSemafor = true;
                
         function validateMail(email){
@@ -471,19 +474,22 @@
             if (data['param_lic'] === 'status'){ $("select.project_param_labels_all[projectparamid='"+data['param_id']+"']").val(data["value"]);}
         }
         
-        function addRowOfWorkOrderToProject(data, project_id){
-                var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Primární objednávka: </div>';
-                var primaryWorkOrderId = -1;
-                row = row + '<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px primary-project"><select class="primary-work-order-select project_param_labels_all users_list" projectid="'+project_id+'">';
-                for(a in data){
-                    var selected = "";
-                    if( data[a]['role'] === 'primary'){ primaryWorkOrderId = data[a]['work_order_id']; selected = 'selected';}
-                    row = row + '<option value = "'+data[a]['work_order_id']+'" workorderid="'+data[a]['work_order_id']+'" '+selected+'>'+data[a]['name']+'</option>';
+        function addRowOfWorkOrderToProject(data, project_id){                 
+                if(1===2) {
+                    var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Primární objednávka: </div>';
+                    var primaryWorkOrderId = -1;
+                    row = row + '<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px primary-project"><select class="primary-work-order-select project_param_labels_all users_list" projectid="'+project_id+'">';
+
+                    for(a in data){
+                        var selected = "";
+                        if( data[a]['role'] === 'primary'){ primaryWorkOrderId = data[a]['work_order_id']; selected = 'selected';}
+                        row = row + '<option value = "'+data[a]['work_order_id']+'" workorderid="'+data[a]['work_order_id']+'" '+selected+'>'+data[a]['name']+'</option>';
+                    }
+                    row = row + '</select></div>';
+                    $("div.project-first-row[projectid='"+project_id+"']").append(row); 
+                    if(primaryWorkOrderId === -1){ $("select.primary-work-order-select[projectid='"+project_id+"']").append('<option value ="-1" workorderid="-1" selected> -vyberte- </option>');}
+                    $("select.primary-work-order-select[projectid='"+project_id+"']").val(primaryWorkOrderId); 
                 }
-                row = row + '</select></div>';
-                $("div.project-first-row[projectid='"+project_id+"']").append(row); 
-                if(primaryWorkOrderId === -1){ $("select.primary-work-order-select[projectid='"+project_id+"']").append('<option value ="-1" workorderid="-1" selected> -vyberte- </option>');}
-                $("select.primary-work-order-select[projectid='"+project_id+"']").val(primaryWorkOrderId); 
         }
         function addRowOfActiveUserToProject(data, project_id){
                 var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Aktivní uživatelé: </div>';

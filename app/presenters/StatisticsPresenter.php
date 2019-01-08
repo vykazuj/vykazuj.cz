@@ -50,6 +50,10 @@ class StatisticsPresenter extends BasePresenter
             $this->template->actualYear = $dateSessions->year;   
             $this->template->jobTitle =  $myClientHandler->getUserCompanyRelTranslated($this->user->getId(), $companyId); 
             
+            $myRole = $myClientHandler->getUserCompanyRel($this->user->getId(),$companyId);
+            if($myRole == 'accountant' || $myRole == 'owner'){
+                $this->template->displaySection = true;
+            }
         }
                 
         public function actionGetEmployeeChargesOverview($month, $year){
@@ -60,6 +64,20 @@ class StatisticsPresenter extends BasePresenter
             $myObj['result'] = 'OK';
             $myObj['code'] = '0';
             $myObj['data'] = $myRecordHandler->getEmployeeChargesOverview($month, $year, $companySessions->id);
+            
+            $myJSON = json_encode($myObj);
+            $this->sendResponse(new JsonResponse($myJSON));
+             
+        }
+                
+        public function actionGetProjectChargesOverview($month, $year){
+            $myRecordHandler = new \RecordHandler($this->database);
+            $companySessions = $this->getSession('Company');
+            
+            $myObj = null;
+            $myObj['result'] = 'OK';
+            $myObj['code'] = '0';
+            $myObj['data'] = $myRecordHandler->getProjectChargesOverview($month, $year, $companySessions->id);
             
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));
