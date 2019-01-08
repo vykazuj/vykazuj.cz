@@ -36,8 +36,9 @@
         </div>        
         <div id="progressContainer">
         </div>   
-                
+        {/if}
                 <div class="container container-inner timetable" id="my-charged-records-table">
+        {if isset($displaySection) and $displaySection}
                     <h1 class="text-left font-weight-semibold">Zaměstnanci</h1>
                     <div class="row" id="my-users-charged-records-table-first">
                         <div class="col-4 font-weight-semibold text-left nopadding">
@@ -106,8 +107,10 @@
                         </div>
                     </div>
                     {/if}
-                </div>
+        {else}
+            Nemáte právo na tuto sekci pro zvolenou firmu. Zvolte jinou firmu nebo požádejte majitele firmy o roli <strong>Účetní.</strong>
         {/if}
+        </div>
     </div>
                 
 </body>
