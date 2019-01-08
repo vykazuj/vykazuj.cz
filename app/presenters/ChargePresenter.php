@@ -68,6 +68,10 @@ class ChargePresenter extends BasePresenter
             $myObj['code'] = '0';
             $myObj['data'] = $myRecordHandler->getRecordsByMonthYearUser($month, $year, $this->user->getId(), $companyId);
             
+            $dateSessions = $this->getSession('Date'); 
+            $dateSessions->year = $year;
+            $dateSessions->month = $month;
+            
             $myJSON = json_encode($myObj);
             $this->sendResponse(new JsonResponse($myJSON));
              

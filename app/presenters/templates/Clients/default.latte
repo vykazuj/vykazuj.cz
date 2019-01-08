@@ -1,11 +1,13 @@
 {block content}
         
-    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">        
+    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">     
+        {if 1==2}      
         <div class="container timetable-blank text-right">
             Aktivní firma: 
           <select id = "company-select" class="client_not_name_label">
           </select>
         </div>
+        {/if}
         
         <div class="container timetable-blank">
             {if isset($displaySection) and $displaySection}
@@ -86,7 +88,8 @@
                     </div>
                 </div>
 
-                
+                 
+        {if 1==2}      
                 <hr class="gray">
                 
                 <div class="row orders-row-head" id ="orders-row-head">
@@ -105,6 +108,7 @@
                 </div>
                 
                 <br>
+        {/if}
             {else}
                 Nemáte právo na tuto sekci pro zvolenou firmu. Zvolte jinou firmu nebo požádejte majitele firmy o roli <strong>Účetní.</strong>
             {/if}
@@ -145,7 +149,6 @@
         {
             initSharedFunctions(home_url, active_page);
         });
-        
         var getMyClientOrdersSemafor = true;
                
         function validateMail(email){
@@ -316,26 +319,31 @@
         }
         
         function cleanOrderRows(){
-            $(".orders-first-row").html('');
+            $(".orders-first-row").remove();
+        }
+        
+        function cleanHR(){
+            $("hr").remove();
         }
         
         function addOrderFirstRow(data){
-            if(data["id"] === null){ return true;}            
-            var row = '<div class="row orders-first-row" workorderid="'+data["id"]+'">'
-                    +'<div class="col-12 text-left font-weight-semibold"><input type="text"  class="work-order-name-input client_labels_all font-weight-semibold" value ="'+data["name"]+'"  finder="name" workorderid="'+data["id"]+'"></div>'
-                    +'<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Status:</div>'
-                    +'<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px"><select class="work-order-status-select project_param_labels_all users_list" workorderid="'+data["id"]+'" finder="status"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select><span class="invisible"> Kč</span></div>'
-                    +'<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Částka k čerpání:</div>'
-                    +'<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px"><input type="text"  class="work-order-amount-input client_not_name_label client_labels_all clients_labels_kc" value ="'+data["amount"]+'"  finder="amount" workorderid="'+data["id"]+'"><span class="clients_labels_kc"> Kč</span></div>'
-                    //+'<div class="col-xl-4 col-lg-4 col-md-0 col-sm-0 col-0 text-left  order-details"></div>';
-                    //+'<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12  text-left  order-details nopadding">Vykazující zaměstananci:<div class="row order-active-members" workorderid="'+data["id"]+'"></div></div>'
-                //+'<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12  text-left  order-details nopadding">Pozastavené vykazování:<div class="row order-inactive-members" workorderid="'+data["id"]+'"></div></div>'
-                //+'<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12  text-left  order-details nopadding">Povolit vykazování:<div class="row order-new-members" workorderid="'+data["id"]+'"></div>'
-                +'</div><hr>';
-            $("#orders-row-head").after(row);    
-                    
-          
-            $(".work-order-status-select[workorderid='"+data["id"]+"']").val(data["status"]);
+            if(data["id"] === null){ return true;}else{            
+                var row = '<div class="row orders-first-row" workorderid="'+data["id"]+'">'
+                        +'<div class="col-12 text-left font-weight-semibold"><input type="text"  class="work-order-name-input client_labels_all font-weight-semibold" value ="'+data["name"]+'"  finder="name" workorderid="'+data["id"]+'"></div>'
+                        +'<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Status:</div>'
+                        +'<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px"><select class="work-order-status-select project_param_labels_all users_list" workorderid="'+data["id"]+'" finder="status"><option value="active">Aktivní</option><option value="inactive">Neaktivní</option></select><span class="invisible"> Kč</span></div>'
+                        +'<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Částka k čerpání:</div>'
+                        +'<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px"><input type="text"  class="work-order-amount-input client_not_name_label client_labels_all clients_labels_kc" value ="'+data["amount"]+'"  finder="amount" workorderid="'+data["id"]+'"><span class="clients_labels_kc"> Kč</span></div>'
+                        //+'<div class="col-xl-4 col-lg-4 col-md-0 col-sm-0 col-0 text-left  order-details"></div>';
+                        //+'<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12  text-left  order-details nopadding">Vykazující zaměstananci:<div class="row order-active-members" workorderid="'+data["id"]+'"></div></div>'
+                    //+'<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12  text-left  order-details nopadding">Pozastavené vykazování:<div class="row order-inactive-members" workorderid="'+data["id"]+'"></div></div>'
+                    //+'<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12  text-left  order-details nopadding">Povolit vykazování:<div class="row order-new-members" workorderid="'+data["id"]+'"></div>'
+                    +'</div><hr>';
+                $("#orders-row-head").after(row);    
+
+
+                $(".work-order-status-select[workorderid='"+data["id"]+"']").val(data["status"]);
+            }
         }
         
         function addOrderRow(data){
@@ -466,19 +474,22 @@
             if (data['param_lic'] === 'status'){ $("select.project_param_labels_all[projectparamid='"+data['param_id']+"']").val(data["value"]);}
         }
         
-        function addRowOfWorkOrderToProject(data, project_id){
-                var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Primární objednávka: </div>';
-                var primaryWorkOrderId = -1;
-                row = row + '<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px primary-project"><select class="primary-work-order-select project_param_labels_all users_list" projectid="'+project_id+'">';
-                for(a in data){
-                    var selected = "";
-                    if( data[a]['role'] === 'primary'){ primaryWorkOrderId = data[a]['work_order_id']; selected = 'selected';}
-                    row = row + '<option value = "'+data[a]['work_order_id']+'" workorderid="'+data[a]['work_order_id']+'" '+selected+'>'+data[a]['name']+'</option>';
+        function addRowOfWorkOrderToProject(data, project_id){                 
+                if(1===2) {
+                    var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Primární objednávka: </div>';
+                    var primaryWorkOrderId = -1;
+                    row = row + '<div class="col-xl-8 col-md-8 col-sm-8  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px primary-project"><select class="primary-work-order-select project_param_labels_all users_list" projectid="'+project_id+'">';
+
+                    for(a in data){
+                        var selected = "";
+                        if( data[a]['role'] === 'primary'){ primaryWorkOrderId = data[a]['work_order_id']; selected = 'selected';}
+                        row = row + '<option value = "'+data[a]['work_order_id']+'" workorderid="'+data[a]['work_order_id']+'" '+selected+'>'+data[a]['name']+'</option>';
+                    }
+                    row = row + '</select></div>';
+                    $("div.project-first-row[projectid='"+project_id+"']").append(row); 
+                    if(primaryWorkOrderId === -1){ $("select.primary-work-order-select[projectid='"+project_id+"']").append('<option value ="-1" workorderid="-1" selected> -vyberte- </option>');}
+                    $("select.primary-work-order-select[projectid='"+project_id+"']").val(primaryWorkOrderId); 
                 }
-                row = row + '</select></div>';
-                $("div.project-first-row[projectid='"+project_id+"']").append(row); 
-                if(primaryWorkOrderId === -1){ $("select.primary-work-order-select[projectid='"+project_id+"']").append('<option value ="-1" workorderid="-1" selected> -vyberte- </option>');}
-                $("select.primary-work-order-select[projectid='"+project_id+"']").val(primaryWorkOrderId); 
         }
         function addRowOfActiveUserToProject(data, project_id){
                 var row = '<div class="col-xl-4 col-md-4 col-sm-4  col-xs-6 col-6 text-left project-details nopadding lowhipadding2px">Aktivní uživatelé: </div>';
@@ -666,12 +677,12 @@
                       }else{
                           $(".orders-first-row").html('');
                           var raw_data = json.data;
-                          for (i in raw_data)
+                          for (iter in raw_data)
                           {
-                              var work_order_id = raw_data[i]["workOrder"]["id"];
-                              addOrderFirstRow(raw_data[i]["workOrder"]);
-                              addRowOfActiveProjectToWorkOrder(raw_data[i]["activeProjects"], work_order_id);
-                              addRowOfInactiveProjectToWorkOrder(raw_data[i]["inactiveProjects"], work_order_id);
+                              var work_order_id = raw_data[iter]["workOrder"]["id"];
+                              addOrderFirstRow(raw_data[iter]["workOrder"]);
+                              addRowOfActiveProjectToWorkOrder(raw_data[iter]["activeProjects"], work_order_id);
+                              addRowOfInactiveProjectToWorkOrder(raw_data[iter]["inactiveProjects"], work_order_id);
                               //addClientRow(raw_data[i]);
                             //setSelectAction(raw_data[i].id);
                           }
@@ -784,6 +795,7 @@
                       $("#client_contact_label").val(raw_data[i]['contact']);   
                       
                       //setSelectAction(raw_data[i].id);
+                      cleanHR();
                       cleanClientRows();
                       setUpMyClientDetails();
                       cleanOrderRows();

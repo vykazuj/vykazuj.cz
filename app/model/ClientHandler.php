@@ -19,8 +19,10 @@ class ClientHandler {
     public $rolesActiveForProject = array('user','pmo','owner');
     public $rolesInactiveForProject = array('alumni');
     //public $rolesPrimaryForWorkOrder = array('active');
+    public $rolesAbleToSeeClients = array('owner','accountant');
     public $rolesActiveForWorkOrder = array('active','primary');
     public $rolesInactiveForWorkOrder = array('inactive');
+    public $clientsSpecialFlagNotToBeDisplayed = array('vacation');
     public $mapCompanyRoles = array('owner' => 'Jednatel','user' => 'Zaměstnanec','accountant' => 'Účetní');
     
     function __construct(Nette\Database\Context $database)
@@ -29,7 +31,7 @@ class ClientHandler {
     }
     
     function getMyClients($userId, $companyId){
-        return $this->database->fetchAll('select cl.* from client cl, users_company_rel ucr where cl.company_id = ucr.company_id and ucr.user_id = ? and ucr.company_id = ? and ucr.role in (?,?) ',$userId, $companyId, 'owner','accountant');
+        return $this->database->fetchAll('select cl.* from client cl, users_company_rel ucr where cl.company_id = ucr.company_id and ucr.user_id = ? and ucr.company_id = ? and ucr.role in (?) and special_flag not in (?)',$userId, $companyId, $this->rolesAbleToSeeClients,$this->clientsSpecialFlagNotToBeDisplayed);
     }
     /*
     function getMyClientOrders($userId){

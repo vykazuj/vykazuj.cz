@@ -1,13 +1,16 @@
 {block content}
        
         
-    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">        
+    <div class="col-12 col-lg-10 col-sm-12  col-xs-12 text-center panel-mid">    
+        {if 1==2}       
         <div class="container timetable-blank text-right">
             Aktivní firma: 
           <select id = "company-select" class="client_not_name_label">
           </select>
         </div>
+        {/if}
         
+        {if isset($displaySection) and $displaySection}
         <div class="container timetable-blank">
           <ul class="nav nav-pills">
             <li id="liPickYear">
@@ -31,113 +34,84 @@
             <li class="monthLink{if $actualMonth==12} active{/if}" month="12">Prosinec</a></li>
           </ul>
         </div>        
-            <div id="progressContainer">
-                               
-            </div>   
-                
+        <div id="progressContainer">
+        </div>   
+        {/if}
                 <div class="container container-inner timetable" id="my-charged-records-table">
-                        <div class="row" id="my-charged-records-table-first">
-                            <div class="col-4 font-weight-semibold text-left nopadding">
-                                 <span class="big-screen">Jméno:</span>
-                                 <span class="small-screen">Jméno:</span>
-                            </div>
-                            <div class="col-2 font-weight-semibold nopadding">
-                                 <span class="big-screen">Hodiny:</span>
-                                 <span class="small-screen">Hod.</span>
-                            </div>
-                            <div class="col-2 font-weight-semibold nopadding">
-                                 <span class="big-screen">Přesčas:</span>
-                                 <span class="small-screen">Přes.</span>
-                            </div>
-                            <div class="col-2 font-weight-semibold nopadding">
-                                 <span class="big-screen">Sick day.:</span>
-                                 <span class="small-screen">Sick.</span>
-                            </div>
-                            <div class="col-2 font-weight-semibold nopadding">
-                                 <span class="big-screen">Dovolená:</span>
-                                 <span class="small-screen">Dov.</span>
-                            </div>
+        {if isset($displaySection) and $displaySection}
+                    <h1 class="text-left font-weight-semibold">Zaměstnanci</h1>
+                    <div class="row" id="my-users-charged-records-table-first">
+                        <div class="col-4 font-weight-semibold text-left nopadding">
+                             <span class="big-screen">Jméno:</span>
+                             <span class="small-screen">Jméno:</span>
                         </div>
-                    <!--
-                        <div class="row" class="my-charged-records-table-neco">
-                            <div class="col-6 text-left">
-                                 Jan Haase
-                            </div>
-                            <div class="col-2">
-                                 152
-                            </div>
-                            <div class="col-2">
-                                 8
-                            </div>
-                            <div class="col-2">
-                                 16
-                            </div>
+                        <div class="col-2 font-weight-semibold nopadding">
+                             <span class="big-screen">Hodiny:</span>
+                             <span class="small-screen">Hod.</span>
                         </div>
+                        <div class="col-2 font-weight-semibold nopadding">
+                             <span class="big-screen">Přesčas:</span>
+                             <span class="small-screen">Přes.</span>
+                        </div>
+                        <div class="col-2 font-weight-semibold nopadding">
+                             <span class="big-screen">Sick day.:</span>
+                             <span class="small-screen">Sick.</span>
+                        </div>
+                        <div class="col-2 font-weight-semibold nopadding">
+                             <span class="big-screen">Dovolená:</span>
+                             <span class="small-screen">Dov.</span>
+                        </div>
+                    </div>
+                    <h1 class="text-left font-weight-semibold">Klienti a Projekty</h1>
+                    <div class="row" id="my-project-charged-records-table-first">
+                        <div class="col-3 font-weight-semibold text-left nopadding">
+                             <span class="big-screen">Klient:</span>
+                             <span class="small-screen">Kli.</span>
+                        </div>
+                        <div class="col-3 font-weight-semibold text-left nopadding">
+                             <span class="big-screen">Projekt:</span>
+                             <span class="small-screen">Proj.</span>
+                        </div>
+                        <div class="col-4 font-weight-semibold text-left nopadding">
+                             <span class="big-screen">Jméno:</span>
+                             <span class="small-screen">Jméno:</span>
+                        </div>
+                        <div class="col-2 font-weight-semibold text-left nopadding">
+                             <span class="big-screen">Hodiny:</span>
+                             <span class="small-screen">Hod.</span>
+                        </div>
+                    </div>
                     
-                        <div class="row" class="my-charged-records-table-neco">
-                            <div class="col-6 text-left">
-                                 Martin Sivok
-                            </div>
-                            <div class="col-2">
-                                 168
-                            </div>
-                            <div class="col-2">
-                                 0
-                            </div>
-                            <div class="col-2">
-                                 0
-                            </div>
+                    {if 1==2}
+                    <h1 class="text-left font-weight-semibold">Údaje pro fakturaci</h1>
+                    <div class="row" id="my-work-order-charged-records-table-first">
+                        <div class="col-4 font-weight-semibold text-left nopadding">
+                             <span class="big-screen">Objednávka:</span>
+                             <span class="small-screen">Obj.:</span>
                         </div>
-                    
-                        <div class="row" class="my-charged-records-table-neco">
-                            <div class="col-6 text-left">
-                                 Jan Mahnel
-                            </div>
-                            <div class="col-2">
-                                 168
-                            </div>
-                            <div class="col-2">
-                                 0
-                            </div>
-                            <div class="col-2">
-                                 8
-                            </div>
+                        <div class="col-4 col-lg-2 font-weight-semibold nopadding">
+                             <span class="big-screen">Tento měsíc:</span>
+                             <span class="small-screen">Měsíc</span>
                         </div>
-                    -->
-                </div>
-        
-    </div>
-
-                
-<!-- Modal for bulk charging -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="exampleModalLabel">Předvyplnit Timesheet</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-        <div class="modal-body">
-            <h5>Vyber projekt:</h5>   
-            <div>
-                      <select class="my-chargeable-projects" id="my-chargeable-projects-bulk"></select>   
-            </div>
-            <h5>Počet hodin:</h5>   
-            <div>
-                      <input type="number" step="0.5" min="0" max="24" value="8" class="my-chargeable-projects" id="my-hours-bulk"></select>   
-            </div>
-            
+                        <div class="col-2 d-none d-lg-block  font-weight-semibold nopadding">
+                             <span class="big-screen">Suma:</span>
+                             <span class="small-screen">Suma</span>
+                        </div>
+                        <div class="col-2 d-none d-lg-block  font-weight-semibold nopadding">
+                             <span class="big-screen">Výše objednávky:</span>
+                             <span class="small-screen">Max</span>
+                        </div>
+                        <div class="col-4 col-lg-2 font-weight-semibold nopadding">
+                             <span class="big-screen">Zbývá vyčerpat:</span>
+                             <span class="small-screen">Zbývá</span>
+                        </div>
+                    </div>
+                    {/if}
+        {else}
+            Nemáte právo na tuto sekci pro zvolenou firmu. Zvolte jinou firmu nebo požádejte majitele firmy o roli <strong>Účetní.</strong>
+        {/if}
         </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
-        <button type="button" class="btn btn-primary" id="preFillButton" data-dismiss="modal">Předvyplnit</button>
-      </div>
     </div>
-  </div>
-</div>
-
                 
 </body>
   <script>
@@ -168,13 +142,47 @@
                 +input['sick']+
                 '</div><div class="col-2 nopadding">'
                 +input['vacation']+'</div></div>';
-            $("#my-charged-records-table-first").after(row);
+            $("#my-users-charged-records-table-first").after(row);
+                        
+    }      
+    
+        function addRowProjectChargesOverview(input){
+        
+            var row ='<div class="row my-charged-records-table-neco">'
+                        +'<div class="col-3 text-left nopadding">'+input['clientName']+'</div>'
+                        +'<div class="col-3 text-left nopadding">'+input['projectName']+'</div>'
+                        +'<div class="col-4 text-left nopadding">'+input['firstName']+' '+input['lastName']+'</div>'
+                        +'<div class="col-2 text-left nopadding">'+input['hours']+'</div>'
+                    +'</div>';
+            $("#my-project-charged-records-table-first").after(row);
+                        
+    }      
+    
+        function addRowWorkOrderChargesOverview(input){
+            var row ='<div class="row my-charged-records-table-neco"><div class="col-4 text-left nopadding">'
+                +input['name']+
+                '</div><div class="col-4 col-lg-2 nopadding wo-actual" workorderid="'+input['workorderid']+'">'
+                +input['charged']+' Kč'+
+                '</div><div class="col-2 d-none d-lg-block   nopadding wo-sum" workorderid="'+input['workorderid']+'">'
+                +
+                '</div><div class="col-2 d-none d-lg-block   nopadding wo-amount" workorderid="'+input['workorderid']+'">'
+                +
+                '</div><div class="col-4 col-lg-2 nopadding wo-rest" workorderid="'+input['workorderid']+'">'
+                +'</div></div>';
+            $("#my-work-order-charged-records-table-first").after(row);
                         
     }
         
+        function addWorkOrdersDetails(input){
+            if($("div.wo-actual[workorderid='"+input['workorderid']+"']").length > 0){
+                $("div.wo-sum[workorderid='"+input['workorderid']+"']").text(input['charged']+' Kč');
+                $("div.wo-amount[workorderid='"+input['workorderid']+"']").text(input['amount']+' Kč');
+                $("div.wo-rest[workorderid='"+input['workorderid']+"']").text(input['amount']*1-input['charged']*1+' Kč');
+            }
+        }
         
         function fillEmployeeChargesOverview(month, year){ 
-            $(".my-charged-records-table-neco").remove();
+            //$(".my-charged-records-table-neco").remove();
             $.ajax(
                     {
                         type: 'GET',
@@ -202,12 +210,104 @@
                 );
         }     
         fillEmployeeChargesOverview(actualMonth, actualYear);
+        
+        function fillProjectChargesOverview(month, year){ 
+            //$(".my-charged-records-table-neco").remove();
+            $.ajax(
+                    {
+                        type: 'GET',
+                        url: home_url+ '/statistics/get-project-charges-overview?month='+month+'&year='+year,
+                        dataType: 'json',
+                        cache: false,
+                        success: function(data)
+                            { 
+                                var json = $.parseJSON(data);
+                                    if(json.result === 'OK')
+                                        {  
+                                            var raw_data = json.data;
+                                            for (i in raw_data)
+                                            {
+                                              addRowProjectChargesOverview(raw_data[i]);
+                                            }  
+                                        }
+                                    else{
+                                            alert(json.code);
+                                        }                                 
+                            }
+                    }
+                );
+        }     
+        fillProjectChargesOverview(actualMonth, actualYear);
+        
+        function fillWorkOrdersOverview(){ 
+            $.ajax(
+                    {
+                        type: 'GET',
+                        url: home_url+ '/statistics/get-work-orders-overview',
+                        dataType: 'json',
+                        cache: false,
+                        success: function(data)
+                            { 
+                                var json = $.parseJSON(data);
+                                    if(json.result === 'OK')
+                                        {  
+                                            var raw_data = json.data;
+                                            for (i in raw_data)
+                                            {
+                                              //alert(raw_data[i]['firstName']+' '+raw_data[i]['lastName']+', '+raw_data[i]['hours']+'h + '+raw_data[i]['hoursOver']+'h');
+                                              //raw_data[i]['vacation'] = 42;
+                                              addWorkOrdersDetails(raw_data[i]);
+                                            }  
+                                        }
+                                    else{
+                                            alert(json.code);
+                                        }                                 
+                            }
+                    }
+                );
+        }   
+        
+        
+        function fillWorkOrderChargesOverview(month, year){ 
+            //$(".my-charged-records-table-neco").remove();
+            $.ajax(
+                    {
+                        type: 'GET',
+                        url: home_url+ '/statistics/get-work-order-charges-overview?month='+month+'&year='+year,
+                        dataType: 'json',
+                        cache: false,
+                        success: function(data)
+                            { 
+                                var json = $.parseJSON(data);
+                                    if(json.result === 'OK')
+                                        {  
+                                            var raw_data = json.data;
+                                            for (i in raw_data)
+                                            {
+                                              //alert(raw_data[i]['firstName']+' '+raw_data[i]['lastName']+', '+raw_data[i]['hours']+'h + '+raw_data[i]['hoursOver']+'h');
+                                              //raw_data[i]['vacation'] = 42;
+                                              addRowWorkOrderChargesOverview(raw_data[i]);
+                                            }
+                                            fillWorkOrdersOverview();
+                                        }
+                                    else{
+                                            alert(json.code);
+                                        }                                 
+                            }
+                    }
+                );
+        }     
+        fillWorkOrderChargesOverview(actualMonth, actualYear);
                 
         $("li.monthLink").click(function(){
             var newMonth = $(this).attr('month');
             $(".my-charged-records-table-neco").remove();
 
             fillEmployeeChargesOverview(newMonth, actualYear);
+            fillProjectChargesOverview(newMonth, actualYear);
+            if(1==2){
+                fillWorkOrderChargesOverview(newMonth, actualYear);
+            }
 
             $('li.active').removeClass('active');
             $(this).addClass('active');
@@ -215,8 +315,13 @@
         });
               
         $("#yearPick").change(function(){
+            $(".my-charged-records-table-neco").remove();
             actualYear = $(this).val();
             fillEmployeeChargesOverview(actualMonth, actualYear);
+            fillProjectChargesOverview(actualMonth, actualYear);
+            if(1==2){
+                fillWorkOrderChargesOverview(actualMonth, actualYear);
+            }
         });
                 
         
